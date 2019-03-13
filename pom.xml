@@ -7,6 +7,33 @@
     <groupId>ru.karelin</groupId>
     <artifactId>tm</artifactId>
     <version>1.0-SNAPSHOT</version>
-
+    <developers>
+        <developer>
+            <id>karelalex</id>
+            <name>Alexander Karelin</name>
+            <email>karelin_alex@inbox.ru</email>
+            <organization>I-teco</organization>
+            <organizationUrl>https://i-teco.ru/</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>Russia/Moscow</timezone>
+        </developer>
+    </developers>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>ru.karelin.tm.MainClass</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
