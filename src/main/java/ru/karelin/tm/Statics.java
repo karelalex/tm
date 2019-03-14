@@ -14,6 +14,7 @@ public class Statics {
     public static final String REMOVE_PROJECT = "remove-project";
     public static final String SHOW_PROJECT_LIST = "show-project-list";
     public static final String SHOW_PROJECT= "show-project";
+    public static final String SHOW_PROJECT_TASKS = "show-project-tasks";
     public static final String EDIT_PROJECT = "edit-project";
 
     public static final String CREATE_TASK = "create-task";

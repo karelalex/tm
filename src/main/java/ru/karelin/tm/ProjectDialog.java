@@ -61,7 +61,7 @@ public class ProjectDialog {
         }
         System.out.println("Enter new project name or just press enter if you do not want to change it");
         String projectName = sc.nextLine();
-        System.out.println("Enter new project decription or just press enter if you do not want to change it");
+        System.out.println("Enter new project description or just press enter if you do not want to change it");
         String projectDescription = sc.nextLine();
         String date;
         Date projectStartDate;
