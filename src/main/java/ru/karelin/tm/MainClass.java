@@ -8,111 +8,66 @@ import java.util.Scanner;
 public class MainClass {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        ProjectManipulator projectManipulator = new ProjectManipulator();
+        ProjectDialog projectDialog = new ProjectDialog(sc);
 
         String command;
         String[] commandParts;
+        out:
         while (true) {
             System.out.print(">");
             command = sc.nextLine();
             commandParts = command.split(" ");
 
-            if (command.equals(QUIT)) break;
-            if (command.equals(HELP)){
-               showMainHelp();
-            }
-            if (command.equals(CREATE_PROJECT)) {
-                System.out.println("Enter project description.");
-                int projectNumber = projectManipulator.createProject(sc.nextLine());
-                enterProject(projectNumber, sc, projectManipulator);
-            }
-
-            if (command.equals(SHOW_PROJECT_LIST)) {
-                projectManipulator.showProjectsList();
-            }
-
-            if (commandParts[0].equals(REMOVE_PROJECT)) {
-                int projectNumber;
-                if (commandParts.length > 1 && commandParts[1].matches("^-?\\d+$") && projectManipulator.checkProjectListBounds(projectNumber = Integer.parseInt(commandParts[1]))) {
-                    System.out.println("Remove project #" + projectNumber + "? (y/n)");
-                    if (sc.nextLine().equalsIgnoreCase("y")) {
-                        projectManipulator.removeProject(projectNumber);
-                    }
-                }
-            }
-
-            if (commandParts[0].equals(GO_INTO_PROJECT)) {
-                int projectNumber;
-                if (commandParts.length > 1 && commandParts[1].matches("^-?\\d+$") && projectManipulator.checkProjectListBounds(projectNumber = Integer.parseInt(commandParts[1]))) {
-                    enterProject(projectNumber, sc, projectManipulator);
-                }
-            }
-        }
-    }
-
-    private static void enterProject(int projectNumber, Scanner sc, ProjectManipulator projectManipulator) {
-        String command;
-        String[] commandParts;
-        while (true) {
-            System.out.print("project " + projectNumber + ">");
-            command = sc.nextLine();
-            commandParts = command.split(" ");
-
-            if (command.equals(LEAVE_PROJECT)) break;
-            if (command.equals(HELP)){
-                showProjectHelp();
-            }
-            if (command.equals(EDIT_PROJECT_DESCRIPTION)) {
-                System.out.println("Enter project description");
-                projectManipulator.editProjectDescription(projectNumber, sc.nextLine());
-            }
-
-            if (command.equals(ADD_TASK_TO_PROJECT)) {
-                System.out.println("Enter new task description");
-                projectManipulator.addNewTask(projectNumber, sc.nextLine());
-            }
-
-            if (command.equals(SHOW_PROJECT_TASK_LIST)) {
-                projectManipulator.showTaskList(projectNumber);
-            }
-
-            if (commandParts[0].equals(SHOW_PROJECT_TASK)) {
-                int taskNumber;
-                if (commandParts.length > 1 && commandParts[1].matches("^-?\\d+$") && projectManipulator.checkTaskListBounds(projectNumber, (taskNumber = Integer.parseInt(commandParts[1])))) {
-                    projectManipulator.showTask(projectNumber, taskNumber);
-                }
-            }
-
-            if (commandParts[0].equals(EDIT_PROJECT_TASK)) {
-                int taskNumber;
-                if (commandParts.length > 1 && commandParts[1].matches("^-?\\d+$") && projectManipulator.checkTaskListBounds(projectNumber, (taskNumber = Integer.parseInt(commandParts[1])))) {
-                    System.out.println("Enter new task description");
-                    projectManipulator.editTask(projectNumber, taskNumber, sc.nextLine());
-                }
-            }
-
-            if (commandParts[0].equals(REMOVE_PROJECT_TASK)) {
-                int taskNumber;
-                if (commandParts.length > 1 && commandParts[1].matches("^-?\\d+$") && projectManipulator.checkTaskListBounds(projectNumber, (taskNumber = Integer.parseInt(commandParts[1])))) {
-                    System.out.println("Do you really want to remove task No " + taskNumber);
-                    if (sc.nextLine().equalsIgnoreCase("y"))
-                        projectManipulator.removeTask(projectNumber, taskNumber);
-                }
-            }
-
-            if (command.equals(REMOVE_PROJECT)) {
-                System.out.println("Remove project #" + projectNumber + "? (y/n)");
-                if (sc.nextLine().equalsIgnoreCase("y")) {
-                    projectManipulator.removeProject(projectNumber);
+            switch (commandParts[0]) {
+                case QUIT:
+                    break out;
+                case HELP:
+                    showMainHelp();
                     break;
-                }
+                case CREATE_PROJECT:
+                    projectDialog.createProject();
+                    break;
+                case EDIT_PROJECT:
+                    if (commandParts.length > 1) {
+                        projectDialog.editProject(commandParts[1]);
+                    }
+                case SHOW_PROJECT_LIST:
+                    projectDialog.showProjectsList();
+                    break;
+                case SHOW_PROJECT:
+                    if(commandParts.length>1) {
+                        projectDialog.showProject(commandParts[1]);
+                    }
+                    break;
+                case REMOVE_PROJECT:
+                    if (commandParts.length > 1) {
+                        projectDialog.removeProject(commandParts[1]);
+                    }
+                    break;
+                case CREATE_TASK:
+                    projectDialog.createProject();
+                    break;
+                case EDIT_TASK:
+                    if (commandParts.length > 1) {
+
+                    }
+                    break;
+                case SHOW_TASK_LIST:
+                    if(commandParts.length>1){
+
+                    }
+                    break;
+                case REMOVE_TASK:
+                    if (commandParts.length > 1) {projectDialog.removeProject(commandParts[1]);
+                    }
+
             }
-
-
         }
     }
 
-    private static void showProjectHelp() {
+
+
+   /* private static void showProjectHelp() {
         System.out.println("Commmands: ");
         System.out.println("'" + LEAVE_PROJECT + "' exit to main menu");
         System.out.println("'" + EDIT_PROJECT_DESCRIPTION + "' allows to change description of current project");
@@ -122,13 +77,13 @@ public class MainClass {
         System.out.println("'" + EDIT_PROJECT_TASK +  " %number%' allows to edit task with specified number in current project ");
         System.out.println("'" + REMOVE_PROJECT_TASK +  " %number%' removes task with specified number from current project ");
         System.out.println("'" + REMOVE_PROJECT + "' removes current project");
-    }
+    }*/
 
     private static void showMainHelp(){
         System.out.println("Commmands: ");
         System.out.println("'" + SHOW_PROJECT_LIST + "' shows list of projects");
         System.out.println("'" + CREATE_PROJECT + "' creates new project");
         System.out.println("'" + REMOVE_PROJECT + " %number%' removes project with specified number");
-        System.out.println("'" + GO_INTO_PROJECT +  " %number%' enter in project submenu");
+       // System.out.println("'" + GO_INTO_PROJECT +  " %number%' enter in project submenu");
     }
 }

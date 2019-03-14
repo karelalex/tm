@@ -1,73 +1,65 @@
 package ru.karelin.tm;
 
+import ru.karelin.tm.entity.Project;
+import ru.karelin.tm.entity.Task;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 public class ProjectManipulator {
-    private static List<Project> projects = Statics.projects;
+    private static Map<String, Project> projects = Statics.projects;
 
-    public int createProject(String description) {
+    DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    public void createProject(String name, String description, Date startDate, Date finishDate) {
 
         Project project = new Project();
+        project.setName(name);
         project.setDescription(description);
-        projects.add(project);
-        return projects.size() - 1;
+        project.setStartDate(startDate);
+        project.setFinishDate(finishDate);
+        projects.put(project.getId(), project);
+    }
+
+    public void editProject(String id, String name, String description, Date startDate, Date finishDate) {
+
+        Project project = projects.get(id);
+        if(!name.isEmpty()) project.setName(name);
+        if(!description.isEmpty()) project.setDescription(description);
+        if(startDate!=null) project.setStartDate(startDate);
+        if(finishDate!=null) project.setFinishDate(finishDate);
+        projects.put(project.getId(), project);
     }
 
     public void showProjectsList() {
-        for (int i = 0; i < projects.size(); i++) {
-            System.out.println("Project №" + i);
-            System.out.println(projects.get(i).getDescription());
+        for (Map.Entry<String, Project> entry:projects.entrySet()) {
+            System.out.println("Projectid: " + entry.getKey());
+            System.out.println("Project name: " +entry.getValue().getName() );
+            System.out.println("Project name: " + entry.getValue().getDescription());
             System.out.println();
         }
     }
 
-    public void editProjectDescription(int projectNumber, String newDescription){
-        Project project = projects.get(projectNumber);
-        project.setDescription(newDescription);
+
+
+    public void removeProject(String projectID){
+        projects.remove(projectID);
     }
 
-    public void removeProject(int projectNumber){
-        projects.remove(projectNumber);
+
+    public boolean checkID(String projectId) {
+       return projects.containsKey(projectId);
     }
 
-    public  void addNewTask(int projectNumber, String taskDescription) {
-        Project project = projects.get(projectNumber);
-        Task task = new Task();
-        task.setDescription(taskDescription);
-        project.getTaskList().add(task);
-    }
-    public  boolean checkProjectListBounds(int indexToCheck) {
-        return (indexToCheck >= 0 && indexToCheck < projects.size());
-    }
-    public  boolean checkTaskListBounds(int projectNumber, int indexToCheck) {
-        Project project = projects.get(projectNumber);
-        return (indexToCheck >= 0 && indexToCheck < project.getTaskList().size());
-    }
-    public  void showTaskList(int projectNumber){
-        Project project = projects.get(projectNumber);
-        List<Task> taskList = project.getTaskList();
-        System.out.println("Tasklist for project# "+ projectNumber);
-        for (int i=0; i<taskList.size(); i++){
-            System.out.println("Task # "+ i+": "+taskList.get(i).getDescription());
-        }
+    public void showProject(String projectId) {
+        Project project = projects.get(projectId);
+        System.out.println("Project name: " + project.getName() );
+        System.out.println("Project name: " + project.getDescription());
+        System.out.println("Start Date: " + dateFormat.format(project.getStartDate()));
+        System.out.println("End Date: " + dateFormat.format(project.getFinishDate()));
         System.out.println();
-    }
-    public  void showTask(int projectNumber, int taskNumber){
-        Project project = projects.get(projectNumber);
-        Task task = project.getTaskList().get(taskNumber);
-        System.out.println("Task# "+taskNumber+" from Project# "+projectNumber);
-        System.out.println(task.getDescription());
-    }
-
-    public  void editTask(int projectNumber, int taskNumber, String taskDescription){
-        Project project = projects.get(projectNumber);
-        Task task = project.getTaskList().get(taskNumber);
-        task.setDescription(taskDescription);
-    }
-    public  void removeTask(int projectNumber, int taskNumber){
-        Project project = projects.get(projectNumber);
-        project.getTaskList().remove(taskNumber);
-
     }
 }
