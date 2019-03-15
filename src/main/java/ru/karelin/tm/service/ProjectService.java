@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ProjectManipulator {
+public class ProjectService {
     private static Map<String, Project> projects = Statics.projects;
 
     DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");

@@ -1,6 +1,6 @@
 package ru.karelin.tm;
 
-import ru.karelin.tm.service.ProjectManipulator;
+import ru.karelin.tm.service.ProjectService;
 
 import static ru.karelin.tm.Statics.*;
 
@@ -15,7 +15,7 @@ public class MainClass {
         Scanner sc = new Scanner(System.in);
         ProjectDialog projectDialog = new ProjectDialog(sc);
         TaskDialog taskDialog = new TaskDialog(sc);
-        ProjectManipulator projectManipulator = new ProjectManipulator();
+        ProjectService projectService = new ProjectService();
         String command;
         String[] commandParts;
         out:
@@ -33,12 +33,12 @@ public class MainClass {
                     break;
                 case SET_CURRENT_PROJECT:
                     if (commandParts.length>1){
-                        setCurrentProject(commandParts[1], projectManipulator);
+                        setCurrentProject(commandParts[1], projectService);
                     }
-                    else setCurrentProject("", projectManipulator);
+                    else setCurrentProject("", projectService);
                     break;
                 case CREATE_PROJECT:
-                    setCurrentProject(projectDialog.createProject(), projectManipulator);
+                    setCurrentProject(projectDialog.createProject(), projectService);
                     break;
                 case EDIT_PROJECT:
                     if (commandParts.length > 1) {
@@ -114,7 +114,7 @@ public class MainClass {
         System.out.println("' "+ HELP + "' shows this help");
     }
 
-    private static void setCurrentProject(String projectId, ProjectManipulator pm) {
+    private static void setCurrentProject(String projectId, ProjectService pm) {
         if (projectId.isEmpty()) {
             currentProjectId = "";
             return;

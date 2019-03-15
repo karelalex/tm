@@ -1,0 +1,71 @@
+package ru.karelin.tm.service;
+
+import ru.karelin.tm.Statics;
+import ru.karelin.tm.entity.Project;
+import ru.karelin.tm.entity.Task;
+import ru.karelin.tm.repository.TaskRepository;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+
+public class TaskService {
+    TaskRepository taskRepository = new TaskRepository();
+    public void createTask(String name, String description, Date startDate, Date finishDate, String projectId) {
+        Task task = new Task();
+        task.setName(name);
+        task.setDescription(description);
+        task.setStartDate(startDate);
+        task.setFinishDate(finishDate);
+        if (!projectId.isEmpty()) task.setProjectID(projectId);
+        taskRepository.persist(task);
+    }
+
+    public void editTask(String id, String name, String description, Date startDate, Date finishDate, String projectId) {
+        Task task = taskRepository.findOne(id);
+        if (!name.isEmpty()) task.setName(name);
+        if (!description.isEmpty()) task.setDescription(description);
+        if (startDate != null) task.setStartDate(startDate);
+        if (finishDate != null) task.setFinishDate(finishDate);
+        if (!projectId.isEmpty()) task.setProjectID(projectId);
+        taskRepository.merge(task);
+    }
+
+    public List<Task> getTaskList() {
+        return taskRepository.findAll();
+    }
+
+    public Task getTask(String taskId){
+        Task task = taskRepository.findOne(taskId);
+        return task;
+
+    }
+
+    public List<Task> getTaskList(String projectId) {
+       return taskRepository.findAllByProjectId(projectId);
+    }
+
+
+    public void removeTask(String taskId) {
+        Task task = taskRepository.findOne(taskId);
+        if(task!=null)
+            taskRepository.remove(task);
+    }
+
+    public void removeTasksByProjectID(String projectId) {
+        List<Task> tasks = taskRepository.findAllByProjectId(projectId);
+        taskRepository.removeAll(tasks);
+    }
+
+
+    public boolean checkID(String taskId) {
+        Task task = taskRepository.findOne(taskId);
+        return task!=null;
+    }
+
+
+}

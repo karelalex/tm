@@ -1,7 +1,7 @@
 package ru.karelin.tm;
 
-import ru.karelin.tm.service.ProjectManipulator;
-import ru.karelin.tm.service.TaskManipulator;
+import ru.karelin.tm.service.ProjectService;
+import ru.karelin.tm.service.TaskService;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -10,8 +10,8 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class ProjectDialog {
-    ProjectManipulator projectManipulator = new ProjectManipulator();
-    TaskManipulator taskManipulator = new TaskManipulator();
+    ProjectService projectService = new ProjectService();
+    TaskService taskService = new TaskService();
     private Scanner sc;
     DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -53,12 +53,12 @@ public class ProjectDialog {
                 e.printStackTrace();
             }
         }
-        return projectManipulator.createProject(projectName, projectDescription, projectStartDate, projectFinishDate);
+        return projectService.createProject(projectName, projectDescription, projectStartDate, projectFinishDate);
 
     }
 
     public void editProject(String projectId) {
-        if(!projectManipulator.checkID(projectId)) {
+        if(!projectService.checkID(projectId)) {
             System.out.println("Wrong ID "+ projectId);
             return;
         }
@@ -100,23 +100,23 @@ public class ProjectDialog {
                 }
             }
         }
-        projectManipulator.editProject(projectId, projectName, projectDescription, projectStartDate, projectFinishDate);
+        projectService.editProject(projectId, projectName, projectDescription, projectStartDate, projectFinishDate);
     }
 
     public void showProjectsList() {
-        projectManipulator.showProjectsList();
+        projectService.showProjectsList();
     }
 
     public void removeProject(String projectId) {
-        taskManipulator.removeTasksByProjectID(projectId);
-        projectManipulator.removeProject(projectId);
+        taskService.removeTasksByProjectID(projectId);
+        projectService.removeProject(projectId);
     }
 
     public void showProject(String projectId) {
-        if(!projectManipulator.checkID(projectId)) {
+        if(!projectService.checkID(projectId)) {
             System.out.println("Wrong ID "+ projectId);
             return;
         }
-        projectManipulator.showProject(projectId);
+        projectService.showProject(projectId);
     }
 }

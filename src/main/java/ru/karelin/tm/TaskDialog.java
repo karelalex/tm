@@ -1,18 +1,20 @@
 package ru.karelin.tm;
 
-import ru.karelin.tm.service.ProjectManipulator;
-import ru.karelin.tm.service.TaskManipulator;
+import ru.karelin.tm.entity.Task;
+import ru.karelin.tm.service.ProjectService;
+import ru.karelin.tm.service.TaskService;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.Scanner;
 
 public class TaskDialog {
     private Scanner sc;
-    private TaskManipulator taskManipulator = new TaskManipulator();
-    private ProjectManipulator projectManipulator = new ProjectManipulator();
+    private TaskService taskService = new TaskService();
+    private ProjectService projectService = new ProjectService();
     private DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 
@@ -61,17 +63,17 @@ public class TaskDialog {
             System.out.println("Enter project id where task will be added or leave it empty");
             projectId = sc.nextLine();
         }
-        while (!projectId.isEmpty() && !projectManipulator.checkID(projectId)) {
+        while (!projectId.isEmpty() && !projectService.checkID(projectId)) {
             System.out.println("Wrong project id try again or leave it empty");
             projectId = sc.nextLine();
         }
 
-        taskManipulator.createTask(taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
+        taskService.createTask(taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
 
     }
 
     public void editTask(String taskId) {
-        if (!taskManipulator.checkID(taskId)) {
+        if (!taskService.checkID(taskId)) {
             System.out.println("Wrong ID!");
             return;
         }
@@ -114,29 +116,42 @@ public class TaskDialog {
         }
         System.out.println("Enter new project id for task or just press enter if you do not want to change it");
         String projectId = sc.nextLine();
-        while (!projectId.isEmpty() && !projectManipulator.checkID(projectId)) {
+        while (!projectId.isEmpty() && !projectService.checkID(projectId)) {
             System.out.println("Wrong project id try again or leave it empty");
             projectId = sc.nextLine();
         }
 
-        taskManipulator.editTask(taskId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
+        taskService.editTask(taskId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
 
     }
     public void showTaskList(String projectId){
-        if (projectId.isEmpty()) taskManipulator.showTaskList();
-        else if(projectManipulator.checkID(projectId)) taskManipulator.showTaskList(projectId);
+        if (projectId.isEmpty()) taskService.getTaskList();
+        else if(projectService.checkID(projectId)) taskService.getTaskList(projectId); //todo fix below
         else System.out.println("Wrong Project ID");
+        for (Map.Entry<String, Task> entry : tasks.entrySet()) {
+            System.out.println("Task: " + entry.getKey());
+            System.out.println("Task name: " + entry.getValue().getName());
+            System.out.println("Task description: " + entry.getValue().getDescription());
+            System.out.println("Project ID: " + entry.getValue().getProjectID());
+            System.out.println();
+        }
     }
     public void showTask(String taskId){
-        if(!taskManipulator.checkID(taskId)){
+        if(!taskService.checkID(taskId)){
             System.out.println("Wrong ID");
             return;
         }
-        taskManipulator.showTask(taskId);
+        taskService.getTask(taskId);
+        System.out.println("Task name: " + task.getName());
+        System.out.println("Task description: " + task.getDescription());
+        System.out.println("Task start date: " + dateFormat.format(task.getStartDate()));
+        System.out.println("Task finish date " + dateFormat.format(task.getFinishDate()));
+        System.out.println("Project ID: " + task.getProjectID());
+        System.out.println();
 
     }
     public void removeTask(String taskId){
-        taskManipulator.removeTask(taskId);
+        taskService.removeTask(taskId);
     }
 }
 
