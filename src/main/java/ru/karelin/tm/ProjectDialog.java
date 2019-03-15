@@ -1,5 +1,6 @@
 package ru.karelin.tm;
 
+import ru.karelin.tm.entity.Project;
 import ru.karelin.tm.service.ProjectService;
 import ru.karelin.tm.service.TaskService;
 
@@ -7,6 +8,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.Scanner;
 
 public class ProjectDialog {
@@ -104,7 +106,13 @@ public class ProjectDialog {
     }
 
     public void showProjectsList() {
-        projectService.showProjectsList();
+        projectService.getProjectsList();
+        for (Map.Entry<String, Project> entry:projects.entrySet()) {
+            System.out.println("Projectid: " + entry.getKey());
+            System.out.println("Project name: " +entry.getValue().getName() );
+            System.out.println("Project name: " + entry.getValue().getDescription());
+            System.out.println();
+        }
     }
 
     public void removeProject(String projectId) {
@@ -117,6 +125,13 @@ public class ProjectDialog {
             System.out.println("Wrong ID "+ projectId);
             return;
         }
-        projectService.showProject(projectId);
+        projectService.getProject(projectId);
+        Project project = projects.get(projectId);
+        System.out.println("Project name: " + project.getName() );
+        System.out.println("Project name: " + project.getDescription());
+        System.out.println("Start Date: " + dateFormat.format(project.getStartDate()));
+        System.out.println("End Date: " + dateFormat.format(project.getFinishDate()));
+        System.out.println();
+
     }
 }

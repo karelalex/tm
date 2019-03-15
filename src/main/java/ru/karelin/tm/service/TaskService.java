@@ -14,7 +14,13 @@ import java.util.Map;
 
 
 public class TaskService {
-    TaskRepository taskRepository = new TaskRepository();
+
+    private TaskRepository taskRepository;
+
+    public TaskService(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
+
     public void createTask(String name, String description, Date startDate, Date finishDate, String projectId) {
         Task task = new Task();
         task.setName(name);
