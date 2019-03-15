@@ -12,10 +12,7 @@ import java.util.*;
 public class TaskRepository implements Repository<Task> {
     private static Map<String, Task> tasks = Statics.tasks;
 
-
-
-
-   public List<Task> findAllByProjectId (String projectId){
+    public List<Task> findAllByProjectId (String projectId){
        ArrayList<Task> taskArrayList = new ArrayList<>();
        for (Task t: tasks.values()
             ) {
@@ -38,6 +35,7 @@ public class TaskRepository implements Repository<Task> {
     @Override
     public void persist(Task task) {
         if(tasks.containsKey(task.getId())) throw new ObjectAlreadyExistsException("Task with ID="+task.getId()+" is already stored in database");
+        tasks.put(task.getId(), task);
     }
 
     @Override
