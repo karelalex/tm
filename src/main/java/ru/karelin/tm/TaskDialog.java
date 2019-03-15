@@ -121,7 +121,7 @@ public class TaskDialog {
     }
     public void showTaskList(String projectId){
         if (projectId.isEmpty()) taskManipulator.showTaskList();
-        if(projectManipulator.checkID(projectId)) taskManipulator.showTaskList(projectId);
+        else if(projectManipulator.checkID(projectId)) taskManipulator.showTaskList(projectId);
         else System.out.println("Wrong Project ID");
     }
     public void showTask(String taskId){

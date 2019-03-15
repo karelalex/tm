@@ -3,6 +3,8 @@ package ru.karelin.tm;
 import ru.karelin.tm.entity.Project;
 import ru.karelin.tm.entity.Task;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.Map;
 
 public class TaskManipulator {
     private static Map<String, Task> tasks = Statics.tasks;
+    DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
     public void createTask(String name, String description, Date startDate, Date finishDate, String projectId) {
 
@@ -47,8 +50,8 @@ public class TaskManipulator {
         Task task = tasks.get(taskId);
         System.out.println("Task name: " + task.getName());
         System.out.println("Task description: " + task.getDescription());
-        System.out.println("Task start date: " + task.getStartDate());
-        System.out.println("Task finish date " + task.getFinishDate());
+        System.out.println("Task start date: " + dateFormat.format(task.getStartDate()));
+        System.out.println("Task finish date " + dateFormat.format(task.getFinishDate()));
         System.out.println("Project ID: " + task.getProjectID());
         System.out.println();
     }
@@ -59,7 +62,7 @@ public class TaskManipulator {
                 System.out.println("Task: " + entry.getKey());
                 System.out.println("Task name: " + entry.getValue().getName());
                 System.out.println("Task description: " + entry.getValue().getDescription());
-                System.out.println("Task must be finished till " + entry.getValue().getFinishDate());
+                System.out.println("Task finish date: " + dateFormat.format(entry.getValue().getFinishDate()));
                 System.out.println();
             }
         }

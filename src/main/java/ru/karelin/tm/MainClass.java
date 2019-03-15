@@ -33,6 +33,8 @@ public class MainClass {
                     if (commandParts.length>1){
                         setCurrentProject(commandParts[1], projectManipulator);
                     }
+                    else setCurrentProject("", projectManipulator);
+                    break;
                 case CREATE_PROJECT:
                     setCurrentProject(projectDialog.createProject(), projectManipulator);
                     break;
@@ -63,7 +65,7 @@ public class MainClass {
                     break;
                 case CREATE_TASK:
                     if (commandParts.length > 1)
-                        taskDialog.createTask(commandParts[0]);
+                        taskDialog.createTask(commandParts[1]);
                     else if (!currentProjectId.isEmpty()) taskDialog.createTask(currentProjectId);
                     else taskDialog.createTask();
                     break;
@@ -93,19 +95,6 @@ public class MainClass {
     }
 
 
-
-   /* private static void showProjectHelp() {
-        System.out.println("Commmands: ");
-        System.out.println("'" + LEAVE_PROJECT + "' exit to main menu");
-        System.out.println("'" + EDIT_PROJECT_DESCRIPTION + "' allows to change description of current project");
-        System.out.println("'" + SHOW_PROJECT_TASK_LIST + "' shows task list of current project");
-        System.out.println("'" + SHOW_PROJECT_TASK +  " %number%' shows task with specified number in current project ");
-        System.out.println("'" + ADD_TASK_TO_PROJECT + "' adds task to current project");
-        System.out.println("'" + EDIT_PROJECT_TASK +  " %number%' allows to edit task with specified number in current project ");
-        System.out.println("'" + REMOVE_PROJECT_TASK +  " %number%' removes task with specified number from current project ");
-        System.out.println("'" + REMOVE_PROJECT + "' removes current project");
-    }*/
-
     private static void showMainHelp() {
         System.out.println("Commmands: ");
         System.out.println("'" + SHOW_PROJECT_LIST + "' shows list of projects");
@@ -113,7 +102,6 @@ public class MainClass {
         System.out.println("'" + REMOVE_PROJECT + " %number%' removes project with specified number and all its tasks");
         System.out.println("'" + SET_CURRENT_PROJECT +  " %number%' set current project to one with %number% ID");
         System.out.println("'" + SHOW_PROJECT +  " %number%' shows project info. If current project is set %number% may be skipped");
-        System.out.println("'" + SHOW_PROJECT_TASKS + " %number%' shows task list of specified project. If current project is set %number% may be skipped");
         System.out.println("'" + EDIT_PROJECT + " %number%' starts edit project dialog for specified project. If current project is set %number% may be skipped");
         System.out.println("'" + CREATE_TASK + " %number%' starts create new task dialog. Task will be created inside current or specified project.");
         System.out.println("'" + SHOW_TASK_LIST + " %number%' shows task list for current or specified project. If not show all tasks");

@@ -4,24 +4,21 @@ package ru.karelin.tm;
 import ru.karelin.tm.entity.Project;
 import ru.karelin.tm.entity.Task;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Statics {
-    public static final String CREATE_PROJECT = "create-project";
-    public static final String REMOVE_PROJECT = "remove-project";
-    public static final String SHOW_PROJECT_LIST = "show-project-list";
-    public static final String SHOW_PROJECT= "show-project";
-    public static final String SHOW_PROJECT_TASKS = "show-project-tasks";
-    public static final String EDIT_PROJECT = "edit-project";
-    public static final String SET_CURRENT_PROJECT = "current-project";
-    public static final String CREATE_TASK = "create-task";
-    public static final String SHOW_TASK_LIST = "show-task-list";
-    public static final String SHOW_TASK = "show-task";
-    public static final String EDIT_TASK = "edit-task";
-    public static final String REMOVE_TASK = "remove-task";
+    public static final String CREATE_PROJECT = "cp";
+    public static final String REMOVE_PROJECT = "rp";
+    public static final String SHOW_PROJECT_LIST = "pl";
+    public static final String SHOW_PROJECT= "sp";
+    public static final String EDIT_PROJECT = "ep";
+    public static final String SET_CURRENT_PROJECT = "cur";
+    public static final String CREATE_TASK = "ct";
+    public static final String SHOW_TASK_LIST = "tl";
+    public static final String SHOW_TASK = "st";
+    public static final String EDIT_TASK = "et";
+    public static final String REMOVE_TASK = "rt";
     public static final String QUIT = "exit";
 
     public static final String HELP = "help";
