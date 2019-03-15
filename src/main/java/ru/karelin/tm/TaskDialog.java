@@ -17,7 +17,10 @@ public class TaskDialog {
         this.sc = sc;
     }
 
-    public void createTask() {
+    public void createTask(){
+        createTask("");
+    }
+    public void createTask(String projectId) {
         System.out.println("Enter task name");
         String taskName = sc.nextLine();
         System.out.println("Enter task description");
@@ -51,9 +54,11 @@ public class TaskDialog {
                 e.printStackTrace();
             }
         }
-        System.out.println("Enter project id where task will be added or leave it empty");
-        String projectId = sc.nextLine();
-        while(!projectId.isEmpty() && !projectManipulator.checkID(projectId)){
+        if (projectId.isEmpty()) {
+            System.out.println("Enter project id where task will be added or leave it empty");
+            projectId = sc.nextLine();
+        }
+        while (!projectId.isEmpty() && !projectManipulator.checkID(projectId)) {
             System.out.println("Wrong project id try again or leave it empty");
             projectId = sc.nextLine();
         }
@@ -61,8 +66,9 @@ public class TaskDialog {
         taskManipulator.createTask(taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
 
     }
+
     public void editTask(String taskId) {
-        if(!taskManipulator.checkID(taskId)){
+        if (!taskManipulator.checkID(taskId)) {
             System.out.println("Wrong ID!");
             return;
         }
@@ -72,7 +78,7 @@ public class TaskDialog {
         String taskDescription = sc.nextLine();
         String date;
         Date taskStartDate;
-        while(true) {
+        while (true) {
             System.out.println("Enter starting date (format DD.MM.YYYY) or just press enter if you do not want to change it");
             date = sc.nextLine();
             if (date.isEmpty()) {
@@ -88,7 +94,7 @@ public class TaskDialog {
             }
         }
         Date taskFinishDate;
-        while(true) {
+        while (true) {
             System.out.println("Enter ending date (format DD.MM.YYYY) or just press enter if you do not want to change it");
             date = sc.nextLine();
             if (date.isEmpty()) {
@@ -105,13 +111,21 @@ public class TaskDialog {
         }
         System.out.println("Enter new project id for task or just press enter if you do not want to change it");
         String projectId = sc.nextLine();
-        while(!projectId.isEmpty() && !projectManipulator.checkID(projectId)){
+        while (!projectId.isEmpty() && !projectManipulator.checkID(projectId)) {
             System.out.println("Wrong project id try again or leave it empty");
             projectId = sc.nextLine();
         }
 
-        taskManipulator.editTask(taskId,taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
+        taskManipulator.editTask(taskId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
 
+    }
+    public void showTaskList(String projectId){
+        if (projectId.isEmpty()) taskManipulator.showTaskList();
+        if(projectManipulator.checkID(projectId)) taskManipulator.showTaskList(projectId);
+        else System.out.println("Wrong Project ID");
+    }
+    public void removeTask(String taskId){
+        taskManipulator.removeTask(taskId);
     }
 }
 

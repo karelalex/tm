@@ -7,18 +7,18 @@ import java.util.Scanner;
 
 public class MainClass {
 
-    private static String currentProjectId="";
+    private static String currentProjectId = "";
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         ProjectDialog projectDialog = new ProjectDialog(sc);
         TaskDialog taskDialog = new TaskDialog(sc);
         ProjectManipulator projectManipulator = new ProjectManipulator();
-        String currentProjectId="";
         String command;
         String[] commandParts;
         out:
         while (true) {
-            if(!currentProjectId.isEmpty()) System.out.println(currentProjectId);
+            if (!currentProjectId.isEmpty()) System.out.println("CurPrId: " + currentProjectId);
             System.out.print(">");
             command = sc.nextLine();
             commandParts = command.split(" ");
@@ -29,51 +29,60 @@ public class MainClass {
                 case HELP:
                     showMainHelp();
                     break;
+                case SET_CURRENT_PROJECT:
+                    if (commandParts.length>1){
+                        setCurrentProject(commandParts[1], projectManipulator);
+                    }
                 case CREATE_PROJECT:
                     setCurrentProject(projectDialog.createProject(), projectManipulator);
                     break;
                 case EDIT_PROJECT:
                     if (commandParts.length > 1) {
                         projectDialog.editProject(commandParts[1]);
-                    }
-                    else if(!currentProjectId.isEmpty()){
+                    } else if (!currentProjectId.isEmpty()) {
                         projectDialog.editProject(currentProjectId);
                     }
+                    break;
                 case SHOW_PROJECT_LIST:
                     projectDialog.showProjectsList();
                     break;
                 case SHOW_PROJECT:
-                    if(commandParts.length>1) {
+                    if (commandParts.length > 1) {
                         projectDialog.showProject(commandParts[1]);
-                    }
-                    else if (!currentProjectId.isEmpty()){
+                    } else if (!currentProjectId.isEmpty()) {
                         projectDialog.showProject(currentProjectId);
                     }
                     break;
                 case REMOVE_PROJECT:
                     if (commandParts.length > 1) {
                         projectDialog.removeProject(commandParts[1]);
-                    }
-                    else if (!currentProjectId.isEmpty()){
+                    } else if (!currentProjectId.isEmpty()) {
                         projectDialog.removeProject(currentProjectId);
+                        currentProjectId = "";
                     }
                     break;
                 case CREATE_TASK:
-                    taskDialog.createTask();
+                    if (commandParts.length > 1)
+                        taskDialog.createTask(commandParts[0]);
+                    else if (!currentProjectId.isEmpty()) taskDialog.editTask(currentProjectId);
+                    else taskDialog.createTask();
                     break;
                 case EDIT_TASK:
                     if (commandParts.length > 1) {
-                    taskDialog.editTask(commandParts[1]);
+                        taskDialog.editTask(commandParts[1]);
                     }
                     break;
                 case SHOW_TASK_LIST:
-                    if(commandParts.length>1){
-
-                    }
+                    if (commandParts.length > 1) {
+                        taskDialog.showTaskList(commandParts[1]);
+                    } else if (!currentProjectId.isEmpty()) taskDialog.showTaskList(currentProjectId);
+                    else taskDialog.showTaskList("");
                     break;
                 case REMOVE_TASK:
-                    if (commandParts.length > 1) {projectDialog.removeProject(commandParts[1]);
+                    if (commandParts.length > 1) {
+                        taskDialog.removeTask(commandParts[1]);
                     }
+                    break;
 
             }
         }
@@ -93,18 +102,19 @@ public class MainClass {
         System.out.println("'" + REMOVE_PROJECT + "' removes current project");
     }*/
 
-    private static void showMainHelp(){
+    private static void showMainHelp() {
         System.out.println("Commmands: ");
         System.out.println("'" + SHOW_PROJECT_LIST + "' shows list of projects");
         System.out.println("'" + CREATE_PROJECT + "' creates new project");
         System.out.println("'" + REMOVE_PROJECT + " %number%' removes project with specified number");
-       // System.out.println("'" + GO_INTO_PROJECT +  " %number%' enter in project submenu");
+        // System.out.println("'" + GO_INTO_PROJECT +  " %number%' enter in project submenu");
     }
-    private static void setCurrentProject(String projectId, ProjectManipulator pm){
-        if(projectId.isEmpty()) {
-            currentProjectId="";
+
+    private static void setCurrentProject(String projectId, ProjectManipulator pm) {
+        if (projectId.isEmpty()) {
+            currentProjectId = "";
             return;
         }
-        if(pm.checkID(projectId)) currentProjectId=projectId;
+        if (pm.checkID(projectId)) currentProjectId = projectId;
     }
 }
