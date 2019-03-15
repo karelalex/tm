@@ -14,7 +14,8 @@ public class ProjectManipulator {
     private static Map<String, Project> projects = Statics.projects;
 
     DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-    public void createProject(String name, String description, Date startDate, Date finishDate) {
+
+    public String createProject(String name, String description, Date startDate, Date finishDate) {
 
         Project project = new Project();
         project.setName(name);
@@ -22,6 +23,7 @@ public class ProjectManipulator {
         project.setStartDate(startDate);
         project.setFinishDate(finishDate);
         projects.put(project.getId(), project);
+        return project.getId();
     }
 
     public void editProject(String id, String name, String description, Date startDate, Date finishDate) {

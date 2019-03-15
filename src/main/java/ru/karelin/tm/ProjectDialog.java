@@ -16,7 +16,7 @@ public class ProjectDialog {
         this.sc = sc;
     }
 
-    public void createProject(){
+    public String createProject(){
         System.out.println("Enter project name");
         String projectName = sc.nextLine();
         System.out.println("Enter project decription");
@@ -50,7 +50,7 @@ public class ProjectDialog {
                 e.printStackTrace();
             }
         }
-        projectManipulator.createProject(projectName, projectDescription, projectStartDate, projectFinishDate);
+        return projectManipulator.createProject(projectName, projectDescription, projectStartDate, projectFinishDate);
 
     }
 

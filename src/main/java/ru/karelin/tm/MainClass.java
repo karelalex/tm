@@ -6,14 +6,19 @@ import java.util.Scanner;
 
 
 public class MainClass {
+
+    private static String currentProjectId="";
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         ProjectDialog projectDialog = new ProjectDialog(sc);
-
+        TaskDialog taskDialog = new TaskDialog(sc);
+        ProjectManipulator projectManipulator = new ProjectManipulator();
+        String currentProjectId="";
         String command;
         String[] commandParts;
         out:
         while (true) {
+            if(!currentProjectId.isEmpty()) System.out.println(currentProjectId);
             System.out.print(">");
             command = sc.nextLine();
             commandParts = command.split(" ");
@@ -25,11 +30,14 @@ public class MainClass {
                     showMainHelp();
                     break;
                 case CREATE_PROJECT:
-                    projectDialog.createProject();
+                    setCurrentProject(projectDialog.createProject(), projectManipulator);
                     break;
                 case EDIT_PROJECT:
                     if (commandParts.length > 1) {
                         projectDialog.editProject(commandParts[1]);
+                    }
+                    else if(!currentProjectId.isEmpty()){
+                        projectDialog.editProject(currentProjectId);
                     }
                 case SHOW_PROJECT_LIST:
                     projectDialog.showProjectsList();
@@ -38,18 +46,24 @@ public class MainClass {
                     if(commandParts.length>1) {
                         projectDialog.showProject(commandParts[1]);
                     }
+                    else if (!currentProjectId.isEmpty()){
+                        projectDialog.showProject(currentProjectId);
+                    }
                     break;
                 case REMOVE_PROJECT:
                     if (commandParts.length > 1) {
                         projectDialog.removeProject(commandParts[1]);
                     }
+                    else if (!currentProjectId.isEmpty()){
+                        projectDialog.removeProject(currentProjectId);
+                    }
                     break;
                 case CREATE_TASK:
-                    projectDialog.createProject();
+                    taskDialog.createTask();
                     break;
                 case EDIT_TASK:
                     if (commandParts.length > 1) {
-
+                    taskDialog.editTask(commandParts[1]);
                     }
                     break;
                 case SHOW_TASK_LIST:
@@ -85,5 +99,12 @@ public class MainClass {
         System.out.println("'" + CREATE_PROJECT + "' creates new project");
         System.out.println("'" + REMOVE_PROJECT + " %number%' removes project with specified number");
        // System.out.println("'" + GO_INTO_PROJECT +  " %number%' enter in project submenu");
+    }
+    private static void setCurrentProject(String projectId, ProjectManipulator pm){
+        if(projectId.isEmpty()) {
+            currentProjectId="";
+            return;
+        }
+        if(pm.checkID(projectId)) currentProjectId=projectId;
     }
 }

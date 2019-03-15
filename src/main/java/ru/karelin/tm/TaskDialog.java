@@ -10,7 +10,7 @@ public class TaskDialog {
     private Scanner sc;
     private TaskManipulator taskManipulator = new TaskManipulator();
     private ProjectManipulator projectManipulator = new ProjectManipulator();
-    DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    private DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 
     public TaskDialog(Scanner sc) {
