@@ -1,16 +1,13 @@
 package ru.karelin.tm.repository;
 
 import ru.karelin.tm.ObjectAlreadyExistsException;
-import ru.karelin.tm.Statics;
 import ru.karelin.tm.entity.Task;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 
 public class TaskRepository implements Repository<Task> {
-    private static Map<String, Task> tasks = Statics.tasks;
+    private static Map<String, Task> tasks = new HashMap<>();
 
     public List<Task> findAllByProjectId (String projectId){
        ArrayList<Task> taskArrayList = new ArrayList<>();

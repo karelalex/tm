@@ -1,18 +1,13 @@
 package ru.karelin.tm.repository;
 
 import ru.karelin.tm.ObjectAlreadyExistsException;
-import ru.karelin.tm.Statics;
 import ru.karelin.tm.entity.Project;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 
 public class ProjectRepository implements Repository<Project> {
-    private static Map<String, Project> projects = Statics.projects;
-
-
+    private static Map<String, Project> projects = new HashMap<>();
 
     @Override
     public List<Project> findAll() {
