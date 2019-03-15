@@ -1,5 +1,6 @@
-package ru.karelin.tm;
+package ru.karelin.tm.service;
 
+import ru.karelin.tm.Statics;
 import ru.karelin.tm.entity.Project;
 import ru.karelin.tm.entity.Task;
 
