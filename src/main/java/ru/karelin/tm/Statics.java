@@ -13,7 +13,6 @@ public class Statics {
     public static final String SHOW_PROJECT_LIST = "pl";
     public static final String SHOW_PROJECT= "sp";
     public static final String EDIT_PROJECT = "ep";
-    public static final String SET_CURRENT_PROJECT = "cur";
     public static final String CREATE_TASK = "ct";
     public static final String SHOW_TASK_LIST = "tl";
     public static final String SHOW_TASK = "st";
