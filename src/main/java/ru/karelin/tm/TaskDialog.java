@@ -124,6 +124,14 @@ public class TaskDialog {
         if(projectManipulator.checkID(projectId)) taskManipulator.showTaskList(projectId);
         else System.out.println("Wrong Project ID");
     }
+    public void showTask(String taskId){
+        if(!taskManipulator.checkID(taskId)){
+            System.out.println("Wrong ID");
+            return;
+        }
+        taskManipulator.showTask(taskId);
+
+    }
     public void removeTask(String taskId){
         taskManipulator.removeTask(taskId);
     }

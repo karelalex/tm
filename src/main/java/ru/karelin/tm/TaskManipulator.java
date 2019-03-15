@@ -43,6 +43,16 @@ public class TaskManipulator {
         }
     }
 
+    public void showTask(String taskId){
+        Task task = tasks.get(taskId);
+        System.out.println("Task name: " + task.getName());
+        System.out.println("Task description: " + task.getDescription());
+        System.out.println("Task start date: " + task.getStartDate());
+        System.out.println("Task finish date " + task.getFinishDate());
+        System.out.println("Project ID: " + task.getProjectID());
+        System.out.println();
+    }
+
     public void showTaskList(String projectId) {
         for (Map.Entry<String, Task> entry : tasks.entrySet()) {
             if (entry.getValue().getProjectID().equals(projectId)) {
