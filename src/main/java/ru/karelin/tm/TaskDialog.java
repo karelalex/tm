@@ -8,18 +8,21 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class TaskDialog {
     private Scanner sc;
-    private TaskService taskService = new TaskService();
-    private ProjectService projectService = new ProjectService();
+    private TaskService taskService;
+    private ProjectService projectService;
     private DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 
-    public TaskDialog(Scanner sc) {
+    public TaskDialog(Scanner sc, TaskService taskService, ProjectService projectService) {
         this.sc = sc;
+        this.taskService = taskService;
+        this.projectService = projectService;
     }
 
     public void createTask(){
@@ -125,14 +128,22 @@ public class TaskDialog {
 
     }
     public void showTaskList(String projectId){
-        if (projectId.isEmpty()) taskService.getTaskList();
-        else if(projectService.checkID(projectId)) taskService.getTaskList(projectId); //todo fix below
-        else System.out.println("Wrong Project ID");
-        for (Map.Entry<String, Task> entry : tasks.entrySet()) {
-            System.out.println("Task: " + entry.getKey());
-            System.out.println("Task name: " + entry.getValue().getName());
-            System.out.println("Task description: " + entry.getValue().getDescription());
-            System.out.println("Project ID: " + entry.getValue().getProjectID());
+        List<Task> tasks;
+        boolean showProjectId=true;
+        if (projectId.isEmpty()) tasks=taskService.getTaskList();
+        else if(projectService.checkID(projectId)) {
+            tasks=taskService.getTaskList(projectId);
+            showProjectId=false;
+        }
+        else {
+            System.out.println("Wrong Project ID");
+            return;
+        }
+        for ( Task t : tasks) {
+            System.out.println("Task: " + t.getId());
+            System.out.println("Task name: " + t.getName());
+            System.out.println("Task description: " + t.getDescription());
+            if (showProjectId) System.out.println("Project ID: " + t.getProjectID());
             System.out.println();
         }
     }
@@ -141,7 +152,7 @@ public class TaskDialog {
             System.out.println("Wrong ID");
             return;
         }
-        taskService.getTask(taskId);
+        Task task = taskService.getTask(taskId);
         System.out.println("Task name: " + task.getName());
         System.out.println("Task description: " + task.getDescription());
         System.out.println("Task start date: " + dateFormat.format(task.getStartDate()));
