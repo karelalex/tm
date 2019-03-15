@@ -7,8 +7,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
-public class createProjectCommand extends AbstractCommand {
-    public createProjectCommand(Bootstrap bootstrap) {
+public class ProjectCreateCommand extends AbstractCommand {
+    public ProjectCreateCommand(Bootstrap bootstrap) {
         super("cp", "starts create new project dialog", bootstrap);
     }
 

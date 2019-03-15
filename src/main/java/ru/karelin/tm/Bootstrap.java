@@ -116,7 +116,7 @@ public class Bootstrap {
         System.out.println("Commands: ");
         System.out.println("'" + SHOW_PROJECT_LIST + "' shows list of projects");
         System.out.println("'" + CREATE_PROJECT + "' starts create new project dialog");
-        System.out.println("'" + REMOVE_PROJECT + " %number%' removes project with specified number and all its tasks");
+        System.out.println("'" + REMOVE_PROJECT + " %number%' ");
         System.out.println("'" + SHOW_PROJECT + " %number%' shows project info. If current project is set %number% may be skipped");
         System.out.println("'" + EDIT_PROJECT + " %number%' starts edit project dialog for specified project. If current project is set %number% may be skipped");
         System.out.println("'" + CREATE_TASK + " %number%' starts create new task dialog. Task will be created inside current or specified project.");
