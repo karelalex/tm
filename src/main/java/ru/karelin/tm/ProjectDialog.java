@@ -8,16 +8,19 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class ProjectDialog {
-    ProjectService projectService = new ProjectService();
-    TaskService taskService = new TaskService();
+    private ProjectService projectService;
+    private TaskService taskService ;
     private Scanner sc;
     DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
-    public ProjectDialog(Scanner sc) {
+    public ProjectDialog(ProjectService projectService, TaskService taskService, Scanner sc) {
+        this.projectService = projectService;
+        this.taskService = taskService;
         this.sc = sc;
     }
 
@@ -106,11 +109,11 @@ public class ProjectDialog {
     }
 
     public void showProjectsList() {
-        projectService.getProjectsList();
-        for (Map.Entry<String, Project> entry:projects.entrySet()) {
-            System.out.println("Projectid: " + entry.getKey());
-            System.out.println("Project name: " +entry.getValue().getName() );
-            System.out.println("Project name: " + entry.getValue().getDescription());
+        List<Project> projects = projectService.getProjectsList();
+        for (Project p :projects) {
+            System.out.println("Projectid: " + p.getId());
+            System.out.println("Project name: " + p.getName() );
+            System.out.println("Project name: " + p.getDescription());
             System.out.println();
         }
     }
@@ -125,8 +128,7 @@ public class ProjectDialog {
             System.out.println("Wrong ID "+ projectId);
             return;
         }
-        projectService.getProject(projectId);
-        Project project = projects.get(projectId);
+        Project project = projectService.getProject(projectId);
         System.out.println("Project name: " + project.getName() );
         System.out.println("Project name: " + project.getDescription());
         System.out.println("Start Date: " + dateFormat.format(project.getStartDate()));
