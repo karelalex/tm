@@ -20,14 +20,13 @@ public class ProjectService {
         this.taskRepository = taskRepository;
     }
 
-    public String createProject(String name, String description, Date startDate, Date finishDate) {
+    public void createProject(String name, String description, Date startDate, Date finishDate) {
         Project project = new Project();
         project.setName(name);
         project.setDescription(description);
         project.setStartDate(startDate);
         project.setFinishDate(finishDate);
         projectRepository.persist(project);
-        return project.getId();
     }
 
     public void editProject(String id, String name, String description, Date startDate, Date finishDate) {

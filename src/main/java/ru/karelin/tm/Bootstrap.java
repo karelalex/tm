@@ -5,6 +5,9 @@ import ru.karelin.tm.repository.TaskRepository;
 import ru.karelin.tm.service.ProjectService;
 import ru.karelin.tm.service.TaskService;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import static ru.karelin.tm.Statics.*;
@@ -12,24 +15,47 @@ import static ru.karelin.tm.Statics.*;
 
 public class Bootstrap {
 
+    private ProjectService projectService;
+    private TaskService taskService;
+    private Scanner sc;
 
-    public static void init() {
-        Scanner sc = new Scanner(System.in);
+    public DateFormat getDateFormat() {
+        return dateFormat;
+    }
+
+    private DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+    public Scanner getScanner() {
+        return sc;
+    }
+
+    public ProjectService getProjectService() {
+        return projectService;
+    }
+
+    public TaskService getTaskService() {
+        return taskService;
+    }
+
+    public void init() {
         ProjectRepository projectRepository = new ProjectRepository();
         TaskRepository taskRepository = new TaskRepository();
-        ProjectService projectService = new ProjectService(projectRepository, taskRepository);
-        TaskService taskService = new TaskService(taskRepository);
-        ProjectDialog projectDialog = new ProjectDialog(projectService, sc);
-        TaskDialog taskDialog = new TaskDialog(sc, taskService, projectService);
+        projectService = new ProjectService(projectRepository, taskRepository);
+        taskService = new TaskService(taskRepository);
+        sc = new Scanner(System.in);
+        //ProjectDialog projectDialog = new ProjectDialog(projectService, sc);
+        //TaskDialog taskDialog = new TaskDialog(sc, taskService, projectService);
 
         String command;
-        String[] commandParts;
+        String[] commandParts, params;
         out:
         while (true) {
             System.out.print(">");
             command = sc.nextLine();
             commandParts = command.split(" ");
 
+            command = commandParts[0];
+            params = Arrays.copyOfRange(commandParts, 1, commandParts.length);
             switch (commandParts[0]) {
                 case QUIT:
                     break out;
@@ -38,7 +64,7 @@ public class Bootstrap {
                     break;
 
                 case CREATE_PROJECT:
-                    projectDialog.createProject();
+                    projectDialog.createProject(); //done
                     break;
                 case EDIT_PROJECT:
                     projectDialog.editProject(commandParts[1]);
@@ -79,15 +105,15 @@ public class Bootstrap {
                     }
                     break;
                 default:
-                    System.out.println("Wrong commantld");
+                    System.out.println("Wrong commandId");
 
             }
         }
     }
 
 
-    private static void showMainHelp() {
-        System.out.println("Commmands: ");
+    public void showMainHelp() {
+        System.out.println("Commands: ");
         System.out.println("'" + SHOW_PROJECT_LIST + "' shows list of projects");
         System.out.println("'" + CREATE_PROJECT + "' starts create new project dialog");
         System.out.println("'" + REMOVE_PROJECT + " %number%' removes project with specified number and all its tasks");

@@ -2,14 +2,12 @@ package ru.karelin.tm;
 
 import ru.karelin.tm.entity.Project;
 import ru.karelin.tm.service.ProjectService;
-import ru.karelin.tm.service.TaskService;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class ProjectDialog {

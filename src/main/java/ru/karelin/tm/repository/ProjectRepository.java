@@ -7,7 +7,7 @@ import java.util.*;
 
 
 public class ProjectRepository implements Repository<Project> {
-    private static Map<String, Project> projects = new HashMap<>();
+    private static Map<String, Project> projects = new LinkedHashMap<>();
 
     @Override
     public List<Project> findAll() {

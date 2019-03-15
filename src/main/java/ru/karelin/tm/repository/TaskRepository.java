@@ -7,7 +7,7 @@ import java.util.*;
 
 
 public class TaskRepository implements Repository<Task> {
-    private static Map<String, Task> tasks = new HashMap<>();
+    private static Map<String, Task> tasks = new LinkedHashMap<>();
 
     public List<Task> findAllByProjectId (String projectId){
        ArrayList<Task> taskArrayList = new ArrayList<>();
