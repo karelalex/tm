@@ -14,13 +14,13 @@ import java.util.Scanner;
 
 public class ProjectDialog {
     private ProjectService projectService;
-    private TaskService taskService ;
+
     private Scanner sc;
     DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
-    public ProjectDialog(ProjectService projectService, TaskService taskService, Scanner sc) {
+    public ProjectDialog(ProjectService projectService, Scanner sc) {
         this.projectService = projectService;
-        this.taskService = taskService;
+
         this.sc = sc;
     }
 
@@ -119,7 +119,6 @@ public class ProjectDialog {
     }
 
     public void removeProject(String projectId) {
-        taskService.removeTasksByProjectID(projectId);
         projectService.removeProject(projectId);
     }
 

@@ -62,12 +62,6 @@ public class TaskService {
             taskRepository.remove(task);
     }
 
-    public void removeTasksByProjectID(String projectId) {
-        List<Task> tasks = taskRepository.findAllByProjectId(projectId);
-        taskRepository.removeAll(tasks);
-    }
-
-
     public boolean checkID(String taskId) {
         Task task = taskRepository.findOne(taskId);
         return task!=null;

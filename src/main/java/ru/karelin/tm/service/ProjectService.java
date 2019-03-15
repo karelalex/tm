@@ -4,6 +4,7 @@ import ru.karelin.tm.Statics;
 import ru.karelin.tm.entity.Project;
 import ru.karelin.tm.entity.Task;
 import ru.karelin.tm.repository.ProjectRepository;
+import ru.karelin.tm.repository.TaskRepository;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -15,9 +16,11 @@ import java.util.Map;
 public class ProjectService {
 
     private ProjectRepository projectRepository;
+    private TaskRepository taskRepository;
 
-    public ProjectService(ProjectRepository projectRepository) {
+    public ProjectService(ProjectRepository projectRepository, TaskRepository taskRepository) {
         this.projectRepository = projectRepository;
+        this.taskRepository = taskRepository;
     }
 
     public String createProject(String name, String description, Date startDate, Date finishDate) {
@@ -47,7 +50,10 @@ public class ProjectService {
 
     public void removeProject(String projectID){
         Project project = projectRepository.findOne(projectID);
+        List<Task> taskList = taskRepository.findAllByProjectId(projectID);
+        taskRepository.removeAll(taskList);
         projectRepository.remove(project);
+
 
     }
 

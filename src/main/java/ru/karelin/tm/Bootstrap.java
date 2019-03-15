@@ -1,21 +1,29 @@
 package ru.karelin.tm;
 
+import ru.karelin.tm.repository.ProjectRepository;
+import ru.karelin.tm.repository.TaskRepository;
 import ru.karelin.tm.service.ProjectService;
-
-import static ru.karelin.tm.Statics.*;
+import ru.karelin.tm.service.TaskService;
 
 import java.util.Scanner;
 
+import static ru.karelin.tm.Statics.*;
 
-public class MainClass {
+
+public class Bootstrap {
 
     private static String currentProjectId = "";
+    private static ProjectService projectService;
 
-    public static void main(String[] args) {
+    public static void init () {
         Scanner sc = new Scanner(System.in);
-        ProjectDialog projectDialog = new ProjectDialog(sc);
-        TaskDialog taskDialog = new TaskDialog(sc);
-        ProjectService projectService = new ProjectService();
+        ProjectRepository projectRepository = new ProjectRepository();
+        TaskRepository taskRepository = new TaskRepository();
+        projectService = new ProjectService(projectRepository, taskRepository);
+        TaskService taskService = new TaskService(taskRepository);
+        ProjectDialog projectDialog = new ProjectDialog(projectService,sc);
+        TaskDialog taskDialog = new TaskDialog(sc, taskService, projectService);
+
         String command;
         String[] commandParts;
         out:
@@ -33,12 +41,12 @@ public class MainClass {
                     break;
                 case SET_CURRENT_PROJECT:
                     if (commandParts.length>1){
-                        setCurrentProject(commandParts[1], projectService);
+                        setCurrentProject(commandParts[1]);
                     }
-                    else setCurrentProject("", projectService);
+                    else setCurrentProject("");
                     break;
                 case CREATE_PROJECT:
-                    setCurrentProject(projectDialog.createProject(), projectService);
+                    setCurrentProject(projectDialog.createProject());
                     break;
                 case EDIT_PROJECT:
                     if (commandParts.length > 1) {
@@ -114,11 +122,11 @@ public class MainClass {
         System.out.println("' "+ HELP + "' shows this help");
     }
 
-    private static void setCurrentProject(String projectId, ProjectService pm) {
+    private static void setCurrentProject(String projectId) {
         if (projectId.isEmpty()) {
             currentProjectId = "";
             return;
         }
-        if (pm.checkID(projectId)) currentProjectId = projectId;
+        if (projectService.checkID(projectId)) currentProjectId = projectId;
     }
 }
