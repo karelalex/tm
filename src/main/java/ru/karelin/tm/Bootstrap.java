@@ -1,5 +1,7 @@
 package ru.karelin.tm;
 
+import ru.karelin.tm.commands.AbstractCommand;
+import ru.karelin.tm.commands.ProjectCreateCommand;
 import ru.karelin.tm.repository.ProjectRepository;
 import ru.karelin.tm.repository.TaskRepository;
 import ru.karelin.tm.service.ProjectService;
@@ -8,6 +10,8 @@ import ru.karelin.tm.service.TaskService;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import static ru.karelin.tm.Statics.*;
@@ -43,8 +47,14 @@ public class Bootstrap {
         projectService = new ProjectService(projectRepository, taskRepository);
         taskService = new TaskService(taskRepository);
         sc = new Scanner(System.in);
-        //ProjectDialog projectDialog = new ProjectDialog(projectService, sc);
-        //TaskDialog taskDialog = new TaskDialog(sc, taskService, projectService);
+        Map<String, AbstractCommand> commands = new HashMap<>();
+
+        //commands registration block
+
+        AbstractCommand projectCreateCommand = new ProjectCreateCommand(this);
+        commands.put(projectCreateCommand.getName(), projectCreateCommand);
+
+        //end of command registration block
 
         String command;
         String[] commandParts, params;
@@ -56,7 +66,7 @@ public class Bootstrap {
 
             command = commandParts[0];
             params = Arrays.copyOfRange(commandParts, 1, commandParts.length);
-            switch (commandParts[0]) {
+            /*switch (commandParts[0]) {
                 case QUIT:
                     break out;
                 case HELP:
@@ -106,10 +116,9 @@ public class Bootstrap {
                     break;
                 default:
                     System.out.println("Wrong commandId");
-
+*/
             }
         }
-    }
 
 
     public void showMainHelp() {
