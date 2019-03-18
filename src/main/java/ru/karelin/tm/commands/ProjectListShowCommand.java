@@ -8,7 +8,7 @@ import java.text.DateFormat;
 import java.util.List;
 
 public class ProjectListShowCommand extends AbstractCommand {
-    public ProjectListShowCommand(String name, String description, Bootstrap bootstrap) {
+    public ProjectListShowCommand(Bootstrap bootstrap) {
         super("pl", "shows list of projects", bootstrap);
     }
 

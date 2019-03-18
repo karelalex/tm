@@ -8,7 +8,7 @@ import java.text.ParseException;
 import java.util.Date;
 
 public class ProjectEditCommand extends AbstractCommand {
-    public ProjectEditCommand(String name, String description, Bootstrap bootstrap) {
+    public ProjectEditCommand(Bootstrap bootstrap) {
         super("ep", " %number%' starts edit project dialog for specified project.", bootstrap);
     }
 

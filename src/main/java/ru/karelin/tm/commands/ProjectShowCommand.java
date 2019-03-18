@@ -7,7 +7,7 @@ import ru.karelin.tm.service.ProjectService;
 import java.text.DateFormat;
 
 public class ProjectShowCommand extends AbstractCommand{
-    public ProjectShowCommand(String name, String description, Bootstrap bootstrap) {
+    public ProjectShowCommand(Bootstrap bootstrap) {
         super("sp",  "shows project info", bootstrap);
     }
 

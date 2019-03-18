@@ -4,7 +4,7 @@ import ru.karelin.tm.Bootstrap;
 import ru.karelin.tm.service.ProjectService;
 
 public class ProjectRemoveCommand extends AbstractCommand {
-    public ProjectRemoveCommand(String name, String description, Bootstrap bootstrap) {
+    public ProjectRemoveCommand(Bootstrap bootstrap) {
         super("rp", "removes project with specified number and all its tasks", bootstrap);
     }
 

@@ -1,7 +1,6 @@
 package ru.karelin.tm;
 
-import ru.karelin.tm.commands.AbstractCommand;
-import ru.karelin.tm.commands.ProjectCreateCommand;
+import ru.karelin.tm.commands.*;
 import ru.karelin.tm.repository.ProjectRepository;
 import ru.karelin.tm.repository.TaskRepository;
 import ru.karelin.tm.service.ProjectService;
@@ -51,14 +50,26 @@ public class Bootstrap {
 
         //commands registration block
 
-        AbstractCommand projectCreateCommand = new ProjectCreateCommand(this);
+        ProjectCreateCommand projectCreateCommand = new ProjectCreateCommand(this);
         commands.put(projectCreateCommand.getName(), projectCreateCommand);
+        ProjectEditCommand projectEditCommand = new ProjectEditCommand(this);
+        commands.put(projectEditCommand.getName(), projectEditCommand);
+        ProjectListShowCommand projectListShowCommand = new ProjectListShowCommand(this);
+        commands.put(projectListShowCommand.getName(), projectListShowCommand);
+        ProjectRemoveCommand projectRemoveCommand = new ProjectRemoveCommand(this);
+        commands.put(projectRemoveCommand.getName(), projectRemoveCommand);
+        ProjectShowCommand projectShowCommand = new ProjectShowCommand(this);
+        commands.put(projectShowCommand.getName(), projectShowCommand);
+
+
+
 
         //end of command registration block
 
         String command;
         String[] commandParts, params;
         out:
+
         while (true) {
             System.out.print(">");
             command = sc.nextLine();
@@ -66,28 +77,14 @@ public class Bootstrap {
 
             command = commandParts[0];
             params = Arrays.copyOfRange(commandParts, 1, commandParts.length);
-            /*switch (commandParts[0]) {
-                case QUIT:
-                    break out;
-                case HELP:
-                    showMainHelp();
-                    break;
+            AbstractCommand abstractCommand = commands.get(command);
+            if(abstractCommand==null){
+                System.out.println("Wrong command name");
+                continue ;
+            }
+            abstractCommand.execute(params);
 
-                case CREATE_PROJECT:
-                    projectDialog.createProject(); //done
-                    break;
-                case EDIT_PROJECT:
-                    projectDialog.editProject(commandParts[1]);
-                    break;
-                case SHOW_PROJECT_LIST:
-                    projectDialog.showProjectsList();
-                    break;
-                case SHOW_PROJECT:
-                    projectDialog.showProject(commandParts[1]);
-                    break;
-                case REMOVE_PROJECT:
-                    projectDialog.removeProject(commandParts[1]);
-                    break;
+            /*
                 case CREATE_TASK:
                     if (commandParts.length > 1)
                         taskDialog.createTask(commandParts[1]);
