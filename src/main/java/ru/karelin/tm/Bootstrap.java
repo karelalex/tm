@@ -1,10 +1,13 @@
 package ru.karelin.tm;
 
 import ru.karelin.tm.commands.*;
+import ru.karelin.tm.entity.User;
 import ru.karelin.tm.repository.ProjectRepository;
 import ru.karelin.tm.repository.TaskRepository;
+import ru.karelin.tm.repository.UserRepository;
 import ru.karelin.tm.service.ProjectService;
 import ru.karelin.tm.service.TaskService;
+import ru.karelin.tm.service.UserService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -18,19 +21,29 @@ public class Bootstrap {
 
     private ProjectService projectService;
     private TaskService taskService;
+    private UserService userService;
     private Scanner sc;
+    private Map<String, AbstractCommand> commands = new LinkedHashMap<>();
+    private DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    private User currentUser;
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 
     public Map<String, AbstractCommand> getCommands() {
         return commands;
     }
 
-    private Map<String, AbstractCommand> commands = new LinkedHashMap<>();
 
     public DateFormat getDateFormat() {
         return dateFormat;
     }
 
-    private DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
     public Scanner getScanner() {
         return sc;
@@ -49,6 +62,9 @@ public class Bootstrap {
         TaskRepository taskRepository = new TaskRepository();
         projectService = new ProjectService(projectRepository, taskRepository);
         taskService = new TaskService(taskRepository);
+        MD5Generator md5Generator = new MD5Generator();
+        UserRepository userRepository = new UserRepository();
+        userService=new UserService(md5Generator, userRepository);
         sc = new Scanner(System.in);
 
 

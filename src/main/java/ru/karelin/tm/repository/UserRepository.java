@@ -7,8 +7,8 @@ import java.util.*;
 
 public class UserRepository implements Repository<User> {
     private static Map<String, User> users = new HashMap<>();
-    @Override
 
+    @Override
     public List<User> findAll() {
         return new ArrayList(users.values());
     }
@@ -40,5 +40,13 @@ public class UserRepository implements Repository<User> {
         for (User u : userCollection) {
             users.remove(u.getId());
         }
+    }
+
+    public User findOneByLoginAndPassword(String login, String passHash) {
+        for (User u : users.values()
+             ) {
+            if(u.getLogin().equals(login) && u.getPasswordHash().equals(passHash)) return u;
+        }
+        return null;
     }
 }
