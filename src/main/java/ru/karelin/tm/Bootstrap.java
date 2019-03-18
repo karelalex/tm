@@ -24,6 +24,11 @@ public class Bootstrap {
     private ProjectService projectService;
     private TaskService taskService;
     private Scanner sc;
+
+    public Map<String, AbstractCommand> getCommands() {
+        return commands;
+    }
+
     private Map<String, AbstractCommand> commands = new HashMap<>();
 
     public DateFormat getDateFormat() {
@@ -112,7 +117,7 @@ public class Bootstrap {
             System.out.println("'" + c.getName() + "' " + c.getDecsription());
         }
         System.out.println("'" + QUIT + "' closes program");
-        System.out.println("'" + HELP + "' shows this help");
+
     }
 
 
