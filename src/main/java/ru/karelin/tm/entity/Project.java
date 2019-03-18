@@ -11,6 +11,7 @@ public class Project {
    private String description;
    private Date startDate;
    private Date finishDate;
+   private String userId;
 
     public String getId() {
         return id;
@@ -50,5 +51,13 @@ public class Project {
 
     public void setFinishDate(Date finishDate) {
         this.finishDate = finishDate;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

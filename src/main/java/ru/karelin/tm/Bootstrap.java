@@ -49,6 +49,10 @@ public class Bootstrap {
         return sc;
     }
 
+    public UserService getUserService() {
+        return userService;
+    }
+
     public ProjectService getProjectService() {
         return projectService;
     }
@@ -64,7 +68,7 @@ public class Bootstrap {
         taskService = new TaskService(taskRepository);
         MD5Generator md5Generator = new MD5Generator();
         UserRepository userRepository = new UserRepository();
-        userService=new UserService(md5Generator, userRepository);
+        userService = new UserService(md5Generator, userRepository);
         sc = new Scanner(System.in);
 
 
@@ -98,7 +102,7 @@ public class Bootstrap {
 
         String command;
         String[] commandParts, params;
-        out:
+
 
         while (true) {
             System.out.print(">");

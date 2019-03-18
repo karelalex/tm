@@ -43,9 +43,15 @@ public class UserRepository implements Repository<User> {
     }
 
     public User findOneByLoginAndPassword(String login, String passHash) {
-        for (User u : users.values()
-             ) {
+        for (User u : users.values()) {
             if(u.getLogin().equals(login) && u.getPasswordHash().equals(passHash)) return u;
+        }
+        return null;
+    }
+
+    public User findOneByLogin(String login) {
+        for (User u : users.values()) {
+            if(u.getLogin().equals(login)) return u;
         }
         return null;
     }

@@ -8,6 +8,9 @@ public class User {
     private String id= UUID.randomUUID().toString();
     private String login;
     private String passwordHash;
+    private String userName;
+
+
     private RoleType role;
 
     public String getId() {
@@ -32,6 +35,14 @@ public class User {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public RoleType getRole() {

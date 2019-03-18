@@ -13,8 +13,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    User getUserByLoginAndPassword(String login, String password) {
+    public User getUserByLoginAndPassword(String login, String password) {
         return userRepository.findOneByLoginAndPassword(login, md5Generator.generate(password));
+    }
+
+    public boolean isUserExistByLogin(String login){
+        return userRepository.findOneByLogin(login) != null;
     }
 
 }

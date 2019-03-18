@@ -10,6 +10,7 @@ public class Task {
     private Date startDate;
     private Date finishDate;
     private String projectID;
+    private String userId;
 
     public String getId() {
         return id;
@@ -57,5 +58,13 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
