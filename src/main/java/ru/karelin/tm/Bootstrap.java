@@ -8,23 +8,23 @@ import ru.karelin.tm.service.TaskService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-
-
+import java.util.*;
 
 
 public class Bootstrap {
 
     public static final String QUIT = "exit";
-    public static final String HELP = "help";
+
 
     private ProjectService projectService;
     private TaskService taskService;
     private Scanner sc;
-    private Map<String, AbstractCommand> commands = new HashMap<>();
+
+    public Map<String, AbstractCommand> getCommands() {
+        return commands;
+    }
+
+    private Map<String, AbstractCommand> commands = new LinkedHashMap<>();
 
     public DateFormat getDateFormat() {
         return dateFormat;
@@ -53,27 +53,30 @@ public class Bootstrap {
 
 
         //commands registration block
+        HelpShowCommand helpShowCommand = new HelpShowCommand(this);
+        commands.put(helpShowCommand.getName(), helpShowCommand);
 
         ProjectCreateCommand projectCreateCommand = new ProjectCreateCommand(this);
         commands.put(projectCreateCommand.getName(), projectCreateCommand);
         ProjectEditCommand projectEditCommand = new ProjectEditCommand(this);
         commands.put(projectEditCommand.getName(), projectEditCommand);
+        ProjectShowCommand projectShowCommand = new ProjectShowCommand(this);
+        commands.put(projectShowCommand.getName(), projectShowCommand);
         ProjectListShowCommand projectListShowCommand = new ProjectListShowCommand(this);
         commands.put(projectListShowCommand.getName(), projectListShowCommand);
         ProjectRemoveCommand projectRemoveCommand = new ProjectRemoveCommand(this);
         commands.put(projectRemoveCommand.getName(), projectRemoveCommand);
-        ProjectShowCommand projectShowCommand = new ProjectShowCommand(this);
-        commands.put(projectShowCommand.getName(), projectShowCommand);
+
         TaskCreateCommand taskCreateCommand = new TaskCreateCommand(this);
         commands.put(taskCreateCommand.getName(), taskCreateCommand);
         TaskEditCommand taskEditCommand = new TaskEditCommand(this);
         commands.put(taskEditCommand.getName(), taskEditCommand);
+        TaskShowCommand taskShowCommand = new TaskShowCommand(this);
+        commands.put(taskShowCommand.getName(), taskShowCommand);
         TaskListShowCommand taskListShowCommand = new TaskListShowCommand(this);
         commands.put(taskListShowCommand.getName(), taskListShowCommand);
         TaskRemoveCommand taskRemoveCommand = new TaskRemoveCommand(this);
         commands.put(taskRemoveCommand.getName(), taskRemoveCommand);
-        TaskShowCommand taskShowCommand = new TaskShowCommand(this);
-        commands.put(taskShowCommand.getName(), taskShowCommand);
 
         //end of command registration block
 
@@ -85,10 +88,6 @@ public class Bootstrap {
             System.out.print(">");
             command = sc.nextLine();
             if(command.equals(QUIT)) break;
-            if (command.equals(HELP)) {
-                showMainHelp();
-                continue;
-            }
             commandParts = command.split(" ");
 
             command = commandParts[0];
@@ -105,15 +104,4 @@ public class Bootstrap {
     }
 
 
-    public void showMainHelp() {
-        System.out.println("Commands: ");
-        for (AbstractCommand c : commands.values()
-        ) {
-            System.out.println("'" + c.getName() + "' " + c.getDecsription());
-        }
-        System.out.println("'" + QUIT + "' closes program");
-        System.out.println("'" + HELP + "' shows this help");
-    }
-
-
-}
+   }
