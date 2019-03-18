@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class ProjectEditCommand extends AbstractCommand {
     public ProjectEditCommand(Bootstrap bootstrap) {
-        super("ep", " %number%' starts edit project dialog for specified project.", bootstrap);
+        super("ep", "starts edit project dialog for specified project", bootstrap);
     }
 
     @Override
