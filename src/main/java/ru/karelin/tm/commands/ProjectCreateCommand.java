@@ -9,7 +9,17 @@ import java.util.Date;
 
 public class ProjectCreateCommand extends AbstractCommand {
     public ProjectCreateCommand(Bootstrap bootstrap) {
-        super("cp", "starts create new project dialog", bootstrap);
+        super( bootstrap, true);
+    }
+
+    @Override
+    public String getName() {
+        return "cp";
+    }
+
+    @Override
+    public String getDescription() {
+        return "starts create new project dialog";
     }
 
     @Override

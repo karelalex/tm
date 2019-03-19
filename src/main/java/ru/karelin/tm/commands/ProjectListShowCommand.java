@@ -9,7 +9,17 @@ import java.util.List;
 
 public class ProjectListShowCommand extends AbstractCommand {
     public ProjectListShowCommand(Bootstrap bootstrap) {
-        super("pl", "shows list of projects", bootstrap);
+        super(bootstrap, true);
+    }
+
+    @Override
+    public String getName() {
+        return "pl";
+    }
+
+    @Override
+    public String getDescription() {
+        return "shows list of projects";
     }
 
     @Override

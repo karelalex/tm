@@ -73,30 +73,26 @@ public class Bootstrap {
 
 
         //commands registration block
-        HelpShowCommand helpShowCommand = new HelpShowCommand(this);
-        commands.put(helpShowCommand.getName(), helpShowCommand);
+        registerCommand(new HelpShowCommand(this));
 
-        ProjectCreateCommand projectCreateCommand = new ProjectCreateCommand(this);
-        commands.put(projectCreateCommand.getName(), projectCreateCommand);
-        ProjectEditCommand projectEditCommand = new ProjectEditCommand(this);
-        commands.put(projectEditCommand.getName(), projectEditCommand);
-        ProjectShowCommand projectShowCommand = new ProjectShowCommand(this);
-        commands.put(projectShowCommand.getName(), projectShowCommand);
-        ProjectListShowCommand projectListShowCommand = new ProjectListShowCommand(this);
-        commands.put(projectListShowCommand.getName(), projectListShowCommand);
-        ProjectRemoveCommand projectRemoveCommand = new ProjectRemoveCommand(this);
-        commands.put(projectRemoveCommand.getName(), projectRemoveCommand);
+        registerCommand(new ProjectCreateCommand(this));
+        registerCommand(new ProjectEditCommand(this));
+        registerCommand(new ProjectShowCommand(this));
+        registerCommand(new ProjectListShowCommand(this));
+        registerCommand(new ProjectRemoveCommand(this));
 
-        TaskCreateCommand taskCreateCommand = new TaskCreateCommand(this);
-        commands.put(taskCreateCommand.getName(), taskCreateCommand);
-        TaskEditCommand taskEditCommand = new TaskEditCommand(this);
-        commands.put(taskEditCommand.getName(), taskEditCommand);
-        TaskShowCommand taskShowCommand = new TaskShowCommand(this);
-        commands.put(taskShowCommand.getName(), taskShowCommand);
-        TaskListShowCommand taskListShowCommand = new TaskListShowCommand(this);
-        commands.put(taskListShowCommand.getName(), taskListShowCommand);
-        TaskRemoveCommand taskRemoveCommand = new TaskRemoveCommand(this);
-        commands.put(taskRemoveCommand.getName(), taskRemoveCommand);
+        registerCommand(new TaskCreateCommand(this));
+        registerCommand(new TaskEditCommand(this));
+        registerCommand(new TaskShowCommand(this));
+        registerCommand(new TaskListShowCommand(this));
+        registerCommand(new TaskRemoveCommand(this));
+
+        registerCommand(new UserRegisterCommand(this));
+        registerCommand(new UserAuthorizationCommand(this));
+        registerCommand(new UserLogoutCommand(this));
+
+
+
 
         //end of command registration block
 
@@ -118,10 +114,15 @@ public class Bootstrap {
                 continue;
             }
             abstractCommand.execute(params);
-
-
         }
+
+
+
+
     }
-
-
+    private void registerCommand(AbstractCommand command) {
+        String commandName = command.getName();
+        if(commands.containsKey(commandName)) throw new ObjectAlreadyExistsException("Command with name " + commandName + " is already registered");
+        commands.put(commandName, command);
+    }
    }

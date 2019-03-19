@@ -9,7 +9,17 @@ import java.util.List;
 
 public class TaskListShowCommand extends AbstractCommand {
     public TaskListShowCommand(Bootstrap bootstrap) {
-        super("tl", "shows task list for specified project. If not shows all tasks", bootstrap);
+        super(bootstrap, true);
+    }
+
+    @Override
+    public String getName() {
+        return"tl";
+    }
+
+    @Override
+    public String getDescription() {
+        return "shows task list for specified project. If not shows all tasks";
     }
 
     @Override

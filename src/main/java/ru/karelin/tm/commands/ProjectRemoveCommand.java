@@ -5,7 +5,17 @@ import ru.karelin.tm.service.ProjectService;
 
 public class ProjectRemoveCommand extends AbstractCommand {
     public ProjectRemoveCommand(Bootstrap bootstrap) {
-        super("rp", "removes project with specified number and all its tasks", bootstrap);
+        super( bootstrap,true);
+    }
+
+    @Override
+    public String getName() {
+        return "rp";
+    }
+
+    @Override
+    public String getDescription() {
+        return "removes project with specified number and all its tasks";
     }
 
     @Override

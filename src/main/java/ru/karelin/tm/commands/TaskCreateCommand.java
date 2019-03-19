@@ -10,10 +10,18 @@ import java.util.Date;
 
 public class TaskCreateCommand  extends AbstractCommand {
     public TaskCreateCommand(Bootstrap bootstrap) {
-        super("ct",
-                "starts create new task dialog. Task will be created inside " +
-                        "specified project or project ID will be asked later.",
-                bootstrap);
+        super(bootstrap, true);
+    }
+
+    @Override
+    public String getName() {
+        return "ct";
+    }
+
+    @Override
+    public String getDescription() {
+        return "starts create new task dialog. Task will be created inside " +
+                "specified project or project ID will be asked later.";
     }
 
     @Override

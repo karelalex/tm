@@ -10,7 +10,17 @@ import java.util.Date;
 
 public class TaskEditCommand extends AbstractCommand {
     public TaskEditCommand(Bootstrap bootstrap) {
-        super("et", "starts edit task dialog for specified task", bootstrap);
+        super(bootstrap, true);
+    }
+
+    @Override
+    public String getName() {
+        return "et";
+    }
+
+    @Override
+    public String getDescription() {
+        return "starts edit task dialog for specified task";
     }
 
     @Override

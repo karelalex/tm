@@ -8,8 +8,18 @@ import java.io.Console;
 import java.util.Arrays;
 
 public class UserAuthorizationCommand extends AbstractCommand {
-    public UserAuthorizationCommand(String name, String description, Bootstrap bootstrap) {
-        super("login", "starts user authorization dialog", bootstrap);
+    public UserAuthorizationCommand(Bootstrap bootstrap) {
+        super(bootstrap, false);
+    }
+
+    @Override
+    public String getName() {
+        return "login";
+    }
+
+    @Override
+    public String getDescription() {
+        return "starts user authorization dialog";
     }
 
     @Override

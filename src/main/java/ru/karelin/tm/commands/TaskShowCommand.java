@@ -8,7 +8,17 @@ import java.text.DateFormat;
 
 public class TaskShowCommand extends AbstractCommand {
     public TaskShowCommand(Bootstrap bootstrap) {
-        super("st", "shows task with specified ID", bootstrap);
+        super(bootstrap, true);
+    }
+
+    @Override
+    public String getName() {
+        return "st";
+    }
+
+    @Override
+    public String getDescription() {
+        return "shows task with specified ID";
     }
 
     @Override

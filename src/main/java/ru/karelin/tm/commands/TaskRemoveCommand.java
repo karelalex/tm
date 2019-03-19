@@ -5,7 +5,17 @@ import ru.karelin.tm.service.TaskService;
 
 public class TaskRemoveCommand extends AbstractCommand {
     public TaskRemoveCommand(Bootstrap bootstrap) {
-        super("rt", "removes task with specified ID", bootstrap);
+        super(bootstrap, true);
+    }
+
+    @Override
+    public String getName() {
+        return "rt";
+    }
+
+    @Override
+    public String getDescription() {
+        return "removes task with specified ID";
     }
 
     @Override

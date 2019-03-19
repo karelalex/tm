@@ -8,7 +8,17 @@ import java.text.DateFormat;
 
 public class ProjectShowCommand extends AbstractCommand{
     public ProjectShowCommand(Bootstrap bootstrap) {
-        super("sp",  "shows project info", bootstrap);
+        super(bootstrap, true);
+    }
+
+    @Override
+    public String getName() {
+        return "sp";
+    }
+
+    @Override
+    public String getDescription() {
+        return "shows project info";
     }
 
     @Override

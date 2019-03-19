@@ -7,8 +7,19 @@ import java.io.Console;
 import java.util.Arrays;
 
 public class UserRegisterCommand extends AbstractCommand {
-    public UserRegisterCommand(String name, String description, Bootstrap bootstrap) {
-        super("register", "starts new user registration dialog", bootstrap);
+
+    public UserRegisterCommand(Bootstrap bootstrap) {
+        super(bootstrap, false);
+    }
+
+    @Override
+    public String getName() {
+        return "register";
+    }
+
+    @Override
+    public String getDescription() {
+        return "starts new user registration dialog";
     }
 
     @Override
