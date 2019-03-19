@@ -2,6 +2,7 @@ package ru.karelin.tm.entity;
 
 import ru.karelin.tm.RoleType;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class User {
@@ -51,5 +52,18 @@ public class User {
 
     public void setRole(RoleType role) {
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id.equals(user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
