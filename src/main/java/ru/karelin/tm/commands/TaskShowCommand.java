@@ -25,14 +25,19 @@ public class TaskShowCommand extends AbstractCommand {
     @Override
     public void execute(String... params) {
         TaskService taskService = bootstrap.getTaskService();
-        String taskId = params[0];
+        String taskId = null;
+        if (params.length > 0) taskId = params[0];
+        else {
+            System.out.println("You must enter taskId");
+            return;
+        }
         DateFormat dateFormat = bootstrap.getDateFormat();
-        User currentUser = bootstrap.getCurrentUser();
-        if(!taskService.checkID(currentUser, taskId)){
+        String currentUserId = bootstrap.getCurrentUser().getId();
+        if (!taskService.checkID(currentUserId, taskId)) {
             System.out.println("Wrong ID");
             return;
         }
-        Task task = taskService.getTask(currentUser, taskId);
+        Task task = taskService.getTask(currentUserId, taskId);
         System.out.println("Task name: " + task.getName());
         System.out.println("Task description: " + task.getDescription());
         System.out.println("Task start date: " + dateFormat.format(task.getStartDate()));

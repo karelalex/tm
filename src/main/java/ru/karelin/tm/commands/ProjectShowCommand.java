@@ -24,15 +24,20 @@ public class ProjectShowCommand extends AbstractCommand{
 
     @Override
     public void execute(String... params) {
+        String projectId = null;
+        if (params.length > 0) projectId = params[0];
+        else {
+            System.out.println("You must enter taskId");
+            return;
+        }
         ProjectService projectService = bootstrap.getProjectService();
-        String projectId = params[0];
         DateFormat dateFormat = bootstrap.getDateFormat();
-        User currentUser = bootstrap.getCurrentUser();
-        if(!projectService.checkID(currentUser,projectId)) {
+        String currentUserId = bootstrap.getCurrentUser().getId();
+        if(!projectService.checkID(currentUserId,projectId)) {
             System.out.println("Wrong ID "+ projectId);
             return;
         }
-        Project project = projectService.getProject(currentUser, projectId);
+        Project project = projectService.getProject(currentUserId, projectId);
         System.out.println("Project name: " + project.getName() );
         System.out.println("Project name: " + project.getDescription());
         System.out.println("Start Date: " + dateFormat.format(project.getStartDate()));

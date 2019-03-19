@@ -25,11 +25,16 @@ public class ProjectEditCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
+        String projectId = null;
+        if (params.length > 0) projectId = params[0];
+        else {
+            System.out.println("You must enter taskId");
+            return;
+        }
         ProjectService projectService = bootstrap.getProjectService();
-        User currentUser = bootstrap.getCurrentUser();
-        String projectId = params[0];
+        String currentUserId = bootstrap.getCurrentUser().getId();
         DateFormat dateFormat = bootstrap.getDateFormat();
-        if (!projectService.checkID(currentUser, projectId)) {
+        if (!projectService.checkID(currentUserId, projectId)) {
             System.out.println("Wrong ID " + projectId);
             return;
         }
@@ -71,7 +76,7 @@ public class ProjectEditCommand extends AbstractCommand {
                 }
             }
         }
-        projectService.editProject(currentUser, projectId, projectName, projectDescription, projectStartDate, projectFinishDate);
+        projectService.editProject(currentUserId, projectId, projectName, projectDescription, projectStartDate, projectFinishDate);
     }
 }
 

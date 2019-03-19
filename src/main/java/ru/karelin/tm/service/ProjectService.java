@@ -22,19 +22,18 @@ public class ProjectService {
         this.taskRepository = taskRepository;
     }
 
-    public void createProject(User currentUser, String name, String description, Date startDate, Date finishDate) {
+    public void createProject(String userId, String name, String description, Date startDate, Date finishDate) {
         Project project = new Project();
         project.setName(name);
         project.setDescription(description);
         project.setStartDate(startDate);
         project.setFinishDate(finishDate);
-        project.setUserId(currentUser.getId());
+        project.setUserId(userId);
         projectRepository.persist(project);
     }
 
-    public void editProject(User currentUser, String id, String name, String description, Date startDate, Date finishDate) {
-        Project project = projectRepository.findOne(id);
-        checkSecurity(currentUser, project);
+    public void editProject(String userId, String id, String name, String description, Date startDate, Date finishDate) {
+        Project project = projectRepository.findOneByIdAndUserId(id, userId);
         if(!name.isEmpty()) project.setName(name);
         if(!description.isEmpty()) project.setDescription(description);
         if(startDate!=null) project.setStartDate(startDate);
@@ -42,43 +41,28 @@ public class ProjectService {
         projectRepository.merge(project);
     }
 
-    public List<Project> getProjectsList(User currentUser) {
-        return filterList(currentUser, projectRepository.findAll());
+    public List<Project> getProjectsList(String userId) {
+        return projectRepository.findAllByUserId(userId);
     }
 
 
 
-    public void removeProject(User currentUser, String projectID){
-        Project project = projectRepository.findOne(projectID);
-        checkSecurity(currentUser, project);
+    public void removeProject(String userId, String projectID){
+        Project project = projectRepository.findOneByIdAndUserId(projectID, userId);
         List<Task> taskList = taskRepository.findAllByProjectId(projectID);
         taskRepository.removeAll(taskList);
         projectRepository.remove(project);
     }
 
 
-    public boolean checkID(User currentUser, String projectId) {
-       Project project = projectRepository.findOne(projectId);
-       checkSecurity(currentUser, project);
-        return project!=null;
+    public boolean checkID(String userId, String projectId) {
+       Project project = projectRepository.findOneByIdAndUserId(projectId, userId);
+       return project!=null;
     }
 
-    public Project getProject(User currentUser, String projectId) {
-        Project project = projectRepository.findOne(projectId);
-        checkSecurity(currentUser, project);
-        return project;
+    public Project getProject(String userId, String projectId) {
+        return projectRepository.findOneByIdAndUserId(projectId, userId);
     }
 
-    private void checkSecurity(User user, Project project){
-        if (project.getUserId().equals(user.getId())) return;
-        else throw new SecurityException("Current user: " + user.getLogin() + " can not manipulate with project: " + project.getId());
-    }
-    private List<Project> filterList (User user, List<Project> list){
-        Iterator<Project> iter = list.iterator();
-        while (iter.hasNext()){
-            Project p = iter.next();
-            if (!p.getUserId().equals(user.getId())) iter.remove();
-        }
-        return list;
-    }
+
 }

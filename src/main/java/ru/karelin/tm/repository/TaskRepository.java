@@ -24,9 +24,32 @@ public class TaskRepository implements Repository<Task> {
         return new ArrayList<>(tasks.values());
     }
 
+    public List<Task> findAllByUserId(String userId) {
+        ArrayList<Task> list = new ArrayList<>();
+        for (Task t: tasks.values()) {
+            if (t.getUserId().equals(userId)) list.add(t);
+        }
+        return list;
+    }
+
+    public List<Task> findAllByProjectIdAndUserId (String projectId, String userId){
+        ArrayList<Task> taskArrayList = new ArrayList<>();
+        for (Task t: tasks.values()
+        ) {
+            if (t.getProjectID().equals(projectId) && t.getUserId().equals(userId)) taskArrayList.add(t);
+        }
+        return taskArrayList;
+    }
+
     @Override
     public Task findOne(String id) {
         return tasks.get(id);
+    }
+
+    public Task findOneByIdAndUserId(String id, String userId) {
+        Task task = findOne(id);
+        if(task.getUserId().equals(userId)) return task;
+        return null;
     }
 
     @Override

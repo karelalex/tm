@@ -15,9 +15,24 @@ public class ProjectRepository implements Repository<Project> {
         return new ArrayList<>(projects.values());
     }
 
+    public List<Project> findAllByUserId(String userId) {
+        ArrayList<Project> list = new ArrayList<>();
+        for (Project p: projects.values()) {
+            if (p.getUserId().equals(userId)) list.add(p);
+        }
+        return list;
+    }
+
+
     @Override
     public Project findOne(String id) {
         return projects.get(id);
+    }
+
+    public Project findOneByIdAndUserId(String id, String userId) {
+        Project project = findOne(id);
+        if (project.getUserId().equals(userId)) return project;
+        return null;
     }
 
     @Override

@@ -25,15 +25,16 @@ public class TaskListShowCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
-        User currentUser = bootstrap.getCurrentUser();
-        String projectId = params[0];
+        String currentUserId = bootstrap.getCurrentUser().getId();
+        String projectId = null;
+        if (params.length>0) projectId=params[0];
         TaskService taskService = bootstrap.getTaskService();
         ProjectService projectService = bootstrap.getProjectService();
         List<Task> tasks;
         boolean showProjectId=true;
-        if (projectId.isEmpty()) tasks=taskService.getTaskList(currentUser);
-        else if(projectService.checkID(currentUser, projectId)) {
-            tasks=taskService.getTaskList(currentUser, projectId);
+        if (projectId.isEmpty()) tasks=taskService.getTaskList(currentUserId);
+        else if(projectService.checkID(currentUserId, projectId)) {
+            tasks=taskService.getTaskList(currentUserId, projectId);
             showProjectId=false;
         }
         else {

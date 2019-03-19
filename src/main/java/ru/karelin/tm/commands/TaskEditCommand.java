@@ -26,12 +26,17 @@ public class TaskEditCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
+        String taskId = null;
+        if (params.length > 0) taskId = params[0];
+        else {
+            System.out.println("You must enter taskId");
+            return;
+        }
         TaskService taskService = bootstrap.getTaskService();
-        String taskId = params[0];
         DateFormat dateFormat = bootstrap.getDateFormat();
-        User currentUser = bootstrap.getCurrentUser();
+        String currentUserId = bootstrap.getCurrentUser().getId();
         ProjectService projectService = bootstrap.getProjectService();
-        if (!taskService.checkID(currentUser, taskId)) {
+        if (!taskService.checkID(currentUserId, taskId)) {
             System.out.println("Wrong ID!");
             return;
         }
@@ -74,12 +79,12 @@ public class TaskEditCommand extends AbstractCommand {
         }
         System.out.println("Enter new project id for task or just press enter if you do not want to change it");
         String projectId = sc.nextLine();
-        while (!projectId.isEmpty() && !projectService.checkID(currentUser, projectId)) {
+        while (!projectId.isEmpty() && !projectService.checkID(currentUserId, projectId)) {
             System.out.println("Wrong project id try again or leave it empty");
             projectId = sc.nextLine();
         }
 
-        taskService.editTask(currentUser, taskId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
+        taskService.editTask(currentUserId, taskId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
 
     }
 }

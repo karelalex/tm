@@ -18,20 +18,19 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public void createTask(User currentUser, String name, String description, Date startDate, Date finishDate, String projectId) {
+    public void createTask(String userId, String name, String description, Date startDate, Date finishDate, String projectId) {
         Task task = new Task();
         task.setName(name);
         task.setDescription(description);
         task.setStartDate(startDate);
         task.setFinishDate(finishDate);
-        task.setUserId(currentUser.getId());
+        task.setUserId(userId);
         if (!projectId.isEmpty()) task.setProjectID(projectId);
         taskRepository.persist(task);
     }
 
-    public void editTask(User currentUser,String id, String name, String description, Date startDate, Date finishDate, String projectId) {
-        Task task = taskRepository.findOne(id);
-        checkSecurity(currentUser, task);
+    public void editTask(String userId,String id, String name, String description, Date startDate, Date finishDate, String projectId) {
+        Task task = taskRepository.findOneByIdAndUserId(id, userId);
         if (!name.isEmpty()) task.setName(name);
         if (!description.isEmpty()) task.setDescription(description);
         if (startDate != null) task.setStartDate(startDate);
@@ -40,49 +39,33 @@ public class TaskService {
         taskRepository.merge(task);
     }
 
-    public List<Task> getTaskList(User currentUser) {
+    public List<Task> getTaskList(String userId) {
 
-        return filterList(currentUser,taskRepository.findAll());
+        return taskRepository.findAllByUserId(userId);
     }
 
-    public Task getTask(User currentUser, String taskId){
-        Task task = taskRepository.findOne(taskId);
-        checkSecurity(currentUser, task);
+    public Task getTask(String userId, String taskId){
+        Task task = taskRepository.findOneByIdAndUserId(taskId, userId);
         return task;
 
     }
 
-    public List<Task> getTaskList(User currentUser, String projectId) {
-       return  filterList(currentUser,taskRepository.findAllByProjectId(projectId));
+    public List<Task> getTaskList(String userId, String projectId) {
+       return taskRepository.findAllByProjectIdAndUserId(projectId, userId);
     }
 
 
-    public void removeTask(User currentUser, String taskId) {
-        Task task = taskRepository.findOne(taskId);
-        checkSecurity(currentUser,task);
+    public void removeTask(String userId, String taskId) {
+        Task task = taskRepository.findOneByIdAndUserId(taskId, userId);
         if(task!=null)
             taskRepository.remove(task);
     }
 
-    public boolean checkID(User currentUser, String taskId) {
-        Task task = taskRepository.findOne(taskId);
-        checkSecurity(currentUser, task);
+    public boolean checkID(String userId, String taskId) {
+        Task task = taskRepository.findOneByIdAndUserId(taskId, userId);
         return task!=null;
     }
 
-    private void checkSecurity(User user, Task task){
-        if (task.getUserId().equals(user.getId())) return;
-        else throw new SecurityException("Current user: " + user.getLogin() + " can not manipulate with task: " + task.getId());
-    }
-    private List<Task> filterList (User user, List<Task> list){
-        Iterator<Task> iter = list.iterator();
-        Task t;
-        while (iter.hasNext()){
-            t = iter.next();
-            if (!t.getUserId().equals(user.getId())) iter.remove();
-        }
-        return list;
-    }
 
 
 

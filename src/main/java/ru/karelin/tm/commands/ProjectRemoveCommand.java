@@ -20,8 +20,13 @@ public class ProjectRemoveCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
+        String projectId = null;
+        if (params.length > 0) projectId = params[0];
+        else {
+            System.out.println("You must enter taskId");
+            return;
+        }
         ProjectService projectService = bootstrap.getProjectService();
-        String projectId = params[0];
-        projectService.removeProject(bootstrap.getCurrentUser(), projectId);
+        projectService.removeProject(bootstrap.getCurrentUser().getId(), projectId);
     }
 }

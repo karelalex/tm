@@ -30,8 +30,9 @@ public class TaskCreateCommand  extends AbstractCommand {
         DateFormat dateFormat = bootstrap.getDateFormat();
         ProjectService projectService = bootstrap.getProjectService();
         TaskService taskService = bootstrap.getTaskService();
-        User currentUser = bootstrap.getCurrentUser();
-        String projectId = params[0];
+        String currentUserId = bootstrap.getCurrentUser().getId();
+        String projectId = null;
+        if (params.length>0) projectId=params[0];;
         System.out.println("Enter task name");
         String taskName = sc.nextLine();
         System.out.println("Enter task description");
@@ -69,12 +70,12 @@ public class TaskCreateCommand  extends AbstractCommand {
             System.out.println("Enter project id where task will be added or leave it empty");
             projectId = sc.nextLine();
         }
-        while (!projectId.isEmpty() && !projectService.checkID(currentUser, projectId)) {
+        while (!projectId.isEmpty() && !projectService.checkID(currentUserId, projectId)) {
             System.out.println("Wrong project id try again or leave it empty");
             projectId = sc.nextLine();
         }
 
-        taskService.createTask(currentUser, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
+        taskService.createTask(currentUserId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
 
     }
 }
