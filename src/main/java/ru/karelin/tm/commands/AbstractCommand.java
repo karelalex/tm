@@ -8,7 +8,12 @@ public abstract class AbstractCommand {
 
     protected Bootstrap bootstrap;
     protected Scanner sc;
+
     protected boolean isSecured;
+
+    public boolean isSecured() {
+        return isSecured;
+    }
 
     public AbstractCommand(Bootstrap bootstrap, Boolean isSecured) {
         this.bootstrap = bootstrap;

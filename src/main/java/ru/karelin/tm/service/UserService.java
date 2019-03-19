@@ -26,13 +26,32 @@ public class UserService {
         return userRepository.findOneByLogin(login) != null;
     }
 
-    public void registerNewUser(String login, char[] pass, String name) {
+   public void registerNewUser(String login, char[] pass, String name){
+        registerNewUser(login, pass, name, RoleType.ORDINARY_USER);
+   }
+
+   public void editUser(User currentUser, String username){
+        User user = userRepository.findOne(currentUser.getId());
+        if(!username.isEmpty()) user.setUserName(username);
+        userRepository.merge(user);
+   }
+
+    public void registerNewUser(String login, char[] pass, String name, RoleType role) {
         if(isUserExistByLogin(login)) throw new ObjectAlreadyExistsException("User with login " +login+ " exists");
         User user = new User();
         user.setLogin(login);
         user.setPasswordHash(md5Generator.generate(pass));
         user.setUserName(name);
-        user.setRole(RoleType.ORDINARY_USER);
+        user.setRole(role);
         userRepository.persist(user);
+    }
+
+    public boolean changePassword(User currentUser, char[] oldPass, char[] newPass) {
+        User user = userRepository.findOneByLoginAndPassword(currentUser.getLogin(), md5Generator.generate(oldPass));
+        if (user==null) return false;
+        user.setPasswordHash(md5Generator.generate(newPass));
+        userRepository.merge(user);
+        return true;
+
     }
 }

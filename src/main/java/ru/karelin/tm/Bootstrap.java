@@ -89,12 +89,16 @@ public class Bootstrap {
 
         registerCommand(new UserRegisterCommand(this));
         registerCommand(new UserAuthorizationCommand(this));
+        registerCommand(new UserShowCurrentCommand(this));
+        registerCommand(new UserPasswordChangeCommand(this));
         registerCommand(new UserLogoutCommand(this));
 
 
-
-
         //end of command registration block
+
+        // create two users block
+        userService.registerNewUser("sk", "pp".toCharArray(), "alex", RoleType.ORDINARY_USER);
+        userService.registerNewUser("bb", "ee".toCharArray(), "boris", RoleType.ADMIN);
 
         String command;
         String[] commandParts, params;
@@ -103,7 +107,7 @@ public class Bootstrap {
         while (true) {
             System.out.print(">");
             command = sc.nextLine();
-            if(command.equals(QUIT)) break;
+            if (command.equals(QUIT)) break;
             commandParts = command.split(" ");
 
             command = commandParts[0];
@@ -113,16 +117,17 @@ public class Bootstrap {
                 System.out.println("Wrong command name");
                 continue;
             }
-            abstractCommand.execute(params);
+            if (!abstractCommand.isSecured() || currentUser != null)
+                abstractCommand.execute(params);
         }
 
 
-
-
     }
+
     private void registerCommand(AbstractCommand command) {
         String commandName = command.getName();
-        if(commands.containsKey(commandName)) throw new ObjectAlreadyExistsException("Command with name " + commandName + " is already registered");
+        if (commands.containsKey(commandName))
+            throw new ObjectAlreadyExistsException("Command with name " + commandName + " is already registered");
         commands.put(commandName, command);
     }
-   }
+}
