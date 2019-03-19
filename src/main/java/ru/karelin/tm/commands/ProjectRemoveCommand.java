@@ -26,7 +26,7 @@ public class ProjectRemoveCommand extends AbstractCommand {
             System.out.println("You must enter projectId");
             return;
         }
-        ProjectService projectService = bootstrap.getProjectService();
-        projectService.removeProject(bootstrap.getCurrentUser().getId(), projectId);
+        ProjectService projectService = locator.getProjectService();
+        projectService.removeProject(locator.getCurrentUser().getId(), projectId);
     }
 }

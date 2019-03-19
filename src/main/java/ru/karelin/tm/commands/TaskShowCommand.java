@@ -2,7 +2,6 @@ package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
 import ru.karelin.tm.entity.Task;
-import ru.karelin.tm.entity.User;
 import ru.karelin.tm.service.TaskService;
 
 import java.text.DateFormat;
@@ -24,15 +23,15 @@ public class TaskShowCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
-        TaskService taskService = bootstrap.getTaskService();
+        TaskService taskService = locator.getTaskService();
         String taskId;
         if (params.length > 0) taskId = params[0];
         else {
             System.out.println("You must enter taskId");
             return;
         }
-        DateFormat dateFormat = bootstrap.getDateFormat();
-        String currentUserId = bootstrap.getCurrentUser().getId();
+        DateFormat dateFormat = locator.getDateFormat();
+        String currentUserId = locator.getCurrentUser().getId();
         if (!taskService.checkID(currentUserId, taskId)) {
             System.out.println("Wrong ID");
             return;

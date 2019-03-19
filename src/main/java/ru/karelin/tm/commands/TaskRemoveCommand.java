@@ -20,13 +20,13 @@ public class TaskRemoveCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
-        TaskService taskService = bootstrap.getTaskService();
+        TaskService taskService = locator.getTaskService();
         String taskId;
         if (params.length > 0) taskId = params[0];
         else {
             System.out.println("You must enter taskId");
             return;
         }
-        taskService.removeTask(bootstrap.getCurrentUser().getId(), taskId);
+        taskService.removeTask(locator.getCurrentUser().getId(), taskId);
     }
 }

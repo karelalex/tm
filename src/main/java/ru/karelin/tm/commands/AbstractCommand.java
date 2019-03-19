@@ -1,12 +1,12 @@
 package ru.karelin.tm.commands;
 
-import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.ServiceLocator;
 
 import java.util.Scanner;
 
 public abstract class AbstractCommand {
 
-    protected Bootstrap bootstrap;
+    protected ServiceLocator locator;
     protected Scanner sc;
 
     protected boolean isSecured;
@@ -15,9 +15,9 @@ public abstract class AbstractCommand {
         return isSecured;
     }
 
-    public AbstractCommand(Bootstrap bootstrap, Boolean isSecured) {
-        this.bootstrap = bootstrap;
-        sc=bootstrap.getScanner();
+    public AbstractCommand(ServiceLocator locator, Boolean isSecured) {
+        this.locator = locator;
+        sc= locator.getScanner();
         this.isSecured=isSecured;
     }
 

@@ -19,7 +19,7 @@ public class UserLogoutCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
-        bootstrap.setCurrentUser(null);
+        locator.setCurrentUser(null);
         System.out.println("You have successfully logged out");
     }
 }

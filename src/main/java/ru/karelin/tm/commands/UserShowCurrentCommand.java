@@ -20,7 +20,7 @@ public class UserShowCurrentCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
-        User currentUser = bootstrap.getCurrentUser();
+        User currentUser = locator.getCurrentUser();
         System.out.println("Login: "+ currentUser.getLogin());
         System.out.println("Name: " + currentUser.getUserName());
         System.out.println("Role: " + currentUser.getRole());

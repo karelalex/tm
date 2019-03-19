@@ -1,6 +1,6 @@
 package ru.karelin.tm.commands;
 
-import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.service.ProjectService;
 
 import java.text.DateFormat;
@@ -8,7 +8,7 @@ import java.text.ParseException;
 import java.util.Date;
 
 public class ProjectCreateCommand extends AbstractCommand {
-    public ProjectCreateCommand(Bootstrap bootstrap) {
+    public ProjectCreateCommand(ServiceLocator bootstrap) {
         super( bootstrap, true);
     }
 
@@ -24,8 +24,8 @@ public class ProjectCreateCommand extends AbstractCommand {
 
     @Override
     public void execute(String ... params){
-        DateFormat dateFormat = bootstrap.getDateFormat();
-        ProjectService projectService = bootstrap.getProjectService();
+        DateFormat dateFormat = locator.getDateFormat();
+        ProjectService projectService = locator.getProjectService();
         System.out.println("Enter project name");
         String projectName = sc.nextLine();
         System.out.println("Enter project description");
@@ -59,7 +59,7 @@ public class ProjectCreateCommand extends AbstractCommand {
                 e.printStackTrace();
             }
         }
-        projectService.createProject(bootstrap.getCurrentUser().getId(), projectName, projectDescription, projectStartDate, projectFinishDate);
+        projectService.createProject(locator.getCurrentUser().getId(), projectName, projectDescription, projectStartDate, projectFinishDate);
 
     }
 }

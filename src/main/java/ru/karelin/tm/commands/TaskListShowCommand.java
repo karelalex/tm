@@ -2,7 +2,6 @@ package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
 import ru.karelin.tm.entity.Task;
-import ru.karelin.tm.entity.User;
 import ru.karelin.tm.service.ProjectService;
 import ru.karelin.tm.service.TaskService;
 
@@ -25,11 +24,11 @@ public class TaskListShowCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
-        String currentUserId = bootstrap.getCurrentUser().getId();
+        String currentUserId = locator.getCurrentUser().getId();
         String projectId="";
         if (params.length>0) projectId=params[0];
-        TaskService taskService = bootstrap.getTaskService();
-        ProjectService projectService = bootstrap.getProjectService();
+        TaskService taskService = locator.getTaskService();
+        ProjectService projectService = locator.getProjectService();
         List<Task> tasks;
         boolean showProjectId=true;
         if (projectId.isEmpty()) tasks=taskService.getTaskList(currentUserId);

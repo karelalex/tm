@@ -25,8 +25,8 @@ public class UserPasswordChangeCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
-        UserService userService = bootstrap.getUserService();
-        User currentUser = bootstrap.getCurrentUser();
+        UserService userService = locator.getUserService();
+        User currentUser = locator.getCurrentUser();
         System.out.println("Enter your old pass");
         Console console = System.console();
         char[] oldPass, newPass, newPassRepeat;

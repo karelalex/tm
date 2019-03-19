@@ -5,7 +5,6 @@ import ru.karelin.tm.entity.User;
 import ru.karelin.tm.service.UserService;
 
 import java.io.Console;
-import java.util.Arrays;
 
 public class UserAuthorizationCommand extends AbstractCommand {
     public UserAuthorizationCommand(Bootstrap bootstrap) {
@@ -24,7 +23,7 @@ public class UserAuthorizationCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
-        UserService userService = bootstrap.getUserService();
+        UserService userService = locator.getUserService();
         System.out.println("Enter login");
         String login = sc.nextLine();
         System.out.println("Enter password");
@@ -35,7 +34,7 @@ public class UserAuthorizationCommand extends AbstractCommand {
             System.out.println("Wrong login or pass");
         }
         else {
-            bootstrap.setCurrentUser(user);
+            locator.setCurrentUser(user);
             System.out.println("Welcome " + user.getUserName());
         }
 

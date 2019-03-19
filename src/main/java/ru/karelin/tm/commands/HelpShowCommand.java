@@ -1,11 +1,11 @@
 package ru.karelin.tm.commands;
 
-import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.ServiceLocator;
 
 import java.util.Map;
 
 public class HelpShowCommand extends AbstractCommand {
-    public HelpShowCommand(Bootstrap bootstrap) {
+    public HelpShowCommand(ServiceLocator bootstrap) {
         super(bootstrap, false);
     }
 
@@ -21,7 +21,7 @@ public class HelpShowCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
-        Map<String, AbstractCommand> commands = bootstrap.getCommands();
+        Map<String, AbstractCommand> commands = locator.getCommands();
         System.out.println("Commands: ");
         for (AbstractCommand c : commands.values()
         ) {

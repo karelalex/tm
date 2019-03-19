@@ -2,7 +2,6 @@ package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
 import ru.karelin.tm.entity.Project;
-import ru.karelin.tm.entity.User;
 import ru.karelin.tm.service.ProjectService;
 
 import java.text.DateFormat;
@@ -24,15 +23,15 @@ public class ProjectShowCommand extends AbstractCommand{
 
     @Override
     public void execute(String... params) {
-        String projectId = "";
+        String projectId;
         if (params.length > 0) projectId = params[0];
         else {
             System.out.println("You must enter projectId");
             return;
         }
-        ProjectService projectService = bootstrap.getProjectService();
-        DateFormat dateFormat = bootstrap.getDateFormat();
-        String currentUserId = bootstrap.getCurrentUser().getId();
+        ProjectService projectService = locator.getProjectService();
+        DateFormat dateFormat = locator.getDateFormat();
+        String currentUserId = locator.getCurrentUser().getId();
         if(!projectService.checkID(currentUserId,projectId)) {
             System.out.println("Wrong ID "+ projectId);
             return;

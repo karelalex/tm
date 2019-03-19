@@ -24,7 +24,7 @@ public class UserRegisterCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
-        UserService userService = bootstrap.getUserService();
+        UserService userService = locator.getUserService();
         System.out.println("Enter login");
         String login = sc.nextLine();
         Console console = System.console();

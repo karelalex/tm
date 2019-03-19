@@ -1,7 +1,6 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
-import ru.karelin.tm.entity.User;
 import ru.karelin.tm.service.ProjectService;
 import ru.karelin.tm.service.TaskService;
 
@@ -32,10 +31,10 @@ public class TaskEditCommand extends AbstractCommand {
             System.out.println("You must enter taskId");
             return;
         }
-        TaskService taskService = bootstrap.getTaskService();
-        DateFormat dateFormat = bootstrap.getDateFormat();
-        String currentUserId = bootstrap.getCurrentUser().getId();
-        ProjectService projectService = bootstrap.getProjectService();
+        TaskService taskService = locator.getTaskService();
+        DateFormat dateFormat = locator.getDateFormat();
+        String currentUserId = locator.getCurrentUser().getId();
+        ProjectService projectService = locator.getProjectService();
         if (!taskService.checkID(currentUserId, taskId)) {
             System.out.println("Wrong ID!");
             return;
