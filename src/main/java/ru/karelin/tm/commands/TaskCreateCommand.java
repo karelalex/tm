@@ -31,7 +31,7 @@ public class TaskCreateCommand  extends AbstractCommand {
         ProjectService projectService = bootstrap.getProjectService();
         TaskService taskService = bootstrap.getTaskService();
         String currentUserId = bootstrap.getCurrentUser().getId();
-        String projectId = null;
+        String projectId = "";
         if (params.length>0) projectId=params[0];;
         System.out.println("Enter task name");
         String taskName = sc.nextLine();

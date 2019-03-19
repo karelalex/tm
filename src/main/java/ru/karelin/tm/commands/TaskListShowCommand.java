@@ -26,7 +26,7 @@ public class TaskListShowCommand extends AbstractCommand {
     @Override
     public void execute(String... params) {
         String currentUserId = bootstrap.getCurrentUser().getId();
-        String projectId = null;
+        String projectId="";
         if (params.length>0) projectId=params[0];
         TaskService taskService = bootstrap.getTaskService();
         ProjectService projectService = bootstrap.getProjectService();

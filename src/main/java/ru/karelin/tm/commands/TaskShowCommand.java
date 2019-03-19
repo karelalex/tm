@@ -25,7 +25,7 @@ public class TaskShowCommand extends AbstractCommand {
     @Override
     public void execute(String... params) {
         TaskService taskService = bootstrap.getTaskService();
-        String taskId = null;
+        String taskId;
         if (params.length > 0) taskId = params[0];
         else {
             System.out.println("You must enter taskId");
