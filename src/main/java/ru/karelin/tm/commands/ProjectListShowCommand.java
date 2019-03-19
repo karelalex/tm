@@ -26,7 +26,7 @@ public class ProjectListShowCommand extends AbstractCommand {
     public void execute(String... params) {
         ProjectService projectService = bootstrap.getProjectService();
         DateFormat dateFormat = bootstrap.getDateFormat();
-        List<Project> projects = projectService.getProjectsList();
+        List<Project> projects = projectService.getProjectsList(bootstrap.getCurrentUser());
         for (Project p :projects) {
             System.out.println("Project ID: " + p.getId());
             System.out.println("Project name: " + p.getName() );

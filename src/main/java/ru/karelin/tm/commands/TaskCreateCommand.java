@@ -1,6 +1,7 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.entity.User;
 import ru.karelin.tm.service.ProjectService;
 import ru.karelin.tm.service.TaskService;
 
@@ -29,6 +30,7 @@ public class TaskCreateCommand  extends AbstractCommand {
         DateFormat dateFormat = bootstrap.getDateFormat();
         ProjectService projectService = bootstrap.getProjectService();
         TaskService taskService = bootstrap.getTaskService();
+        User currentUser = bootstrap.getCurrentUser();
         String projectId = params[0];
         System.out.println("Enter task name");
         String taskName = sc.nextLine();
@@ -67,12 +69,12 @@ public class TaskCreateCommand  extends AbstractCommand {
             System.out.println("Enter project id where task will be added or leave it empty");
             projectId = sc.nextLine();
         }
-        while (!projectId.isEmpty() && !projectService.checkID(projectId)) {
+        while (!projectId.isEmpty() && !projectService.checkID(currentUser, projectId)) {
             System.out.println("Wrong project id try again or leave it empty");
             projectId = sc.nextLine();
         }
 
-        taskService.createTask(taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
+        taskService.createTask(currentUser, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
 
     }
 }

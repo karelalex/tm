@@ -119,6 +119,7 @@ public class Bootstrap {
             }
             if (!abstractCommand.isSecured() || currentUser != null)
                 abstractCommand.execute(params);
+            else System.out.println("Login first.");
         }
 
 

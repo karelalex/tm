@@ -1,6 +1,7 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.entity.User;
 import ru.karelin.tm.service.ProjectService;
 import ru.karelin.tm.service.TaskService;
 
@@ -28,8 +29,9 @@ public class TaskEditCommand extends AbstractCommand {
         TaskService taskService = bootstrap.getTaskService();
         String taskId = params[0];
         DateFormat dateFormat = bootstrap.getDateFormat();
+        User currentUser = bootstrap.getCurrentUser();
         ProjectService projectService = bootstrap.getProjectService();
-        if (!taskService.checkID(taskId)) {
+        if (!taskService.checkID(currentUser, taskId)) {
             System.out.println("Wrong ID!");
             return;
         }
@@ -72,12 +74,12 @@ public class TaskEditCommand extends AbstractCommand {
         }
         System.out.println("Enter new project id for task or just press enter if you do not want to change it");
         String projectId = sc.nextLine();
-        while (!projectId.isEmpty() && !projectService.checkID(projectId)) {
+        while (!projectId.isEmpty() && !projectService.checkID(currentUser, projectId)) {
             System.out.println("Wrong project id try again or leave it empty");
             projectId = sc.nextLine();
         }
 
-        taskService.editTask(taskId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
+        taskService.editTask(currentUser, taskId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
 
     }
 }

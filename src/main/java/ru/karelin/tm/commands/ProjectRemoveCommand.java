@@ -22,6 +22,6 @@ public class ProjectRemoveCommand extends AbstractCommand {
     public void execute(String... params) {
         ProjectService projectService = bootstrap.getProjectService();
         String projectId = params[0];
-        projectService.removeProject(projectId);
+        projectService.removeProject(bootstrap.getCurrentUser(), projectId);
     }
 }

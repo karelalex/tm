@@ -22,6 +22,6 @@ public class TaskRemoveCommand extends AbstractCommand {
     public void execute(String... params) {
         TaskService taskService = bootstrap.getTaskService();
         String taskId = params[0];
-        taskService.removeTask(taskId);
+        taskService.removeTask(bootstrap.getCurrentUser(), taskId);
     }
 }

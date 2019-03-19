@@ -1,6 +1,7 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.entity.User;
 import ru.karelin.tm.service.ProjectService;
 
 import java.text.DateFormat;
@@ -25,9 +26,10 @@ public class ProjectEditCommand extends AbstractCommand {
     @Override
     public void execute(String... params) {
         ProjectService projectService = bootstrap.getProjectService();
+        User currentUser = bootstrap.getCurrentUser();
         String projectId = params[0];
         DateFormat dateFormat = bootstrap.getDateFormat();
-        if (!projectService.checkID(projectId)) {
+        if (!projectService.checkID(currentUser, projectId)) {
             System.out.println("Wrong ID " + projectId);
             return;
         }
@@ -69,7 +71,7 @@ public class ProjectEditCommand extends AbstractCommand {
                 }
             }
         }
-        projectService.editProject(projectId, projectName, projectDescription, projectStartDate, projectFinishDate);
+        projectService.editProject(currentUser, projectId, projectName, projectDescription, projectStartDate, projectFinishDate);
     }
 }
 

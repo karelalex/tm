@@ -2,6 +2,7 @@ package ru.karelin.tm.repository;
 
 import ru.karelin.tm.ObjectAlreadyExistsException;
 import ru.karelin.tm.entity.Project;
+import ru.karelin.tm.entity.User;
 
 import java.util.*;
 
@@ -22,6 +23,7 @@ public class ProjectRepository implements Repository<Project> {
     @Override
     public void persist(Project project) {
         if (projects.containsKey(project.getId())) throw new ObjectAlreadyExistsException("Project with id="+project.getId()+" is already save in db");
+
         projects.put(project.getId(), project);
     }
 
@@ -44,4 +46,5 @@ public class ProjectRepository implements Repository<Project> {
             projects.remove(p.getId());
         }
     }
+
 }

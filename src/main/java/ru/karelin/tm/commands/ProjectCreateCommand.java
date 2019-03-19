@@ -59,7 +59,7 @@ public class ProjectCreateCommand extends AbstractCommand {
                 e.printStackTrace();
             }
         }
-        projectService.createProject(projectName, projectDescription, projectStartDate, projectFinishDate);
+        projectService.createProject(bootstrap.getCurrentUser(), projectName, projectDescription, projectStartDate, projectFinishDate);
 
     }
 }
