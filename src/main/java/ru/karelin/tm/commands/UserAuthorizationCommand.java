@@ -14,7 +14,7 @@ public class UserAuthorizationCommand extends AbstractCommand {
 
     @Override
     public String getName() {
-        return "login";
+        return "in";
     }
 
     @Override

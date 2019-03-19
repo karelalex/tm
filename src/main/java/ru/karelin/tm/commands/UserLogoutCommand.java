@@ -10,7 +10,7 @@ public class UserLogoutCommand extends AbstractCommand {
 
     @Override
     public String getName() {
-        return "logout";
+        return "out";
     }
 
     @Override

@@ -8,8 +8,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
-public class ProjectEditCommand extends AbstractCommand {
-    public ProjectEditCommand(ServiceLocator locator) {
+public final class ProjectEditCommand extends AbstractCommand {
+    public ProjectEditCommand(final ServiceLocator locator) {
         super(locator, true);
     }
 
@@ -31,17 +31,17 @@ public class ProjectEditCommand extends AbstractCommand {
             System.out.println("You must enter projectId");
             return;
         }
-        ProjectService projectService = locator.getProjectService();
-        String currentUserId = locator.getCurrentUser().getId();
-        DateFormat dateFormat = locator.getDateFormat();
+        final ProjectService projectService = locator.getProjectService();
+        final String currentUserId = locator.getCurrentUser().getId();
+        final DateFormat dateFormat = locator.getDateFormat();
         if (!projectService.checkID(currentUserId, projectId)) {
             System.out.println("Wrong ID " + projectId);
             return;
         }
         System.out.println("Enter new project name or just press enter if you do not want to change it");
-        String projectName = sc.nextLine();
+        final String projectName = sc.nextLine();
         System.out.println("Enter new project description or just press enter if you do not want to change it");
-        String projectDescription = sc.nextLine();
+        final String projectDescription = sc.nextLine();
         String date;
         Date projectStartDate;
         while (true) {

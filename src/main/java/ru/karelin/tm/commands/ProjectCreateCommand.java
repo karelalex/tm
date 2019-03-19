@@ -7,8 +7,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
-public class ProjectCreateCommand extends AbstractCommand {
-    public ProjectCreateCommand(ServiceLocator locator) {
+public final class ProjectCreateCommand extends AbstractCommand {
+    public ProjectCreateCommand(final ServiceLocator locator) {
         super( locator, true);
     }
 
@@ -23,13 +23,13 @@ public class ProjectCreateCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String ... params){
-        DateFormat dateFormat = locator.getDateFormat();
-        ProjectService projectService = locator.getProjectService();
+    public void execute(final String ... params){
+        final DateFormat dateFormat = locator.getDateFormat();
+        final ProjectService projectService = locator.getProjectService();
         System.out.println("Enter project name");
-        String projectName = sc.nextLine();
+        final String projectName = sc.nextLine();
         System.out.println("Enter project description");
-        String projectDescription = sc.nextLine();
+        final String projectDescription = sc.nextLine();
         String date;
         Date projectStartDate;
         while(true) {

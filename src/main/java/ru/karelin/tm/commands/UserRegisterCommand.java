@@ -15,7 +15,7 @@ public class UserRegisterCommand extends AbstractCommand {
 
     @Override
     public String getName() {
-        return "register";
+        return "reg";
     }
 
     @Override
