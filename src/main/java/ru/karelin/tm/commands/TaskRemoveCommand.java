@@ -1,11 +1,12 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.service.TaskService;
 
 public class TaskRemoveCommand extends AbstractCommand {
-    public TaskRemoveCommand(Bootstrap bootstrap) {
-        super(bootstrap, true);
+    public TaskRemoveCommand(ServiceLocator locator) {
+        super(locator, true);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.entity.Task;
 import ru.karelin.tm.service.ProjectService;
 import ru.karelin.tm.service.TaskService;
@@ -8,8 +9,8 @@ import ru.karelin.tm.service.TaskService;
 import java.util.List;
 
 public class TaskListShowCommand extends AbstractCommand {
-    public TaskListShowCommand(Bootstrap bootstrap) {
-        super(bootstrap, true);
+    public TaskListShowCommand(ServiceLocator locator) {
+        super(locator, true);
     }
 
     @Override

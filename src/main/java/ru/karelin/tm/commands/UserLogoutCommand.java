@@ -1,10 +1,11 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.ServiceLocator;
 
 public class UserLogoutCommand extends AbstractCommand {
-    public UserLogoutCommand(Bootstrap bootstrap) {
-        super(bootstrap, false);
+    public UserLogoutCommand(ServiceLocator locator) {
+        super(locator, false);
     }
 
     @Override

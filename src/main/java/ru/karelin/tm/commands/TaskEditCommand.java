@@ -1,6 +1,7 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.service.ProjectService;
 import ru.karelin.tm.service.TaskService;
 
@@ -9,8 +10,8 @@ import java.text.ParseException;
 import java.util.Date;
 
 public class TaskEditCommand extends AbstractCommand {
-    public TaskEditCommand(Bootstrap bootstrap) {
-        super(bootstrap, true);
+    public TaskEditCommand(ServiceLocator locator) {
+        super(locator, true);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.service.ProjectService;
 
 import java.text.DateFormat;
@@ -8,8 +9,8 @@ import java.text.ParseException;
 import java.util.Date;
 
 public class ProjectEditCommand extends AbstractCommand {
-    public ProjectEditCommand(Bootstrap bootstrap) {
-        super(bootstrap, true);
+    public ProjectEditCommand(ServiceLocator locator) {
+        super(locator, true);
     }
 
     @Override

@@ -1,11 +1,12 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.service.ProjectService;
 
 public class ProjectRemoveCommand extends AbstractCommand {
-    public ProjectRemoveCommand(Bootstrap bootstrap) {
-        super( bootstrap,true);
+    public ProjectRemoveCommand(ServiceLocator locator) {
+        super( locator,true);
     }
 
     @Override

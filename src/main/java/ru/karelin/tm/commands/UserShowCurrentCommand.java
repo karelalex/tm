@@ -1,11 +1,12 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.entity.User;
 
 public class UserShowCurrentCommand extends AbstractCommand {
-    public UserShowCurrentCommand(Bootstrap bootstrap) {
-        super(bootstrap, true);
+    public UserShowCurrentCommand(ServiceLocator locator) {
+        super(locator, true);
     }
 
     @Override

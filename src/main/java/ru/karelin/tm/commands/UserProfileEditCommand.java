@@ -1,11 +1,14 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.service.UserService;
 
+import javax.xml.ws.Service;
+
 public class UserProfileEditCommand extends AbstractCommand{
-    public UserProfileEditCommand(Bootstrap bootstrap) {
-        super(bootstrap, true);
+    public UserProfileEditCommand(ServiceLocator locator) {
+        super(locator, true);
     }
 
     @Override

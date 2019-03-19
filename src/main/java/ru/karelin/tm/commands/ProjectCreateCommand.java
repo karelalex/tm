@@ -8,8 +8,8 @@ import java.text.ParseException;
 import java.util.Date;
 
 public class ProjectCreateCommand extends AbstractCommand {
-    public ProjectCreateCommand(ServiceLocator bootstrap) {
-        super( bootstrap, true);
+    public ProjectCreateCommand(ServiceLocator locator) {
+        super( locator, true);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.entity.User;
 import ru.karelin.tm.service.UserService;
 
@@ -9,8 +10,8 @@ import java.util.Arrays;
 
 public class UserPasswordChangeCommand extends AbstractCommand {
 
-    public UserPasswordChangeCommand(Bootstrap bootstrap) {
-        super(bootstrap, true);
+    public UserPasswordChangeCommand(ServiceLocator locator) {
+        super(locator, true);
     }
 
     @Override

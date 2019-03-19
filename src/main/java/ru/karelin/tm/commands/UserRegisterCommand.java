@@ -1,6 +1,7 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.service.UserService;
 
 import java.io.Console;
@@ -8,8 +9,8 @@ import java.util.Arrays;
 
 public class UserRegisterCommand extends AbstractCommand {
 
-    public UserRegisterCommand(Bootstrap bootstrap) {
-        super(bootstrap, false);
+    public UserRegisterCommand(ServiceLocator locator) {
+        super(locator, false);
     }
 
     @Override

@@ -5,8 +5,8 @@ import ru.karelin.tm.ServiceLocator;
 import java.util.Map;
 
 public class HelpShowCommand extends AbstractCommand {
-    public HelpShowCommand(ServiceLocator bootstrap) {
-        super(bootstrap, false);
+    public HelpShowCommand(ServiceLocator locator) {
+        super(locator, false);
     }
 
     @Override

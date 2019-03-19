@@ -1,14 +1,15 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.entity.User;
 import ru.karelin.tm.service.UserService;
 
 import java.io.Console;
 
 public class UserAuthorizationCommand extends AbstractCommand {
-    public UserAuthorizationCommand(Bootstrap bootstrap) {
-        super(bootstrap, false);
+    public UserAuthorizationCommand(ServiceLocator locator) {
+        super(locator, false);
     }
 
     @Override

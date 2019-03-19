@@ -1,14 +1,15 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.entity.Project;
 import ru.karelin.tm.service.ProjectService;
 
 import java.text.DateFormat;
 
 public class ProjectShowCommand extends AbstractCommand{
-    public ProjectShowCommand(Bootstrap bootstrap) {
-        super(bootstrap, true);
+    public ProjectShowCommand(ServiceLocator locator) {
+        super(locator, true);
     }
 
     @Override

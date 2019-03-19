@@ -1,14 +1,15 @@
 package ru.karelin.tm.commands;
 
 import ru.karelin.tm.Bootstrap;
+import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.entity.Task;
 import ru.karelin.tm.service.TaskService;
 
 import java.text.DateFormat;
 
 public class TaskShowCommand extends AbstractCommand {
-    public TaskShowCommand(Bootstrap bootstrap) {
-        super(bootstrap, true);
+    public TaskShowCommand(ServiceLocator locator) {
+        super(locator, true);
     }
 
     @Override
