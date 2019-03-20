@@ -12,7 +12,7 @@
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
     <scm>
-        <connection>scm:svn:http://127.0.0.1/dummy</connection>
+        <!--<connection>scm:svn:http://127.0.0.1/dummy</connection>-->
         <developerConnection>scm:svn:https://127.0.0.1/dummy</developerConnection>
         <tag>HEAD</tag>
         <url>http://127.0.0.1/dummy</url>
