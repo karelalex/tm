@@ -9,7 +9,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
-public class TaskEditCommand extends AbstractCommand {
+public final class TaskEditCommand extends AbstractCommand {
     public TaskEditCommand(ServiceLocator locator) {
         super(locator, true);
     }
@@ -25,25 +25,25 @@ public class TaskEditCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String... params) {
-        String taskId;
+    public void execute(final String... params) {
+        final String taskId;
         if (params.length > 0) taskId = params[0];
         else {
             System.out.println("You must enter taskId");
             return;
         }
-        TaskService taskService = locator.getTaskService();
-        DateFormat dateFormat = locator.getDateFormat();
-        String currentUserId = locator.getCurrentUser().getId();
-        ProjectService projectService = locator.getProjectService();
+        final TaskService taskService = locator.getTaskService();
+        final DateFormat dateFormat = locator.getDateFormat();
+        final String currentUserId = locator.getCurrentUser().getId();
+        final ProjectService projectService = locator.getProjectService();
         if (!taskService.checkID(currentUserId, taskId)) {
             System.out.println("Wrong ID!");
             return;
         }
         System.out.println("Enter new task name or just press enter if you do not want to change it");
-        String taskName = sc.nextLine();
+        final String taskName = sc.nextLine();
         System.out.println("Enter new task description or just press enter if you do not want to change it");
-        String taskDescription = sc.nextLine();
+        final String taskDescription = sc.nextLine();
         String date;
         Date taskStartDate;
         while (true) {

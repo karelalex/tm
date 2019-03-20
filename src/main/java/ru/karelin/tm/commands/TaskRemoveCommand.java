@@ -4,8 +4,8 @@ import ru.karelin.tm.Bootstrap;
 import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.service.TaskService;
 
-public class TaskRemoveCommand extends AbstractCommand {
-    public TaskRemoveCommand(ServiceLocator locator) {
+public final class TaskRemoveCommand extends AbstractCommand {
+    public TaskRemoveCommand(final ServiceLocator locator) {
         super(locator, true);
     }
 
@@ -20,9 +20,9 @@ public class TaskRemoveCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String... params) {
-        TaskService taskService = locator.getTaskService();
-        String taskId;
+    public void execute(final String... params) {
+        final TaskService taskService = locator.getTaskService();
+        final String taskId;
         if (params.length > 0) taskId = params[0];
         else {
             System.out.println("You must enter taskId");

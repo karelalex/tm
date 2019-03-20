@@ -8,7 +8,7 @@ import ru.karelin.tm.service.UserService;
 import java.io.Console;
 import java.util.Arrays;
 
-public class UserPasswordChangeCommand extends AbstractCommand {
+public final class UserPasswordChangeCommand extends AbstractCommand {
 
     public UserPasswordChangeCommand(ServiceLocator locator) {
         super(locator, true);
@@ -26,11 +26,12 @@ public class UserPasswordChangeCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
-        UserService userService = locator.getUserService();
-        User currentUser = locator.getCurrentUser();
+        final UserService userService = locator.getUserService();
+        final User currentUser = locator.getCurrentUser();
         System.out.println("Enter your old pass");
-        Console console = System.console();
-        char[] oldPass, newPass, newPassRepeat;
+        final Console console = System.console();
+        final char[] oldPass;
+        char[] newPass, newPassRepeat;
         oldPass = console.readPassword();
         while (true){
             System.out.println("Enter new password");
@@ -43,7 +44,7 @@ public class UserPasswordChangeCommand extends AbstractCommand {
             }
             break;
         }
-        Boolean success = userService.changePassword(currentUser, oldPass, newPass);
+        final boolean success = userService.changePassword(currentUser, oldPass, newPass);
         if(success) System.out.println("Password was changed");
         else System.out.println("Password was NOT changed. Make sure you typed correct old password");
 

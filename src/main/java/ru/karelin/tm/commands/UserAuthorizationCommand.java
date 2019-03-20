@@ -7,7 +7,7 @@ import ru.karelin.tm.service.UserService;
 
 import java.io.Console;
 
-public class UserAuthorizationCommand extends AbstractCommand {
+public final class UserAuthorizationCommand extends AbstractCommand {
     public UserAuthorizationCommand(ServiceLocator locator) {
         super(locator, false);
     }
@@ -23,14 +23,14 @@ public class UserAuthorizationCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String... params) {
-        UserService userService = locator.getUserService();
+    public void execute(final String... params) {
+        final UserService userService = locator.getUserService();
         System.out.println("Enter login");
-        String login = sc.nextLine();
+        final String login = sc.nextLine();
         System.out.println("Enter password");
-        Console console = System.console();
-        char[] pass = console.readPassword();;
-        User user = userService.getUserByLoginAndPassword(login, pass);
+        final Console console = System.console();
+        final char[] pass = console.readPassword();;
+        final User user = userService.getUserByLoginAndPassword(login, pass);
         if(user==null){
             System.out.println("Wrong login or pass");
         }

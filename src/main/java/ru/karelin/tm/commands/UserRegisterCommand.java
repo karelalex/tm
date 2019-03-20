@@ -1,13 +1,12 @@
 package ru.karelin.tm.commands;
 
-import ru.karelin.tm.Bootstrap;
 import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.service.UserService;
 
 import java.io.Console;
 import java.util.Arrays;
 
-public class UserRegisterCommand extends AbstractCommand {
+public final class UserRegisterCommand extends AbstractCommand {
 
     public UserRegisterCommand(ServiceLocator locator) {
         super(locator, false);
@@ -24,11 +23,11 @@ public class UserRegisterCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String... params) {
-        UserService userService = locator.getUserService();
+    public void execute(final String... params) {
+        final UserService userService = locator.getUserService();
         System.out.println("Enter login");
         String login = sc.nextLine();
-        Console console = System.console();
+        final Console console = System.console();
         while (userService.isUserExistByLogin(login)) {
             System.out.println("Choose another login");
             login = sc.nextLine();
@@ -46,7 +45,7 @@ public class UserRegisterCommand extends AbstractCommand {
             break;
         }
         System.out.println("Enter your name");
-        String name = sc.nextLine();
+        final String name = sc.nextLine();
         userService.registerNewUser(login, pass, name);
         System.out.println("Thank you for registration");
     }

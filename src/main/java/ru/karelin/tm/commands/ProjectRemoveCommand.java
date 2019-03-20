@@ -1,11 +1,10 @@
 package ru.karelin.tm.commands;
 
-import ru.karelin.tm.Bootstrap;
 import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.service.ProjectService;
 
-public class ProjectRemoveCommand extends AbstractCommand {
-    public ProjectRemoveCommand(ServiceLocator locator) {
+public final class ProjectRemoveCommand extends AbstractCommand {
+    public ProjectRemoveCommand(final ServiceLocator locator) {
         super( locator,true);
     }
 
@@ -20,14 +19,14 @@ public class ProjectRemoveCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String... params) {
+    public void execute(final String... params) {
         String projectId;
         if (params.length > 0) projectId = params[0];
         else {
             System.out.println("You must enter projectId");
             return;
         }
-        ProjectService projectService = locator.getProjectService();
+        final ProjectService projectService = locator.getProjectService();
         projectService.removeProject(locator.getCurrentUser().getId(), projectId);
     }
 }

@@ -1,10 +1,9 @@
 package ru.karelin.tm.commands;
 
-import ru.karelin.tm.Bootstrap;
 import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.entity.User;
 
-public class UserShowCurrentCommand extends AbstractCommand {
+public final class UserShowCurrentCommand extends AbstractCommand {
     public UserShowCurrentCommand(ServiceLocator locator) {
         super(locator, true);
     }
@@ -20,8 +19,8 @@ public class UserShowCurrentCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String... params) {
-        User currentUser = locator.getCurrentUser();
+    public void execute(final String... params) {
+        final User currentUser = locator.getCurrentUser();
         System.out.println("Login: "+ currentUser.getLogin());
         System.out.println("Name: " + currentUser.getUserName());
         System.out.println("Role: " + currentUser.getRole());

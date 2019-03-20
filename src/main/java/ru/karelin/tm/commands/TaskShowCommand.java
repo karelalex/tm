@@ -7,8 +7,8 @@ import ru.karelin.tm.service.TaskService;
 
 import java.text.DateFormat;
 
-public class TaskShowCommand extends AbstractCommand {
-    public TaskShowCommand(ServiceLocator locator) {
+public final class TaskShowCommand extends AbstractCommand {
+    public TaskShowCommand(final ServiceLocator locator) {
         super(locator, true);
     }
 
@@ -23,21 +23,21 @@ public class TaskShowCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String... params) {
-        TaskService taskService = locator.getTaskService();
-        String taskId;
+    public void execute(final String... params) {
+        final TaskService taskService = locator.getTaskService();
+        final String taskId;
         if (params.length > 0) taskId = params[0];
         else {
             System.out.println("You must enter taskId");
             return;
         }
-        DateFormat dateFormat = locator.getDateFormat();
-        String currentUserId = locator.getCurrentUser().getId();
+        final DateFormat dateFormat = locator.getDateFormat();
+        final String currentUserId = locator.getCurrentUser().getId();
         if (!taskService.checkID(currentUserId, taskId)) {
             System.out.println("Wrong ID");
             return;
         }
-        Task task = taskService.getTask(currentUserId, taskId);
+        final Task task = taskService.getTask(currentUserId, taskId);
         System.out.println("Task name: " + task.getName());
         System.out.println("Task description: " + task.getDescription());
         System.out.println("Task start date: " + dateFormat.format(task.getStartDate()));

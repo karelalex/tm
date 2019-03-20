@@ -8,8 +8,8 @@ import ru.karelin.tm.service.TaskService;
 
 import java.util.List;
 
-public class TaskListShowCommand extends AbstractCommand {
-    public TaskListShowCommand(ServiceLocator locator) {
+public final class TaskListShowCommand extends AbstractCommand {
+    public TaskListShowCommand(final ServiceLocator locator) {
         super(locator, true);
     }
 
@@ -24,13 +24,14 @@ public class TaskListShowCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String... params) {
-        String currentUserId = locator.getCurrentUser().getId();
-        String projectId="";
+    public void execute(final String... params) {
+        final String currentUserId = locator.getCurrentUser().getId();
+        final String projectId;
         if (params.length>0) projectId=params[0];
-        TaskService taskService = locator.getTaskService();
-        ProjectService projectService = locator.getProjectService();
-        List<Task> tasks;
+        else projectId="";
+        final TaskService taskService = locator.getTaskService();
+        final ProjectService projectService = locator.getProjectService();
+        final List<Task> tasks;
         boolean showProjectId=true;
         if (projectId.isEmpty()) tasks=taskService.getTaskList(currentUserId);
         else if(projectService.checkID(currentUserId, projectId)) {

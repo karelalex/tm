@@ -48,8 +48,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task getTask(String userId, String taskId){
-        Task task = taskRepository.findOneByIdAndUserId(taskId, userId);
-        return task;
+        return taskRepository.findOneByIdAndUserId(taskId, userId);
+
 
     }
 

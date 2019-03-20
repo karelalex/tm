@@ -9,8 +9,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
-public class TaskCreateCommand  extends AbstractCommand {
-    public TaskCreateCommand(ServiceLocator locator) {
+public final class TaskCreateCommand  extends AbstractCommand {
+    public TaskCreateCommand(final ServiceLocator locator) {
         super(locator, true);
     }
 
@@ -26,17 +26,17 @@ public class TaskCreateCommand  extends AbstractCommand {
     }
 
     @Override
-    public void execute(String... params) {
-        DateFormat dateFormat = locator.getDateFormat();
-        ProjectService projectService = locator.getProjectService();
-        TaskService taskService = locator.getTaskService();
-        String currentUserId = locator.getCurrentUser().getId();
-        String projectId = "";
-        if (params.length>0) projectId=params[0];;
+    public void execute(final String... params) {
+        final DateFormat dateFormat = locator.getDateFormat();
+        final ProjectService projectService = locator.getProjectService();
+        final TaskService taskService = locator.getTaskService();
+        final String currentUserId = locator.getCurrentUser().getId();
+        String projectId="";
+        if (params.length>0) projectId=params[0];
         System.out.println("Enter task name");
-        String taskName = sc.nextLine();
+        final String taskName = sc.nextLine();
         System.out.println("Enter task description");
-        String taskDescription = sc.nextLine();
+        final String taskDescription = sc.nextLine();
         String date;
         Date taskStartDate;
         while (true) {

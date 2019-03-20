@@ -24,7 +24,7 @@ public final class ProjectEditCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String... params) {
+    public void execute(final String... params) {
         String projectId;
         if (params.length > 0) projectId = params[0];
         else {
