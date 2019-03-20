@@ -7,8 +7,8 @@ import ru.karelin.tm.entity.User;
 import java.util.*;
 
 
-public class ProjectRepositoryImpl implements ProjectRepository {
-    private static Map<String, Project> projects = new LinkedHashMap<>();
+public final class ProjectRepositoryImpl implements ProjectRepository {
+    private static final Map<String, Project> projects = new LinkedHashMap<>();
 
     @Override
     public List<Project> findAll() {
@@ -16,8 +16,8 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public List<Project> findAllByUserId(String userId) {
-        ArrayList<Project> list = new ArrayList<>();
+    public List<Project> findAllByUserId(final String userId) {
+        final ArrayList<Project> list = new ArrayList<>();
         for (Project p: projects.values()) {
             if (p.getUserId().equals(userId)) list.add(p);
         }
@@ -26,39 +26,38 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
 
     @Override
-    public Project findOne(String id) {
+    public Project findOne(final String id) {
         return projects.get(id);
     }
 
     @Override
-    public Project findOneByIdAndUserId(String id, String userId) {
-        Project project = findOne(id);
+    public Project findOneByIdAndUserId(final String id, final String userId) {
+        final Project project = findOne(id);
         if (project.getUserId().equals(userId)) return project;
         return null;
     }
 
     @Override
-    public void persist(Project project) {
+    public void persist(final Project project) {
         if (projects.containsKey(project.getId())) throw new ObjectAlreadyExistsException("Project with id="+project.getId()+" is already save in db");
-
         projects.put(project.getId(), project);
     }
 
     @Override
-    public Project merge(Project project) {
+    public Project merge(final Project project) {
         projects.put(project.getId(), project);
         return projects.get(project.getId());
 
     }
 
     @Override
-    public boolean remove(Project project) {
+    public boolean remove(final Project project) {
         Project removedProject = projects.remove(project.getId());
         return removedProject != null;
     }
 
     @Override
-    public void removeAll(Collection<Project> projectCollection) {
+    public void removeAll(final Collection<Project> projectCollection) {
         for (Project p : projectCollection) {
             projects.remove(p.getId());
         }

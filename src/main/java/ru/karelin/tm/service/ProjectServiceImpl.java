@@ -11,19 +11,19 @@ import java.util.List;
 
 
 
-public class ProjectServiceImpl implements ProjectService {
+public final class ProjectServiceImpl implements ProjectService {
 
-    private ProjectRepository projectRepository;
-    private TaskRepository taskRepository;
+    final private ProjectRepository projectRepository;
+    final private TaskRepository taskRepository;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository, TaskRepository taskRepository) {
+    public ProjectServiceImpl(final ProjectRepository projectRepository, final TaskRepository taskRepository) {
         this.projectRepository = projectRepository;
         this.taskRepository = taskRepository;
     }
 
     @Override
-    public void createProject(String userId, String name, String description, Date startDate, Date finishDate) {
-        Project project = new Project();
+    public void createProject(final String userId, final String name, final String description, final Date startDate, final Date finishDate) {
+        final Project project = new Project();
         project.setName(name);
         project.setDescription(description);
         project.setStartDate(startDate);
@@ -33,8 +33,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void editProject(String userId, String id, String name, String description, Date startDate, Date finishDate) {
-        Project project = projectRepository.findOneByIdAndUserId(id, userId);
+    public void editProject(final String userId, final String id, final String name, final String description, final Date startDate, final Date finishDate) {
+        final Project project = projectRepository.findOneByIdAndUserId(id, userId);
         if(!name.isEmpty()) project.setName(name);
         if(!description.isEmpty()) project.setDescription(description);
         if(startDate!=null) project.setStartDate(startDate);
@@ -43,29 +43,29 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Project> getProjectsList(String userId) {
+    public List<Project> getProjectsList(final String userId) {
         return projectRepository.findAllByUserId(userId);
     }
 
 
 
     @Override
-    public void removeProject(String userId, String projectID){
-        Project project = projectRepository.findOneByIdAndUserId(projectID, userId);
-        List<Task> taskList = taskRepository.findAllByProjectId(projectID);
+    public void removeProject(final String userId, final String projectID){
+        final Project project = projectRepository.findOneByIdAndUserId(projectID, userId);
+        final List<Task> taskList = taskRepository.findAllByProjectId(projectID);
         taskRepository.removeAll(taskList);
         projectRepository.remove(project);
     }
 
 
     @Override
-    public boolean checkID(String userId, String projectId) {
-       Project project = projectRepository.findOneByIdAndUserId(projectId, userId);
+    public boolean checkID(final String userId, final String projectId) {
+       final Project project = projectRepository.findOneByIdAndUserId(projectId, userId);
        return project!=null;
     }
 
     @Override
-    public Project getProject(String userId, String projectId) {
+    public Project getProject(final String userId, final String projectId) {
         return projectRepository.findOneByIdAndUserId(projectId, userId);
     }
 

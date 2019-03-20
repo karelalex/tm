@@ -6,12 +6,12 @@ import ru.karelin.tm.entity.Task;
 import java.util.*;
 
 
-public class TaskRepositoryImpl implements TaskRepository {
-    private static Map<String, Task> tasks = new LinkedHashMap<>();
+public final class TaskRepositoryImpl implements TaskRepository {
+    private final static Map<String, Task> tasks = new LinkedHashMap<>();
 
     @Override
-    public List<Task> findAllByProjectId(String projectId){
-       ArrayList<Task> taskArrayList = new ArrayList<>();
+    public List<Task> findAllByProjectId(final String projectId){
+       final ArrayList<Task> taskArrayList = new ArrayList<>();
        for (Task t: tasks.values()
             ) {
            if (t.getProjectID().equals(projectId)) taskArrayList.add(t);
@@ -26,8 +26,8 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public List<Task> findAllByUserId(String userId) {
-        ArrayList<Task> list = new ArrayList<>();
+    public List<Task> findAllByUserId(final String userId) {
+        final ArrayList<Task> list = new ArrayList<>();
         for (Task t: tasks.values()) {
             if (t.getUserId().equals(userId)) list.add(t);
         }
@@ -35,8 +35,8 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public List<Task> findAllByProjectIdAndUserId(String projectId, String userId){
-        ArrayList<Task> taskArrayList = new ArrayList<>();
+    public List<Task> findAllByProjectIdAndUserId(final String projectId, final String userId){
+        final ArrayList<Task> taskArrayList = new ArrayList<>();
         for (Task t: tasks.values()
         ) {
             if (t.getProjectID().equals(projectId) && t.getUserId().equals(userId)) taskArrayList.add(t);
@@ -45,36 +45,36 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public Task findOne(String id) {
+    public Task findOne(final String id) {
         return tasks.get(id);
     }
 
     @Override
-    public Task findOneByIdAndUserId(String id, String userId) {
-        Task task = findOne(id);
+    public Task findOneByIdAndUserId(final String id, final String userId) {
+        final Task task = findOne(id);
         if(task.getUserId().equals(userId)) return task;
         return null;
     }
 
     @Override
-    public void persist(Task task) {
+    public void persist(final Task task) {
         if(tasks.containsKey(task.getId())) throw new ObjectAlreadyExistsException("Task with ID="+task.getId()+" is already stored in database");
         tasks.put(task.getId(), task);
     }
 
     @Override
-    public Task merge(Task task) {
+    public Task merge(final Task task) {
         tasks.put(task.getId(), task);
         return tasks.get(task.getId());
     }
 
     @Override
-    public boolean remove(Task task) {
+    public boolean remove(final Task task) {
         return tasks.remove(task.getId())!=null;
     }
 
     @Override
-    public void removeAll(Collection<Task> taskCollection) {
+    public void removeAll(final Collection<Task> taskCollection) {
         for (Task t : taskCollection) {
             tasks.remove(t.getId());
         }

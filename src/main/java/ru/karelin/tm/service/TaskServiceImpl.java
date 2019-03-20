@@ -9,17 +9,17 @@ import java.util.List;
 
 
 
-public class TaskServiceImpl implements TaskService {
+public final class TaskServiceImpl implements TaskService {
 
-    private TaskRepository taskRepository;
+    final private TaskRepository taskRepository;
 
-    public TaskServiceImpl(TaskRepository taskRepository) {
+    public TaskServiceImpl(final TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
 
     @Override
-    public void createTask(String userId, String name, String description, Date startDate, Date finishDate, String projectId) {
-        Task task = new Task();
+    public void createTask(final String userId, final String name, final String description, final Date startDate, final Date finishDate, final String projectId) {
+        final Task task = new Task();
         task.setName(name);
         task.setDescription(description);
         task.setStartDate(startDate);
@@ -30,8 +30,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void editTask(String userId, String id, String name, String description, Date startDate, Date finishDate, String projectId) {
-        Task task = taskRepository.findOneByIdAndUserId(id, userId);
+    public void editTask(final String userId, final String id, final String name, final String description, final Date startDate, final Date finishDate, final String projectId) {
+        final Task task = taskRepository.findOneByIdAndUserId(id, userId);
         if (!name.isEmpty()) task.setName(name);
         if (!description.isEmpty()) task.setDescription(description);
         if (startDate != null) task.setStartDate(startDate);
@@ -41,34 +41,34 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getTaskList(String userId) {
+    public List<Task> getTaskList(final String userId) {
 
         return taskRepository.findAllByUserId(userId);
     }
 
     @Override
-    public Task getTask(String userId, String taskId){
+    public Task getTask(final String userId, final String taskId){
         return taskRepository.findOneByIdAndUserId(taskId, userId);
 
 
     }
 
     @Override
-    public List<Task> getTaskList(String userId, String projectId) {
+    public List<Task> getTaskList(final String userId, final String projectId) {
        return taskRepository.findAllByProjectIdAndUserId(projectId, userId);
     }
 
 
     @Override
-    public void removeTask(String userId, String taskId) {
-        Task task = taskRepository.findOneByIdAndUserId(taskId, userId);
+    public void removeTask(final String userId, final String taskId) {
+        final Task task = taskRepository.findOneByIdAndUserId(taskId, userId);
         if(task!=null)
             taskRepository.remove(task);
     }
 
     @Override
-    public boolean checkID(String userId, String taskId) {
-        Task task = taskRepository.findOneByIdAndUserId(taskId, userId);
+    public boolean checkID(final String userId, final String taskId) {
+        final Task task = taskRepository.findOneByIdAndUserId(taskId, userId);
         return task!=null;
     }
 

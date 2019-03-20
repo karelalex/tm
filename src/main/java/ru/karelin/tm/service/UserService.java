@@ -12,9 +12,9 @@ public interface UserService {
 
     void registerNewUser(String login, char[] pass, String name);
 
-    void editUser(User currentUser, String username);
+    void editUser(String login, String username);
 
     void registerNewUser(String login, char[] pass, String name, RoleType role);
 
-    boolean changePassword(User currentUser, char[] oldPass, char[] newPass);
+    boolean changePassword(String login, char[] oldPass, char[] newPass);
 }
