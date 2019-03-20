@@ -103,6 +103,8 @@ public final class Bootstrap implements ServiceLocator {
         registerCommand(new UserProfileEditCommand(this));
         registerCommand(new UserLogoutCommand(this));
 
+        registerCommand(new InfoShowCommand(this));
+
 
         //end of command registration block
 
