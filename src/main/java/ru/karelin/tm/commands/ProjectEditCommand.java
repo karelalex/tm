@@ -1,8 +1,7 @@
 package ru.karelin.tm.commands;
 
-import ru.karelin.tm.Bootstrap;
-import ru.karelin.tm.ServiceLocator;
-import ru.karelin.tm.service.ProjectService;
+import ru.karelin.tm.api.ServiceLocator;
+import ru.karelin.tm.api.service.ProjectService;
 
 import java.text.DateFormat;
 import java.text.ParseException;

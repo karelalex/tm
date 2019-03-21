@@ -1,8 +1,7 @@
 package ru.karelin.tm.repository;
 
-import ru.karelin.tm.ObjectAlreadyExistsException;
+import ru.karelin.tm.api.repository.ProjectRepository;
 import ru.karelin.tm.entity.Project;
-import ru.karelin.tm.entity.User;
 
 import java.util.*;
 

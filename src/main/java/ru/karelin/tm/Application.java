@@ -1,6 +1,6 @@
 package ru.karelin.tm;
 
-import java.security.NoSuchAlgorithmException;
+import ru.karelin.tm.util.Bootstrap;
 
 public class Application {
 

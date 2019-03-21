@@ -1,13 +1,14 @@
 package ru.karelin.tm.commands;
 
-import ru.karelin.tm.ServiceLocator;
+import org.jetbrains.annotations.NotNull;
+import ru.karelin.tm.api.ServiceLocator;
 
 import java.util.Scanner;
 
 public abstract class AbstractCommand {
 
-    protected ServiceLocator locator;
-    protected Scanner sc;
+    @NotNull protected ServiceLocator locator;
+    @NotNull protected Scanner sc;
 
     protected boolean isSecured;
 
@@ -15,7 +16,7 @@ public abstract class AbstractCommand {
         return isSecured;
     }
 
-    public AbstractCommand(ServiceLocator locator, Boolean isSecured) {
+    public AbstractCommand(@NotNull ServiceLocator locator, Boolean isSecured) {
         this.locator = locator;
         sc= locator.getScanner();
         this.isSecured=isSecured;

@@ -1,10 +1,7 @@
 package ru.karelin.tm.entity;
 
 import lombok.Data;
-import ru.karelin.tm.RoleType;
-
-import java.util.Objects;
-import java.util.UUID;
+import ru.karelin.tm.enums.RoleType;
 
 @Data
 public class User extends AbstractEntity {

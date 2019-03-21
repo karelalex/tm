@@ -1,8 +1,9 @@
 package ru.karelin.tm.service;
 
 
+import ru.karelin.tm.api.service.TaskService;
 import ru.karelin.tm.entity.Task;
-import ru.karelin.tm.repository.TaskRepository;
+import ru.karelin.tm.api.repository.TaskRepository;
 
 import java.util.Date;
 import java.util.List;

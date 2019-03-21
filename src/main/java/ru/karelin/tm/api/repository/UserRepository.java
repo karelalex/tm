@@ -1,4 +1,4 @@
-package ru.karelin.tm.repository;
+package ru.karelin.tm.api.repository;
 
 import ru.karelin.tm.entity.User;
 

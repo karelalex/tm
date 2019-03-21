@@ -1,4 +1,4 @@
-package ru.karelin.tm;
+package ru.karelin.tm.util;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;

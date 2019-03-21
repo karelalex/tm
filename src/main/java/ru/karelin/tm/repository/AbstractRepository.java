@@ -1,11 +1,12 @@
 package ru.karelin.tm.repository;
 
-import ru.karelin.tm.ObjectAlreadyExistsException;
+import ru.karelin.tm.exception.ObjectAlreadyExistsException;
+import ru.karelin.tm.api.repository.Repository;
 import ru.karelin.tm.entity.AbstractEntity;
 
 import java.util.*;
 
-public class AbstractRepository<T extends AbstractEntity> implements Repository<T>{
+public class AbstractRepository<T extends AbstractEntity> implements Repository<T> {
     protected Map<String, T> items = new LinkedHashMap<>();
 
     @Override

@@ -1,4 +1,4 @@
-package ru.karelin.tm.service;
+package ru.karelin.tm.api.service;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package ru.karelin.tm;
+package ru.karelin.tm.exception;
 
 public class ObjectAlreadyExistsException extends IllegalArgumentException {
     public ObjectAlreadyExistsException(String message){

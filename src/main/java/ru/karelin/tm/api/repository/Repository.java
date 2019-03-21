@@ -1,4 +1,4 @@
-package ru.karelin.tm.repository;
+package ru.karelin.tm.api.repository;
 
 import java.util.Collection;
 import java.util.List;

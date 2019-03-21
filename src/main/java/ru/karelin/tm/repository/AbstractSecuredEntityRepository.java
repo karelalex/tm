@@ -1,5 +1,6 @@
 package ru.karelin.tm.repository;
 
+import ru.karelin.tm.api.repository.SecuredEntityRepository;
 import ru.karelin.tm.entity.AbstractSecuredEntity;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package ru.karelin.tm;
+package ru.karelin.tm.enums;
 
 public enum RoleType {
     ADMIN("administrator"), ORDINARY_USER("user");

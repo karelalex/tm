@@ -1,7 +1,8 @@
 package ru.karelin.tm.service;
 
+import ru.karelin.tm.api.service.SecuredEntityService;
 import ru.karelin.tm.entity.AbstractEntity;
-import ru.karelin.tm.repository.SecuredEntityRepository;
+import ru.karelin.tm.api.repository.SecuredEntityRepository;
 
 import java.util.List;
 

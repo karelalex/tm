@@ -1,7 +1,7 @@
 package ru.karelin.tm.commands;
 
 import com.jcabi.manifests.Manifests;
-import ru.karelin.tm.ServiceLocator;
+import ru.karelin.tm.api.ServiceLocator;
 
 public class InfoShowCommand extends AbstractCommand {
 

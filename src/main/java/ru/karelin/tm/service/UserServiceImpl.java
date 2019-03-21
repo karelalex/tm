@@ -1,10 +1,11 @@
 package ru.karelin.tm.service;
 
-import ru.karelin.tm.MD5Generator;
-import ru.karelin.tm.ObjectAlreadyExistsException;
-import ru.karelin.tm.RoleType;
+import ru.karelin.tm.util.MD5Generator;
+import ru.karelin.tm.exception.ObjectAlreadyExistsException;
+import ru.karelin.tm.enums.RoleType;
+import ru.karelin.tm.api.service.UserService;
 import ru.karelin.tm.entity.User;
-import ru.karelin.tm.repository.UserRepository;
+import ru.karelin.tm.api.repository.UserRepository;
 
 public final class UserServiceImpl implements UserService {
     private final MD5Generator md5Generator;

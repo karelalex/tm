@@ -1,10 +1,10 @@
-package ru.karelin.tm;
+package ru.karelin.tm.api;
 
 import ru.karelin.tm.commands.AbstractCommand;
 import ru.karelin.tm.entity.User;
-import ru.karelin.tm.service.ProjectService;
-import ru.karelin.tm.service.TaskService;
-import ru.karelin.tm.service.UserService;
+import ru.karelin.tm.api.service.ProjectService;
+import ru.karelin.tm.api.service.TaskService;
+import ru.karelin.tm.api.service.UserService;
 
 import java.text.DateFormat;
 import java.util.Map;

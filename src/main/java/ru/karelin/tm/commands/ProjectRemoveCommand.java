@@ -1,7 +1,7 @@
 package ru.karelin.tm.commands;
 
-import ru.karelin.tm.ServiceLocator;
-import ru.karelin.tm.service.ProjectService;
+import ru.karelin.tm.api.ServiceLocator;
+import ru.karelin.tm.api.service.ProjectService;
 
 public final class ProjectRemoveCommand extends AbstractCommand {
     public ProjectRemoveCommand(final ServiceLocator locator) {

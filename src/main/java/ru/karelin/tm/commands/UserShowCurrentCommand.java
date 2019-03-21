@@ -1,6 +1,6 @@
 package ru.karelin.tm.commands;
 
-import ru.karelin.tm.ServiceLocator;
+import ru.karelin.tm.api.ServiceLocator;
 import ru.karelin.tm.entity.User;
 
 public final class UserShowCurrentCommand extends AbstractCommand {

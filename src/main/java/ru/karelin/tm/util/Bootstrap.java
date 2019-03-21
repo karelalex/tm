@@ -1,10 +1,20 @@
-package ru.karelin.tm;
+package ru.karelin.tm.util;
 
 import org.jetbrains.annotations.NotNull;
+import ru.karelin.tm.api.ServiceLocator;
+import ru.karelin.tm.api.repository.ProjectRepository;
+import ru.karelin.tm.api.repository.TaskRepository;
+import ru.karelin.tm.api.repository.UserRepository;
+import ru.karelin.tm.api.service.ProjectService;
+import ru.karelin.tm.api.service.TaskService;
+import ru.karelin.tm.api.service.UserService;
 import ru.karelin.tm.commands.*;
 import ru.karelin.tm.entity.User;
+import ru.karelin.tm.enums.RoleType;
+import ru.karelin.tm.exception.ObjectAlreadyExistsException;
 import ru.karelin.tm.repository.*;
 import ru.karelin.tm.service.*;
+import ru.karelin.tm.util.MD5Generator;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
