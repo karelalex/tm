@@ -24,7 +24,7 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
     @Override
     public Project findOneByIdAndUserId(final String id, final String userId) {
         final Project project = findOne(id);
-        if (project.getUserId().equals(userId)) return project;
+        if (project!=null && project.getUserId().equals(userId)) return project;
         return null;
     }
 

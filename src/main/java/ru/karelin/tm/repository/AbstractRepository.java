@@ -14,12 +14,12 @@ public class AbstractRepository<T extends AbstractEntity> implements Repository<
     }
 
     @Override
-    public T findOne(String id) {
+    public T findOne(final String id) {
         return items.get(id);
     }
 
     @Override
-    public void persist(T t) {
+    public void persist(final T t) {
         if (items.containsKey(t.getId())) throw new ObjectAlreadyExistsException(
                 t.getClass().getSimpleName()+ " with id=" + t.getId() +" is already saved in database"
         );
@@ -27,19 +27,19 @@ public class AbstractRepository<T extends AbstractEntity> implements Repository<
     }
 
     @Override
-    public T merge(T t) {
+    public T merge(final T t) {
         items.put(t.getId(), t);
         return items.get(t.getId());
     }
 
     @Override
-    public boolean remove(T t) {
+    public boolean remove(final T t) {
         T removedItem = items.remove(t.getId());
         return !(removedItem == null);
     }
 
     @Override
-    public void removeAll(Collection<T> tCollection) {
+    public void removeAll(final Collection<T> tCollection) {
         for (T t: tCollection
              ) {
             items.remove(t.getId());

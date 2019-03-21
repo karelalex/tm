@@ -58,12 +58,6 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
             taskRepository.remove(task);
     }
 
-    @Override
-    public boolean checkID(final String userId, final String taskId) {
-        final Task task = taskRepository.findOneByIdAndUserId(taskId, userId);
-        return task!=null;
-    }
-
 
 
 

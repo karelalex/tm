@@ -1,6 +1,5 @@
 package ru.karelin.tm.commands;
 
-import ru.karelin.tm.Bootstrap;
 import ru.karelin.tm.ServiceLocator;
 import ru.karelin.tm.entity.Task;
 import ru.karelin.tm.service.TaskService;
