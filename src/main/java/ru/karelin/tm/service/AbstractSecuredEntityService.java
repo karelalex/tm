@@ -5,7 +5,7 @@ import ru.karelin.tm.repository.SecuredEntityRepository;
 
 import java.util.List;
 
-public class AbstractSecuredEntityService<T extends AbstractEntity> implements SecuredEntitiesService<T>
+public class AbstractSecuredEntityService<T extends AbstractEntity> implements SecuredEntityService<T>
 {
     protected final SecuredEntityRepository<T> entityRepository;
     public AbstractSecuredEntityService(final SecuredEntityRepository<T> repo) {
