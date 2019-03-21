@@ -3,22 +3,15 @@ package ru.karelin.tm.entity;
 import java.util.Date;
 import java.util.UUID;
 
-public class Task {
-    private String id = UUID.randomUUID().toString();
+public class Task extends AbstractSecuredEntity{
+
     private String name;
     private String description;
     private Date startDate;
     private Date finishDate;
     private String projectID;
-    private String userId;
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -60,11 +53,5 @@ public class Task {
         this.description = description;
     }
 
-    public String getUserId() {
-        return userId;
-    }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 }

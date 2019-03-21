@@ -37,7 +37,7 @@ public final class TaskShowCommand extends AbstractCommand {
             System.out.println("Wrong ID");
             return;
         }
-        final Task task = taskService.getTask(currentUserId, taskId);
+        final Task task = taskService.getOne(currentUserId, taskId);
         System.out.println("Task name: " + task.getName());
         System.out.println("Task description: " + task.getDescription());
         System.out.println("Task start date: " + dateFormat.format(task.getStartDate()));

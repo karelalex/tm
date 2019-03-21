@@ -76,7 +76,7 @@ public final class ProjectEditCommand extends AbstractCommand {
                 }
             }
         }
-        projectService.editProject(currentUserId, projectId, projectName, projectDescription, projectStartDate, projectFinishDate);
+        projectService.edit(currentUserId, projectId, projectName, projectDescription, projectStartDate, projectFinishDate);
     }
 }
 

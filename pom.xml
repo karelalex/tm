@@ -62,6 +62,7 @@
                         </manifest>
                         <manifestEntries>
                             <Implementation-Build>${buildNumber}</Implementation-Build>
+                            <developer>AlexK</developer>
                         </manifestEntries>
                     </archive>
                 </configuration>

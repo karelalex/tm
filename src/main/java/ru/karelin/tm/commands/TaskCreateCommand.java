@@ -75,7 +75,7 @@ public final class TaskCreateCommand  extends AbstractCommand {
             projectId = sc.nextLine();
         }
 
-        taskService.createTask(currentUserId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
+        taskService.create(currentUserId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
 
     }
 }

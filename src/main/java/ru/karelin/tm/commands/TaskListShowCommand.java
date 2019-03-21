@@ -33,9 +33,9 @@ public final class TaskListShowCommand extends AbstractCommand {
         final ProjectService projectService = locator.getProjectService();
         final List<Task> tasks;
         boolean showProjectId=true;
-        if (projectId.isEmpty()) tasks=taskService.getTaskList(currentUserId);
+        if (projectId.isEmpty()) tasks=taskService.getList(currentUserId);
         else if(projectService.checkID(currentUserId, projectId)) {
-            tasks=taskService.getTaskList(currentUserId, projectId);
+            tasks=taskService.getListByProjectId(currentUserId, projectId);
             showProjectId=false;
         }
         else {

@@ -27,6 +27,6 @@ public final class ProjectRemoveCommand extends AbstractCommand {
             return;
         }
         final ProjectService projectService = locator.getProjectService();
-        projectService.removeProject(locator.getCurrentUser().getId(), projectId);
+        projectService.remove(locator.getCurrentUser().getId(), projectId);
     }
 }

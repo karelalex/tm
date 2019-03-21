@@ -37,7 +37,7 @@ public final class ProjectShowCommand extends AbstractCommand{
             System.out.println("Wrong ID "+ projectId);
             return;
         }
-        final Project project = projectService.getProject(currentUserId, projectId);
+        final Project project = projectService.getOne(currentUserId, projectId);
         System.out.println("Project name: " + project.getName() );
         System.out.println("Project name: " + project.getDescription());
         System.out.println("Start Date: " + dateFormat.format(project.getStartDate()));

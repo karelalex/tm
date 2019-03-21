@@ -11,63 +11,50 @@ import java.util.List;
 
 
 
-public final class ProjectServiceImpl implements ProjectService {
+public final class ProjectServiceImpl extends AbstractSecuredEntityService<Project> implements ProjectService {
 
-    final private ProjectRepository projectRepository;
+
     final private TaskRepository taskRepository;
 
     public ProjectServiceImpl(final ProjectRepository projectRepository, final TaskRepository taskRepository) {
-        this.projectRepository = projectRepository;
+        super(projectRepository);
         this.taskRepository = taskRepository;
     }
 
     @Override
-    public void createProject(final String userId, final String name, final String description, final Date startDate, final Date finishDate) {
+    public void create(final String userId, final String name, final String description, final Date startDate, final Date finishDate) {
         final Project project = new Project();
         project.setName(name);
         project.setDescription(description);
         project.setStartDate(startDate);
         project.setFinishDate(finishDate);
         project.setUserId(userId);
-        projectRepository.persist(project);
+        entityRepository.persist(project);
     }
 
     @Override
-    public void editProject(final String userId, final String id, final String name, final String description, final Date startDate, final Date finishDate) {
-        final Project project = projectRepository.findOneByIdAndUserId(id, userId);
+    public void edit(final String userId, final String id, final String name, final String description, final Date startDate, final Date finishDate) {
+        final Project project = entityRepository.findOneByIdAndUserId(id, userId);
         if(!name.isEmpty()) project.setName(name);
         if(!description.isEmpty()) project.setDescription(description);
         if(startDate!=null) project.setStartDate(startDate);
         if(finishDate!=null) project.setFinishDate(finishDate);
-        projectRepository.merge(project);
-    }
-
-    @Override
-    public List<Project> getProjectsList(final String userId) {
-        return projectRepository.findAllByUserId(userId);
+        entityRepository.merge(project);
     }
 
 
 
+
     @Override
-    public void removeProject(final String userId, final String projectID){
-        final Project project = projectRepository.findOneByIdAndUserId(projectID, userId);
+    public void remove(final String userId, final String projectID){
+        super.remove(userId, projectID);
         final List<Task> taskList = taskRepository.findAllByProjectId(projectID);
         taskRepository.removeAll(taskList);
-        projectRepository.remove(project);
     }
 
 
-    @Override
-    public boolean checkID(final String userId, final String projectId) {
-       final Project project = projectRepository.findOneByIdAndUserId(projectId, userId);
-       return project!=null;
-    }
 
-    @Override
-    public Project getProject(final String userId, final String projectId) {
-        return projectRepository.findOneByIdAndUserId(projectId, userId);
-    }
+
 
 
 }

@@ -5,21 +5,14 @@ import java.util.Date;
 
 import java.util.UUID;
 
-public class Project {
-   private String id = UUID.randomUUID().toString();
-   private String name;
+public class Project extends AbstractSecuredEntity {
+    private String name;
    private String description;
    private Date startDate;
    private Date finishDate;
-   private String userId;
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+
 
     public String getName() {
         return name;
@@ -53,11 +46,5 @@ public class Project {
         this.finishDate = finishDate;
     }
 
-    public String getUserId() {
-        return userId;
-    }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 }

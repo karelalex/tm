@@ -5,22 +5,13 @@ import ru.karelin.tm.RoleType;
 import java.util.Objects;
 import java.util.UUID;
 
-public class User {
-    private String id= UUID.randomUUID().toString();
+public class User extends AbstractEntity{
     private String login;
     private String passwordHash;
     private String userName;
 
 
     private RoleType role;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getLogin() {
         return login;
@@ -59,11 +50,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id.equals(user.id);
+        return getId().equals(user.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(getId());
     }
 }

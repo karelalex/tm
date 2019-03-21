@@ -28,6 +28,6 @@ public final class TaskRemoveCommand extends AbstractCommand {
             System.out.println("You must enter taskId");
             return;
         }
-        taskService.removeTask(locator.getCurrentUser().getId(), taskId);
+        taskService.remove(locator.getCurrentUser().getId(), taskId);
     }
 }

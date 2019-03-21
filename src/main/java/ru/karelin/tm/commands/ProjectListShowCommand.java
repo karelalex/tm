@@ -26,7 +26,7 @@ public final class ProjectListShowCommand extends AbstractCommand {
     public void execute(final String... params) {
         final ProjectService projectService = locator.getProjectService();
         final DateFormat dateFormat = locator.getDateFormat();
-        final List<Project> projects = projectService.getProjectsList(locator.getCurrentUser().getId());
+        final List<Project> projects = projectService.getList(locator.getCurrentUser().getId());
         for (Project p :projects) {
             System.out.println("Project ID: " + p.getId());
             System.out.println("Project name: " + p.getName() );

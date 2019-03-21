@@ -27,7 +27,7 @@ public final class UserPasswordChangeCommand extends AbstractCommand {
     @Override
     public void execute(String... params) {
         final UserService userService = locator.getUserService();
-        final String currentUserLogin = locator.getCurrentUser().getLogin();
+        final String currentUserId = locator.getCurrentUser().getId();
         System.out.println("Enter your old pass");
         final Console console = System.console();
         final char[] oldPass;
@@ -44,7 +44,7 @@ public final class UserPasswordChangeCommand extends AbstractCommand {
             }
             break;
         }
-        final boolean success = userService.changePassword(currentUserLogin, oldPass, newPass);
+        final boolean success = userService.changePassword(currentUserId, oldPass, newPass);
         if(success) System.out.println("Password was changed");
         else System.out.println("Password was NOT changed. Make sure you typed correct old password");
 

@@ -84,7 +84,7 @@ public final class TaskEditCommand extends AbstractCommand {
             projectId = sc.nextLine();
         }
 
-        taskService.editTask(currentUserId, taskId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
+        taskService.edit(currentUserId, taskId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
 
     }
 }
