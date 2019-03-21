@@ -21,6 +21,9 @@ public class InfoShowCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
+        System.out.println("Program name: " + Manifests.read("Implementation-Title"));
+        System.out.println("Version: " + Manifests.read("Implementation-Version"));
         System.out.println("Build number: " + Manifests.read("Implementation-Build"));
+        System.out.println("Developer: " + Manifests.read("developer"));
     }
 }
