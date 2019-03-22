@@ -1,11 +1,16 @@
-package ru.karelin.tm.commands;
+package ru.karelin.tm.command;
 
-import ru.karelin.tm.api.ServiceLocator;
+import ru.karelin.tm.api.util.ServiceLocator;
+
 
 public final class UserLogoutCommand extends AbstractCommand {
+
+    private static final boolean SECURED = false;
+
     public UserLogoutCommand(ServiceLocator locator) {
-        super(locator, false);
+        super(locator, SECURED);
     }
+    public UserLogoutCommand(){super(SECURED);}
 
     @Override
     public String getName() {

@@ -1,20 +1,20 @@
 package ru.karelin.tm.util;
 
 import org.jetbrains.annotations.NotNull;
-import ru.karelin.tm.api.ServiceLocator;
+import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.repository.ProjectRepository;
 import ru.karelin.tm.api.repository.TaskRepository;
 import ru.karelin.tm.api.repository.UserRepository;
 import ru.karelin.tm.api.service.ProjectService;
 import ru.karelin.tm.api.service.TaskService;
 import ru.karelin.tm.api.service.UserService;
-import ru.karelin.tm.commands.*;
+import ru.karelin.tm.api.util.TerminalService;
+import ru.karelin.tm.command.*;
 import ru.karelin.tm.entity.User;
-import ru.karelin.tm.enums.RoleType;
-import ru.karelin.tm.exception.ObjectAlreadyExistsException;
+import ru.karelin.tm.enumeration.RoleType;
+import ru.karelin.tm.exception.CommandRegisteredException;
 import ru.karelin.tm.repository.*;
 import ru.karelin.tm.service.*;
-import ru.karelin.tm.util.MD5Generator;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -32,7 +32,10 @@ public final class Bootstrap implements ServiceLocator {
     private ProjectService projectService;
     private TaskService taskService;
     private UserService userService;
-    private final Scanner sc= new Scanner(System.in);
+
+
+
+    private final TerminalService terminalService= new TerminalServiceImpl();
     private final Map<String, AbstractCommand> commands = new LinkedHashMap<>();
     private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
     private User currentUser;
@@ -42,6 +45,10 @@ public final class Bootstrap implements ServiceLocator {
         return currentUser;
     }
 
+    @Override
+    public TerminalService getTerminalService() {
+        return terminalService;
+    }
     @Override
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
@@ -59,10 +66,7 @@ public final class Bootstrap implements ServiceLocator {
     }
 
 
-    @Override
-    public Scanner getScanner() {
-        return sc;
-    }
+
 
     @Override
     public UserService getUserService() {
@@ -80,7 +84,7 @@ public final class Bootstrap implements ServiceLocator {
     }
 
     @Override
-    public void init() {
+    public void init(Class[] commandClasses) {
         final ProjectRepository projectRepository = new ProjectRepositoryImpl();
         final TaskRepository taskRepository = new TaskRepositoryImpl();
         projectService = new ProjectServiceImpl(projectRepository, taskRepository);
@@ -90,9 +94,18 @@ public final class Bootstrap implements ServiceLocator {
         userService = new UserServiceImpl(md5Generator, userRepository);
 
 
+        //command registration block
+        for (int i = 0; i < commandClasses.length; i++) {
+            try {
+                registerCommand(commandClasses[i]);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            }
+        }
 
-        //commands registration block
-        registerCommand(new HelpShowCommand(this));
+        /*registerCommand(new HelpShowCommand(this));
 
         registerCommand(new ProjectCreateCommand(this));
         registerCommand(new ProjectEditCommand(this));
@@ -113,7 +126,7 @@ public final class Bootstrap implements ServiceLocator {
         registerCommand(new UserProfileEditCommand(this));
         registerCommand(new UserLogoutCommand(this));
 
-        registerCommand(new InfoShowCommand(this));
+        registerCommand(new InfoShowCommand(this));*/
 
 
         //end of command registration block
@@ -130,7 +143,7 @@ public final class Bootstrap implements ServiceLocator {
         String[] commandParts, params;
         while (true) {
             System.out.print(">");
-            command = sc.nextLine();
+            command = terminalService.readLn();
             if (command.equals(QUIT)) break;
             commandParts = command.split(" ");
 
@@ -151,10 +164,16 @@ public final class Bootstrap implements ServiceLocator {
 
     }
 
-    private void registerCommand(@NotNull final AbstractCommand command) {
-        String commandName = command.getName();
-        if (commands.containsKey(commandName))
-            throw new ObjectAlreadyExistsException("Command with name " + commandName + " is already registered");
-        commands.put(commandName, command);
+    private void registerCommand(@NotNull final Class<AbstractCommand> commandClass) throws IllegalAccessException, InstantiationException {
+        if (AbstractCommand.class.isAssignableFrom(commandClass)) {
+            AbstractCommand command = commandClass.newInstance();
+            final String commandName = command.getName();
+            if (commands.containsKey(commandName))
+                throw new CommandRegisteredException("Command with name " + commandName + " is already registered");
+            command.setLocator(this);
+            commands.put(commandName, command);
+        } else {
+            System.out.println("комманда не клёвая");
+        }
     }
 }

@@ -1,16 +1,20 @@
-package ru.karelin.tm.commands;
+package ru.karelin.tm.command;
 
-import ru.karelin.tm.api.ServiceLocator;
+import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.entity.Project;
 import ru.karelin.tm.api.service.ProjectService;
 
 import java.text.DateFormat;
 import java.util.List;
 
+
 public final class ProjectListShowCommand extends AbstractCommand {
+    private static final boolean SECURED = true;
+
     public ProjectListShowCommand(final ServiceLocator locator) {
-        super(locator, true);
+        super(locator, SECURED);
     }
+    public ProjectListShowCommand(){super(SECURED);}
 
     @Override
     public String getName() {

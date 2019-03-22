@@ -1,6 +1,6 @@
 package ru.karelin.tm.api.service;
 
-import ru.karelin.tm.enums.RoleType;
+import ru.karelin.tm.enumeration.RoleType;
 import ru.karelin.tm.entity.User;
 
 public interface UserService {

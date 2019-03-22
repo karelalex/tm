@@ -1,20 +1,27 @@
-package ru.karelin.tm.commands;
+package ru.karelin.tm.command;
 
-import ru.karelin.tm.api.ServiceLocator;
+import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.entity.Task;
 import ru.karelin.tm.api.service.ProjectService;
 import ru.karelin.tm.api.service.TaskService;
 
 import java.util.List;
 
+
 public final class TaskListShowCommand extends AbstractCommand {
+    private static final boolean SECURED = true;
+
     public TaskListShowCommand(final ServiceLocator locator) {
-        super(locator, true);
+        super(locator, SECURED);
+    }
+
+    public TaskListShowCommand() {
+        super(SECURED);
     }
 
     @Override
     public String getName() {
-        return"tl";
+        return "tl";
     }
 
     @Override
@@ -26,22 +33,21 @@ public final class TaskListShowCommand extends AbstractCommand {
     public void execute(final String... params) {
         final String currentUserId = locator.getCurrentUser().getId();
         final String projectId;
-        if (params.length>0) projectId=params[0];
-        else projectId="";
+        if (params.length > 0) projectId = params[0];
+        else projectId = "";
         final TaskService taskService = locator.getTaskService();
         final ProjectService projectService = locator.getProjectService();
         final List<Task> tasks;
-        boolean showProjectId=true;
-        if (projectId.isEmpty()) tasks=taskService.getList(currentUserId);
-        else if(projectService.checkID(currentUserId, projectId)) {
-            tasks=taskService.getListByProjectId(currentUserId, projectId);
-            showProjectId=false;
-        }
-        else {
+        boolean showProjectId = true;
+        if (projectId.isEmpty()) tasks = taskService.getList(currentUserId);
+        else if (projectService.checkID(currentUserId, projectId)) {
+            tasks = taskService.getListByProjectId(currentUserId, projectId);
+            showProjectId = false;
+        } else {
             System.out.println("Wrong Project ID");
             return;
         }
-        for ( Task t : tasks) {
+        for (Task t : tasks) {
             System.out.println("Task: " + t.getId());
             System.out.println("Task name: " + t.getName());
             System.out.println("Task description: " + t.getDescription());

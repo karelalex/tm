@@ -1,6 +1,6 @@
-package ru.karelin.tm.commands;
+package ru.karelin.tm.command;
 
-import ru.karelin.tm.api.ServiceLocator;
+import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.ProjectService;
 
 import java.text.DateFormat;
@@ -8,10 +8,11 @@ import java.text.ParseException;
 import java.util.Date;
 
 public final class ProjectCreateCommand extends AbstractCommand {
+    private static final boolean SECURED = true;
     public ProjectCreateCommand(final ServiceLocator locator) {
-        super( locator, true);
+        super( locator, SECURED);
     }
-
+    public ProjectCreateCommand(){super(SECURED);}
     @Override
     public String getName() {
         return "cp";
@@ -27,14 +28,14 @@ public final class ProjectCreateCommand extends AbstractCommand {
         final DateFormat dateFormat = locator.getDateFormat();
         final ProjectService projectService = locator.getProjectService();
         System.out.println("Enter project name");
-        final String projectName = sc.nextLine();
+        final String projectName = ts.readLn();
         System.out.println("Enter project description");
-        final String projectDescription = sc.nextLine();
+        final String projectDescription = ts.readLn();
         String date;
         Date projectStartDate;
         while(true) {
             System.out.println("Enter starting date (format DD.MM.YYYY) or leave empty for today");
-            date = sc.nextLine();
+            date = ts.readLn();
             if (date.isEmpty()) {
                 projectStartDate = new Date();
                 break;
@@ -51,7 +52,7 @@ public final class ProjectCreateCommand extends AbstractCommand {
         Date projectFinishDate;
         while (true) {
             System.out.println("Enter ending date (format DD.MM.YYYY)");
-            date = sc.nextLine();
+            date = ts.readLn();
             try {
                 projectFinishDate = dateFormat.parse(date);
                 break;

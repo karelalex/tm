@@ -2,7 +2,7 @@ package ru.karelin.tm.service;
 
 import ru.karelin.tm.util.MD5Generator;
 import ru.karelin.tm.exception.ObjectAlreadyExistsException;
-import ru.karelin.tm.enums.RoleType;
+import ru.karelin.tm.enumeration.RoleType;
 import ru.karelin.tm.api.service.UserService;
 import ru.karelin.tm.entity.User;
 import ru.karelin.tm.api.repository.UserRepository;

@@ -1,6 +1,6 @@
-package ru.karelin.tm.commands;
+package ru.karelin.tm.command;
 
-import ru.karelin.tm.api.ServiceLocator;
+import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.UserService;
 
 import java.io.Console;
@@ -8,9 +8,12 @@ import java.util.Arrays;
 
 public final class UserRegisterCommand extends AbstractCommand {
 
+    private static final boolean SECURED = false;
+
     public UserRegisterCommand(ServiceLocator locator) {
-        super(locator, false);
+        super(locator, SECURED);
     }
+    public UserRegisterCommand(){super(SECURED);}
 
     @Override
     public String getName() {
@@ -26,18 +29,17 @@ public final class UserRegisterCommand extends AbstractCommand {
     public void execute(final String... params) {
         final UserService userService = locator.getUserService();
         System.out.println("Enter login");
-        String login = sc.nextLine();
-        final Console console = System.console();
+        String login = ts.readLn();
         while (userService.isUserExistByLogin(login)) {
             System.out.println("Choose another login");
-            login = sc.nextLine();
+            login = ts.readLn();
         }
         char[] pass, passRepeat;
         while (true){
             System.out.println("Enter password");
-            pass = console.readPassword();
+            pass = ts.readPass();
             System.out.println("Repeat password");
-            passRepeat = console.readPassword();
+            passRepeat = ts.readPass();
             if(!Arrays.equals(pass, passRepeat)){
                 System.out.println("Passwords don't match, try again");
                 continue;
@@ -45,7 +47,7 @@ public final class UserRegisterCommand extends AbstractCommand {
             break;
         }
         System.out.println("Enter your name");
-        final String name = sc.nextLine();
+        final String name = ts.readLn();
         userService.registerNewUser(login, pass, name);
         System.out.println("Thank you for registration");
     }

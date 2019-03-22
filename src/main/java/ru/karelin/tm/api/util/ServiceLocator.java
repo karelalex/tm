@@ -1,6 +1,6 @@
-package ru.karelin.tm.api;
+package ru.karelin.tm.api.util;
 
-import ru.karelin.tm.commands.AbstractCommand;
+import ru.karelin.tm.command.AbstractCommand;
 import ru.karelin.tm.entity.User;
 import ru.karelin.tm.api.service.ProjectService;
 import ru.karelin.tm.api.service.TaskService;
@@ -19,7 +19,7 @@ public interface ServiceLocator {
 
     DateFormat getDateFormat();
 
-    Scanner getScanner();
+    TerminalService getTerminalService();
 
     UserService getUserService();
 
@@ -27,5 +27,5 @@ public interface ServiceLocator {
 
     TaskService getTaskService();
 
-    void init();
+    void init(Class[] commandClasses);
 }

@@ -1,6 +1,6 @@
-package ru.karelin.tm.commands;
+package ru.karelin.tm.command;
 
-import ru.karelin.tm.api.ServiceLocator;
+import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.UserService;
 
 import java.io.Console;
@@ -8,9 +8,12 @@ import java.util.Arrays;
 
 public final class UserPasswordChangeCommand extends AbstractCommand {
 
+    private static final boolean SECURED = true;
+
     public UserPasswordChangeCommand(ServiceLocator locator) {
-        super(locator, true);
+        super(locator, SECURED);
     }
+    public UserPasswordChangeCommand(){super(SECURED);}
 
     @Override
     public String getName() {
@@ -27,15 +30,14 @@ public final class UserPasswordChangeCommand extends AbstractCommand {
         final UserService userService = locator.getUserService();
         final String currentUserId = locator.getCurrentUser().getId();
         System.out.println("Enter your old pass");
-        final Console console = System.console();
         final char[] oldPass;
         char[] newPass, newPassRepeat;
-        oldPass = console.readPassword();
+        oldPass = ts.readPass();
         while (true){
             System.out.println("Enter new password");
-            newPass = console.readPassword();
+            newPass = ts.readPass();
             System.out.println("Repeat new password");
-            newPassRepeat = console.readPassword();
+            newPassRepeat = ts.readPass();
             if(!Arrays.equals(newPass, newPassRepeat)){
                 System.out.println("Passwords don't match, try again");
                 continue;

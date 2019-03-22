@@ -1,12 +1,16 @@
-package ru.karelin.tm.commands;
+package ru.karelin.tm.command;
 
-import ru.karelin.tm.api.ServiceLocator;
+import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.entity.User;
 
 public final class UserShowCurrentCommand extends AbstractCommand {
+
+    private static final boolean SECURED = true;
+
     public UserShowCurrentCommand(ServiceLocator locator) {
-        super(locator, true);
+        super(locator, SECURED);
     }
+    public UserShowCurrentCommand(){super(SECURED);}
 
     @Override
     public String getName() {

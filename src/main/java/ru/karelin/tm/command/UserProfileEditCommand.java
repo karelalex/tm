@@ -1,12 +1,16 @@
-package ru.karelin.tm.commands;
+package ru.karelin.tm.command;
 
-import ru.karelin.tm.api.ServiceLocator;
+import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.UserService;
 
 public final class UserProfileEditCommand extends AbstractCommand{
+
+    private static final boolean SECURED = true;
+
     public UserProfileEditCommand(ServiceLocator locator) {
-        super(locator, true);
+        super(locator, SECURED);
     }
+    public UserProfileEditCommand(){super(SECURED);}
 
     @Override
     public String getName() {
@@ -21,7 +25,7 @@ public final class UserProfileEditCommand extends AbstractCommand{
     @Override
     public void execute(String... params) {
         System.out.println("Enter user name or just press enter if you do not want to change it");
-        final String userName = sc.nextLine();
+        final String userName = ts.readLn();
         final UserService userService = locator.getUserService();
         userService.editUser(locator.getCurrentUser().getId(), userName);
     }

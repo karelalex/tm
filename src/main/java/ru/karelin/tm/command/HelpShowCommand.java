@@ -1,12 +1,17 @@
-package ru.karelin.tm.commands;
+package ru.karelin.tm.command;
 
-import ru.karelin.tm.api.ServiceLocator;
+import ru.karelin.tm.api.util.ServiceLocator;
 
 import java.util.Map;
 
+
 public final class HelpShowCommand extends AbstractCommand {
+    private static final boolean SECURED = false;
     public HelpShowCommand(final ServiceLocator locator) {
-        super(locator, false);
+        super(locator, SECURED);
+    }
+    public HelpShowCommand(){
+        super(SECURED);
     }
 
     @Override

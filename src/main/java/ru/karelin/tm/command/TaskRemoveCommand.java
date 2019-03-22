@@ -1,12 +1,18 @@
-package ru.karelin.tm.commands;
+package ru.karelin.tm.command;
 
-import ru.karelin.tm.api.ServiceLocator;
+import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.TaskService;
 
+
 public final class TaskRemoveCommand extends AbstractCommand {
+
+    private static final boolean SECURED = true;
+
     public TaskRemoveCommand(final ServiceLocator locator) {
-        super(locator, true);
+        super(locator, SECURED);
     }
+
+    public TaskRemoveCommand(){super(SECURED);}
 
     @Override
     public String getName() {

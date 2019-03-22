@@ -1,6 +1,6 @@
-package ru.karelin.tm.commands;
+package ru.karelin.tm.command;
 
-import ru.karelin.tm.api.ServiceLocator;
+import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.ProjectService;
 import ru.karelin.tm.api.service.TaskService;
 
@@ -8,10 +8,14 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
+
 public final class TaskEditCommand extends AbstractCommand {
+    private static final boolean SECURED = true;
+
     public TaskEditCommand(ServiceLocator locator) {
-        super(locator, true);
+        super(locator, SECURED);
     }
+    public TaskEditCommand(){super(SECURED);}
 
     @Override
     public String getName() {
@@ -40,14 +44,14 @@ public final class TaskEditCommand extends AbstractCommand {
             return;
         }
         System.out.println("Enter new task name or just press enter if you do not want to change it");
-        final String taskName = sc.nextLine();
+        final String taskName = ts.readLn();
         System.out.println("Enter new task description or just press enter if you do not want to change it");
-        final String taskDescription = sc.nextLine();
+        final String taskDescription = ts.readLn();
         String date;
         Date taskStartDate;
         while (true) {
             System.out.println("Enter starting date (format DD.MM.YYYY) or just press enter if you do not want to change it");
-            date = sc.nextLine();
+            date = ts.readLn();
             if (date.isEmpty()) {
                 taskStartDate = null;
                 break;
@@ -63,7 +67,7 @@ public final class TaskEditCommand extends AbstractCommand {
         Date taskFinishDate;
         while (true) {
             System.out.println("Enter ending date (format DD.MM.YYYY) or just press enter if you do not want to change it");
-            date = sc.nextLine();
+            date = ts.readLn();
             if (date.isEmpty()) {
                 taskFinishDate = null;
                 break;
@@ -77,10 +81,10 @@ public final class TaskEditCommand extends AbstractCommand {
             }
         }
         System.out.println("Enter new project id for task or just press enter if you do not want to change it");
-        String projectId = sc.nextLine();
+        String projectId = ts.readLn();
         while (!projectId.isEmpty() && !projectService.checkID(currentUserId, projectId)) {
             System.out.println("Wrong project id try again or leave it empty");
-            projectId = sc.nextLine();
+            projectId = ts.readLn();
         }
 
         taskService.edit(currentUserId, taskId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);

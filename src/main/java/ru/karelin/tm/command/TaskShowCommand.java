@@ -1,15 +1,20 @@
-package ru.karelin.tm.commands;
+package ru.karelin.tm.command;
 
-import ru.karelin.tm.api.ServiceLocator;
-import ru.karelin.tm.entity.Task;
+import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.TaskService;
+import ru.karelin.tm.entity.Task;
 
 import java.text.DateFormat;
 
+
 public final class TaskShowCommand extends AbstractCommand {
+
+    private static final boolean SECURED = true;
+
     public TaskShowCommand(final ServiceLocator locator) {
-        super(locator, true);
+        super(locator, SECURED);
     }
+    public TaskShowCommand(){super(SECURED);}
 
     @Override
     public String getName() {
