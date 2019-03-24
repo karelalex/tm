@@ -3,6 +3,8 @@ package ru.karelin.tm;
 import ru.karelin.tm.command.*;
 import ru.karelin.tm.util.Bootstrap;
 
+import java.io.IOException;
+
 public class Application {
 
     public static void main(String[] args) {
@@ -28,7 +30,11 @@ public class Application {
 
                 HelpShowCommand.class,
                 InfoShowCommand.class};
-        new Bootstrap().init(commandClasses);
+        try {
+            new Bootstrap().init(commandClasses);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 }

@@ -6,6 +6,7 @@ import ru.karelin.tm.api.service.ProjectService;
 import ru.karelin.tm.api.service.TaskService;
 import ru.karelin.tm.api.service.UserService;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Map;
 import java.util.Scanner;
@@ -27,5 +28,5 @@ public interface ServiceLocator {
 
     TaskService getTaskService();
 
-    void init(Class[] commandClasses);
+    void init(Class[] commandClasses) throws IOException;
 }

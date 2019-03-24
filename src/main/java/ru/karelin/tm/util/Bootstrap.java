@@ -1,5 +1,9 @@
 package ru.karelin.tm.util;
 
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.jetbrains.annotations.NotNull;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.repository.ProjectRepository;
@@ -16,6 +20,7 @@ import ru.karelin.tm.exception.CommandRegisteredException;
 import ru.karelin.tm.repository.*;
 import ru.karelin.tm.service.*;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -84,13 +89,17 @@ public final class Bootstrap implements ServiceLocator {
     }
 
     @Override
-    public void init(Class[] commandClasses) {
+    public void init(Class[] commandClasses) throws IOException {
+        final SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsStream("mybatis-config.xml"));
+        final SqlSession sqlSession = sqlSessionFactory.openSession(true);
+        final UserRepository userRepository = sqlSession.getMapper(UserBatisRepo.class);
+
         final ProjectRepository projectRepository = new ProjectRepositoryImpl();
         final TaskRepository taskRepository = new TaskRepositoryImpl();
         projectService = new ProjectServiceImpl(projectRepository, taskRepository);
         taskService = new TaskServiceImpl(taskRepository);
         final MD5Generator md5Generator = new MD5Generator();
-        final UserRepository userRepository = new UserRepositoryImpl();
+        //final UserRepository userRepository = new UserRepositoryImpl();
         userService = new UserServiceImpl(md5Generator, userRepository);
 
 
@@ -132,8 +141,8 @@ public final class Bootstrap implements ServiceLocator {
         //end of command registration block
 
         // create two users block
-        userService.registerNewUser("sk", "pp".toCharArray(), "alex", RoleType.ORDINARY_USER);
-        userService.registerNewUser("bb", "ee".toCharArray(), "boris", RoleType.ADMIN);
+        //userService.registerNewUser("sk", "pp".toCharArray(), "alex", RoleType.ORDINARY_USER);
+        //userService.registerNewUser("bb", "ee".toCharArray(), "boris", RoleType.ADMIN);
 
         // end of create two users block
 
