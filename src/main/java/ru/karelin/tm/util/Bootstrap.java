@@ -93,9 +93,10 @@ public final class Bootstrap implements ServiceLocator {
         final SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsStream("mybatis-config.xml"));
         final SqlSession sqlSession = sqlSessionFactory.openSession(true);
         final UserRepository userRepository = sqlSession.getMapper(UserBatisRepo.class);
-
-        final ProjectRepository projectRepository = new ProjectRepositoryImpl();
-        final TaskRepository taskRepository = new TaskRepositoryImpl();
+        final ProjectRepository projectRepository = sqlSession.getMapper(ProjectBatisRepo.class);
+        //final ProjectRepository projectRepository = new ProjectRepositoryImpl();
+        final TaskRepository taskRepository = sqlSession.getMapper(TaskBatisRepo.class);
+        //final TaskRepository taskRepository = new TaskRepositoryImpl();
         projectService = new ProjectServiceImpl(projectRepository, taskRepository);
         taskService = new TaskServiceImpl(taskRepository);
         final MD5Generator md5Generator = new MD5Generator();

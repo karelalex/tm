@@ -16,5 +16,7 @@
     </environments>
     <mappers>
         <mapper class="ru.karelin.tm.repository.UserBatisRepo"/>
+        <mapper class="ru.karelin.tm.repository.ProjectBatisRepo"/>
+        <mapper class="ru.karelin.tm.repository.TaskBatisRepo"/>
     </mappers>
 </configuration>

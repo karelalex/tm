@@ -51,7 +51,7 @@ public final class TaskListShowCommand extends AbstractCommand {
             System.out.println("Task: " + t.getId());
             System.out.println("Task name: " + t.getName());
             System.out.println("Task description: " + t.getDescription());
-            if (showProjectId) System.out.println("Project ID: " + t.getProjectID());
+            if (showProjectId) System.out.println("Project ID: " + t.getProjectId());
             System.out.println();
         }
     }

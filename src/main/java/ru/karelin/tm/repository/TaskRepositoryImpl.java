@@ -14,7 +14,7 @@ public final class TaskRepositoryImpl extends AbstractRepository <Task> implemen
        final ArrayList<Task> taskArrayList = new ArrayList<>();
        for (Task t: items.values()
             ) {
-           if (t.getProjectID().equals(projectId)) taskArrayList.add(t);
+           if (t.getProjectId().equals(projectId)) taskArrayList.add(t);
        }
        return taskArrayList;
    }
@@ -36,7 +36,7 @@ public final class TaskRepositoryImpl extends AbstractRepository <Task> implemen
         final ArrayList<Task> taskArrayList = new ArrayList<>();
         for (Task t: items.values()
         ) {
-            if (t.getProjectID().equals(projectId) && t.getUserId().equals(userId)) taskArrayList.add(t);
+            if (t.getProjectId().equals(projectId) && t.getUserId().equals(userId)) taskArrayList.add(t);
         }
         return taskArrayList;
     }

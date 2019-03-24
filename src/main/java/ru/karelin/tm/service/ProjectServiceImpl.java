@@ -48,9 +48,10 @@ public final class ProjectServiceImpl extends AbstractSecuredEntityService<Proje
 
     @Override
     public void remove(final String userId, final String projectID){
-        super.remove(userId, projectID);
         final List<Task> taskList = taskRepository.findAllByProjectId(projectID);
         taskRepository.removeAll(taskList);
+        super.remove(userId, projectID);
+
     }
 
 

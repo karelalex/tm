@@ -11,5 +11,5 @@ public class Task extends AbstractSecuredEntity {
     private String description;
     private Date startDate;
     private Date finishDate;
-    private String projectID;
+    private String projectId;
 }

@@ -51,7 +51,7 @@ public interface UserBatisRepo extends UserRepository {
 
     @Override
     @Update("UPDATE `users` set `login` = #{login}, `pass_hash` = #{passwordHash}, `user_name` = #{userName}, `user_role` = #{role} where `id` = #{id}")
-    User merge(User user);
+    void merge(User user);
 
     @Override
     @Delete("Delete from `user` where id = #{id}")
@@ -59,7 +59,7 @@ public interface UserBatisRepo extends UserRepository {
 
     @Override
     @Delete("<script>" +
-                "delete from user where if in " +
+                "delete from user where id in " +
                     "<foreach item='item' index = 'index' collection='users' open='(' separator=',' close = ')'>" +
                         "#{item.id}" +
                     "</foreach>" +

@@ -27,7 +27,7 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
         task.setStartDate(startDate);
         task.setFinishDate(finishDate);
         task.setUserId(userId);
-        if (!projectId.isEmpty()) task.setProjectID(projectId);
+        if (!projectId.isEmpty()) task.setProjectId(projectId);
         entityRepository.persist(task);
     }
 
@@ -38,7 +38,7 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
         if (!description.isEmpty()) task.setDescription(description);
         if (startDate != null) task.setStartDate(startDate);
         if (finishDate != null) task.setFinishDate(finishDate);
-        if (!projectId.isEmpty()) task.setProjectID(projectId);
+        if (!projectId.isEmpty()) task.setProjectId(projectId);
         entityRepository.merge(task);
     }
 
