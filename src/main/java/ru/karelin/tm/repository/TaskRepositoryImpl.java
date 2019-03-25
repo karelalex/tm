@@ -8,8 +8,17 @@ import ru.karelin.tm.entity.Task;
 import java.util.*;
 
 
-public final class TaskRepositoryImpl extends AbstractRepository <Task> implements TaskRepository {
+public final class TaskRepositoryImpl extends AbstractSortableEntityRepository<Task> implements TaskRepository {
 
+    @Override
+    public List<Task> findAllByProjectId(final String projectId, final String sortField, boolean isStraight) {
+        return sortItems(findAllByProjectId(projectId), sortField, isStraight);
+    }
+
+    @Override
+    public List<Task> findAllByProjectIdAndUserId(String projectId, String userId, String sortField, boolean isStraight) {
+        return sortItems(findAllByProjectIdAndUserId(projectId, userId), sortField, isStraight);
+    }
 
     @Override
     public List<Task> findAllByProjectId(final String projectId){
@@ -24,14 +33,7 @@ public final class TaskRepositoryImpl extends AbstractRepository <Task> implemen
 
 
 
-    @Override
-    public List<Task> findAllByUserId(final String userId) {
-        @NotNull final ArrayList<Task> list = new ArrayList<>();
-        for (Task t: items.values()) {
-            if (t.getUserId().equals(userId)) list.add(t);
-        }
-        return list;
-    }
+
 
     @Override
     public List<Task> findAllByProjectIdAndUserId(final String projectId, final String userId){
@@ -44,12 +46,7 @@ public final class TaskRepositoryImpl extends AbstractRepository <Task> implemen
     }
 
 
-    @Override
-    public Task findOneByIdAndUserId(final String id, final String userId) {
-        @Nullable final Task task = findOne(id);
-        if(task!=null && task.getUserId().equals(userId)) return task;
-        return null;
-    }
+
 
 
 

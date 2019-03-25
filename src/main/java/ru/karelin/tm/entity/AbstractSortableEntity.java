@@ -10,9 +10,9 @@ import java.util.Date;
 @Setter
 @Getter
 @NoArgsConstructor
-public class Task extends AbstractSortableEntity {
-
-    private String name;
-    private String description;
-    private String projectID;
+public abstract class AbstractSortableEntity extends AbstractSecuredEntity {
+    private Date startDate;
+    private Date finishDate;
+    private Date creationDate = new Date();
+    private Status status;
 }

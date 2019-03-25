@@ -4,9 +4,10 @@ import ru.karelin.tm.api.repository.SecuredEntityRepository;
 import ru.karelin.tm.entity.AbstractSecuredEntity;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-public class AbstractSecuredEntityRepository<T extends AbstractSecuredEntity> extends AbstractRepository<T> implements SecuredEntityRepository<T> {
+public abstract class AbstractSecuredEntityRepository<T extends AbstractSecuredEntity> extends AbstractRepository<T> implements SecuredEntityRepository<T> {
     @Override
     public List<T> findAllByUserId(final String userId) {
 
@@ -25,4 +26,6 @@ public class AbstractSecuredEntityRepository<T extends AbstractSecuredEntity> ex
         }
         return null;
     }
+
+
 }

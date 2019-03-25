@@ -4,19 +4,12 @@ package ru.karelin.tm.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.karelin.tm.enumeration.Status;
-
-import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class Project extends AbstractSecuredEntity {
+public class Project extends AbstractSortableEntity {
     private String name;
     private String description;
-    private Date startDate;
-    private Date finishDate;
-    private Date creationDate = new Date();
-    private Status status;
 
 }

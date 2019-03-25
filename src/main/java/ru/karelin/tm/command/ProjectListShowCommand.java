@@ -1,6 +1,7 @@
 package ru.karelin.tm.command;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.entity.Project;
 import ru.karelin.tm.api.service.ProjectService;
@@ -29,6 +30,7 @@ public final class ProjectListShowCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) {
+
         @NotNull final ProjectService projectService = locator.getProjectService();
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
         @NotNull final List<Project> projects = projectService.getList(locator.getCurrentUser().getId());

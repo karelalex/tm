@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class AbstractSecuredEntity extends AbstractEntity {
+public abstract class AbstractSecuredEntity extends AbstractEntity {
     private String userId;
 
 }
