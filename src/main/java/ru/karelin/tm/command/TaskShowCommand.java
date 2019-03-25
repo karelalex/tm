@@ -46,6 +46,7 @@ public final class TaskShowCommand extends AbstractCommand {
         @NotNull final Task task = taskService.getOne(currentUserId, taskId);
         System.out.println("Task name: " + task.getName());
         System.out.println("Task description: " + task.getDescription());
+        System.out.println("Creation date: " + task.getCreationDate());
         System.out.println("Task start date: " + dateFormat.format(task.getStartDate()));
         System.out.println("Task finish date " + dateFormat.format(task.getFinishDate()));
         System.out.println("Status: " + task.getStatus().toString());

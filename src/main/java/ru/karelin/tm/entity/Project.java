@@ -16,6 +16,7 @@ public class Project extends AbstractSecuredEntity {
     private String description;
     private Date startDate;
     private Date finishDate;
+    private Date creationDate = new Date();
     private Status status;
 
 }

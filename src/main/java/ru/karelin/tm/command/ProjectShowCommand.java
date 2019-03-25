@@ -45,6 +45,7 @@ public final class ProjectShowCommand extends AbstractCommand{
         @NotNull final Project project = projectService.getOne(currentUserId, projectId);
         System.out.println("Project name: " + project.getName() );
         System.out.println("Project description: " + project.getDescription());
+        System.out.println("Creation date: " + project.getCreationDate());
         System.out.println("Start Date: " + dateFormat.format(project.getStartDate()));
         System.out.println("End Date: " + dateFormat.format(project.getFinishDate()));
         System.out.println("Status: " + project.getStatus().toString());

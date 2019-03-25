@@ -7,6 +7,7 @@ import ru.karelin.tm.entity.Task;
 import ru.karelin.tm.api.service.ProjectService;
 import ru.karelin.tm.api.service.TaskService;
 
+import java.text.DateFormat;
 import java.util.List;
 
 
@@ -34,6 +35,7 @@ public final class TaskListShowCommand extends AbstractCommand {
     @Override
     public void execute(final String... params) {
         @Nullable final String currentUserId = locator.getCurrentUser().getId();
+        @NotNull final DateFormat dateFormat = locator.getDateFormat();
         @NotNull final String projectId;
         if (params.length > 0) projectId = params[0];
         else projectId = "";
@@ -53,6 +55,10 @@ public final class TaskListShowCommand extends AbstractCommand {
             System.out.println("Task: " + t.getId());
             System.out.println("Task name: " + t.getName());
             System.out.println("Task description: " + t.getDescription());
+            System.out.println("Creation date: " + t.getCreationDate());
+            System.out.println("Task start date: " + dateFormat.format(t.getStartDate()));
+            System.out.println("Task finish date " + dateFormat.format(t.getFinishDate()));
+            System.out.println("Status: " + t.getStatus().toString());
             if (showProjectId) System.out.println("Project ID: " + t.getProjectID());
             System.out.println();
         }
