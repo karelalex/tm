@@ -13,4 +13,8 @@ public interface TaskService extends SecuredEntityService<Task> {
 
     List<Task> getListByProjectId(String userId, String projectId);
 
+    List<Task> getSortedListByProjectId(String userId, String projectId, String sortField, boolean isStraight);
+
+    List<Task> getSortedList(String userId, String sortField, boolean isStraight);
+
 }

@@ -2,16 +2,16 @@ package ru.karelin.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.karelin.tm.api.repository.SortableEntityRepository;
 import ru.karelin.tm.api.service.SecuredEntityService;
-import ru.karelin.tm.entity.AbstractEntity;
-import ru.karelin.tm.api.repository.SecuredEntityRepository;
+import ru.karelin.tm.entity.AbstractSortableEntity;
 
 import java.util.List;
 
-public class AbstractSecuredEntityService<T extends AbstractEntity> implements SecuredEntityService<T>
+public class AbstractSecuredEntityService<T extends AbstractSortableEntity> implements SecuredEntityService<T>
 {
-    @NotNull protected final SecuredEntityRepository<T> entityRepository;
-    public AbstractSecuredEntityService(@NotNull final SecuredEntityRepository<T> repo) {
+    @NotNull protected final SortableEntityRepository<T> entityRepository;
+    public AbstractSecuredEntityService(@NotNull final SortableEntityRepository<T> repo) {
         entityRepository = repo;
     }
 

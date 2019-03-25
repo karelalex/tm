@@ -33,7 +33,31 @@ public final class ProjectListShowCommand extends AbstractCommand {
 
         @NotNull final ProjectService projectService = locator.getProjectService();
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
-        @NotNull final List<Project> projects = projectService.getList(locator.getCurrentUser().getId());
+        boolean isSorted = false;
+        @NotNull String sortField = "";
+        boolean isStraight = true;
+        if (params.length > 0) {
+            int iter=0;
+            while (iter < params.length) {
+                if (params[iter].equals("-sort")) {
+                    isSorted = true;
+                    iter++;
+                    if (iter < params.length && !params[iter].startsWith("-")) {
+                        sortField = params[iter];
+                        iter++;
+                        if (iter < params.length && !params[iter].startsWith("-")) {
+                            if (params[iter].startsWith("desc")) isStraight = false;
+                        }
+                    }
+                }
+                iter++;
+            }
+
+        }
+
+        @NotNull final List<Project> projects;
+        if (isSorted) projects= projectService.getSortedList(locator.getCurrentUser().getId(), sortField, true);
+        else projects = projectService.getList(locator.getCurrentUser().getId());
         for (Project p :projects) {
             System.out.println("Project ID: " + p.getId());
             System.out.println("Project name: " + p.getName() );

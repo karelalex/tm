@@ -50,6 +50,10 @@ public final class ProjectServiceImpl extends AbstractSecuredEntityService<Proje
         }
     }
 
+    @Override
+    public List<Project> getSortedList(String userId, String sortField, boolean isStraight) {
+        return entityRepository.findAllByUserId(userId, sortField, isStraight);
+    }
 
     @Override
     public void remove(final String userId, final String projectID) {

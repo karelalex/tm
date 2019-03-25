@@ -3,10 +3,11 @@ package ru.karelin.tm.repository;
 import ru.karelin.tm.api.repository.SortableEntityRepository;
 import ru.karelin.tm.entity.AbstractSortableEntity;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class AbstractSortableEntityRepository<T extends AbstractSortableEntity> extends AbstractSecuredEntityRepository<T> implements SortableEntityRepository<T> {
+public abstract class AbstractSortableEntityRepository<T extends AbstractSortableEntity> extends AbstractSecuredEntityRepository<T> implements SortableEntityRepository<T> {
     @Override
     public List<T> findAllByUserId(String userId, String sortField, boolean isStraight) {
         return sortItems(findAllByUserId(userId), sortField, isStraight);
@@ -30,13 +31,14 @@ public class AbstractSortableEntityRepository<T extends AbstractSortableEntity> 
                 comp = new SortByCreationDate();
                 break;
             case "stat":
+                default:
                 comp = new SortByStatus();
                 break;
         }
         if (comp != null) {
             if(isStraight)
-            initialList.sort(comp);
-            else initialList.sort(comp.reversed());
+                Collections.sort(initialList, comp);
+            else Collections.sort(initialList, Collections.reverseOrder(comp));
         }
         return initialList;
 

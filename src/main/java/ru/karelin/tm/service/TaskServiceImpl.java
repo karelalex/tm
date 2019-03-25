@@ -63,5 +63,13 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
             taskRepository.remove(task);
     }
 
+    @Override
+    public List<Task> getSortedListByProjectId(String userId, String projectId, String sortField, boolean isStraight) {
+        return taskRepository.findAllByProjectIdAndUserId(projectId, userId, sortField, isStraight);
+    }
 
+    @Override
+    public List<Task> getSortedList(String userId, String sortField, boolean isStraight) {
+        return null;
+    }
 }
