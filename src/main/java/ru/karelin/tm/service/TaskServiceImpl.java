@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.karelin.tm.api.service.TaskService;
 import ru.karelin.tm.entity.Task;
 import ru.karelin.tm.api.repository.TaskRepository;
+import ru.karelin.tm.enumeration.Status;
 
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,7 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
         task.setStartDate(startDate);
         task.setFinishDate(finishDate);
         task.setUserId(userId);
+        task.setStatus(Status.PLANNED);
         if (!projectId.isEmpty()) task.setProjectID(projectId);
         entityRepository.persist(task);
     }

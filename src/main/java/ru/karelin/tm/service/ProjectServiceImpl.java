@@ -8,6 +8,7 @@ import ru.karelin.tm.entity.Project;
 import ru.karelin.tm.entity.Task;
 import ru.karelin.tm.api.repository.ProjectRepository;
 import ru.karelin.tm.api.repository.TaskRepository;
+import ru.karelin.tm.enumeration.Status;
 
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,7 @@ public final class ProjectServiceImpl extends AbstractSecuredEntityService<Proje
         project.setStartDate(startDate);
         project.setFinishDate(finishDate);
         project.setUserId(userId);
+        project.setStatus(Status.PLANNED);
         entityRepository.persist(project);
     }
 
