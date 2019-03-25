@@ -40,6 +40,8 @@ public final class TaskListShowCommand extends AbstractCommand {
         boolean isSorted = false;
         String sortField = "";
         boolean isStraight = true;
+        String searchItem ="";
+        boolean isFind = false;
         if (params.length > 0) {
             int iter;
             if (!params[0].startsWith("-")) {
@@ -61,6 +63,14 @@ public final class TaskListShowCommand extends AbstractCommand {
 
                         }
                     }
+                    if(iter<params.length && params[iter].equals("-search")){
+                        isFind = true;
+                        iter ++;
+                        if(iter<params.length && !params[iter].startsWith("-")){
+                            searchItem = params[iter];
+                        }
+                    }
+                    iter++;
                 }
                 iter++;
             }
@@ -70,7 +80,8 @@ public final class TaskListShowCommand extends AbstractCommand {
         @NotNull final ProjectService projectService = locator.getProjectService();
         @NotNull final List<Task> tasks;
         boolean showProjectId = true;
-        if (projectId.isEmpty()) {
+        if (isFind) tasks = taskService.getListByKeyword(currentUserId, searchItem);
+        else if (projectId.isEmpty()) {
             if (isSorted) {
                 tasks = taskService.getSortedList(currentUserId, sortField, isStraight);
             } else tasks = taskService.getList(currentUserId);
@@ -84,8 +95,7 @@ public final class TaskListShowCommand extends AbstractCommand {
             System.out.println("Wrong Project ID");
             return;
         }
-        for (
-                Task t : tasks) {
+        for (Task t : tasks) {
             System.out.println("Task: " + t.getId());
             System.out.println("Task name: " + t.getName());
             System.out.println("Task description: " + t.getDescription());

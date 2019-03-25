@@ -33,9 +33,12 @@ public final class ProjectListShowCommand extends AbstractCommand {
 
         @NotNull final ProjectService projectService = locator.getProjectService();
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
+        @NotNull final String currentUserId = locator.getCurrentUser().getId();
         boolean isSorted = false;
         @NotNull String sortField = "";
         boolean isStraight = true;
+        boolean isFind = false;
+        String searchItem="";
         if (params.length > 0) {
             int iter=0;
             while (iter < params.length) {
@@ -47,16 +50,26 @@ public final class ProjectListShowCommand extends AbstractCommand {
                         iter++;
                         if (iter < params.length && !params[iter].startsWith("-")) {
                             if (params[iter].startsWith("desc")) isStraight = false;
+                            iter++;
                         }
                     }
                 }
+                if(iter<params.length && params[iter].equals("-search")){
+                    isFind = true;
+                    iter ++;
+                    if(iter<params.length && !params[iter].startsWith("-")){
+                        searchItem = params[iter];
+                    }
+                }
                 iter++;
+
             }
 
         }
 
         @NotNull final List<Project> projects;
-        if (isSorted) projects= projectService.getSortedList(locator.getCurrentUser().getId(), sortField, true);
+        if (isFind) projects = projectService.getListByKeyword(currentUserId, searchItem);
+        else if (isSorted) projects= projectService.getSortedList(locator.getCurrentUser().getId(), sortField, true);
         else projects = projectService.getList(locator.getCurrentUser().getId());
         for (Project p :projects) {
             System.out.println("Project ID: " + p.getId());
