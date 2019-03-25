@@ -1,5 +1,6 @@
 package ru.karelin.tm.command;
 
+import org.jetbrains.annotations.NotNull;
 import ru.karelin.tm.api.util.ServiceLocator;
 
 import java.util.Map;
@@ -7,7 +8,7 @@ import java.util.Map;
 
 public final class HelpShowCommand extends AbstractCommand {
     private static final boolean SECURED = false;
-    public HelpShowCommand(final ServiceLocator locator) {
+    public HelpShowCommand(@NotNull final ServiceLocator locator) {
         super(locator, SECURED);
     }
     public HelpShowCommand(){

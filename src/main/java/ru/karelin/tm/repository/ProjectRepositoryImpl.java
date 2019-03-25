@@ -1,5 +1,7 @@
 package ru.karelin.tm.repository;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.karelin.tm.api.repository.ProjectRepository;
 import ru.karelin.tm.entity.Project;
 
@@ -13,7 +15,7 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
 
     @Override
     public List<Project> findAllByUserId(final String userId) {
-        final ArrayList<Project> list = new ArrayList<>();
+        @NotNull final ArrayList<Project> list = new ArrayList<>();
         for (Project p: items.values()) {
             if (p.getUserId().equals(userId)) list.add(p);
         }
@@ -22,7 +24,7 @@ public final class ProjectRepositoryImpl extends AbstractRepository<Project> imp
 
     @Override
     public Project findOneByIdAndUserId(final String id, final String userId) {
-        final Project project = findOne(id);
+        @Nullable final Project project = findOne(id);
         if (project!=null && project.getUserId().equals(userId)) return project;
         return null;
     }

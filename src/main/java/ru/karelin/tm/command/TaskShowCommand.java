@@ -1,5 +1,7 @@
 package ru.karelin.tm.command;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.TaskService;
 import ru.karelin.tm.entity.Task;
@@ -28,20 +30,20 @@ public final class TaskShowCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) {
-        final TaskService taskService = locator.getTaskService();
-        final String taskId;
+        @NotNull final TaskService taskService = locator.getTaskService();
+        @NotNull final String taskId;
         if (params.length > 0) taskId = params[0];
         else {
             System.out.println("You must enter taskId");
             return;
         }
-        final DateFormat dateFormat = locator.getDateFormat();
-        final String currentUserId = locator.getCurrentUser().getId();
+        @NotNull final DateFormat dateFormat = locator.getDateFormat();
+        @Nullable final String currentUserId = locator.getCurrentUser().getId();
         if (!taskService.checkID(currentUserId, taskId)) {
             System.out.println("Wrong ID");
             return;
         }
-        final Task task = taskService.getOne(currentUserId, taskId);
+        @NotNull final Task task = taskService.getOne(currentUserId, taskId);
         System.out.println("Task name: " + task.getName());
         System.out.println("Task description: " + task.getDescription());
         System.out.println("Task start date: " + dateFormat.format(task.getStartDate()));

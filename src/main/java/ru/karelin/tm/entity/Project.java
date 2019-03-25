@@ -1,11 +1,15 @@
 package ru.karelin.tm.entity;
 
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class Project extends AbstractSecuredEntity {
     private String name;
     private String description;

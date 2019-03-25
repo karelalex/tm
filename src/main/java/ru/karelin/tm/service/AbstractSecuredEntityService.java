@@ -1,5 +1,7 @@
 package ru.karelin.tm.service;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.karelin.tm.api.service.SecuredEntityService;
 import ru.karelin.tm.entity.AbstractEntity;
 import ru.karelin.tm.api.repository.SecuredEntityRepository;
@@ -8,8 +10,8 @@ import java.util.List;
 
 public class AbstractSecuredEntityService<T extends AbstractEntity> implements SecuredEntityService<T>
 {
-    protected final SecuredEntityRepository<T> entityRepository;
-    public AbstractSecuredEntityService(final SecuredEntityRepository<T> repo) {
+    @NotNull protected final SecuredEntityRepository<T> entityRepository;
+    public AbstractSecuredEntityService(@NotNull final SecuredEntityRepository<T> repo) {
         entityRepository = repo;
     }
 
@@ -20,13 +22,13 @@ public class AbstractSecuredEntityService<T extends AbstractEntity> implements S
 
     @Override
     public void remove(final String userId, final String id) {
-        final T itemToRemove = entityRepository.findOneByIdAndUserId(id, userId);
+        @Nullable final T itemToRemove = entityRepository.findOneByIdAndUserId(id, userId);
         if(itemToRemove!=null) entityRepository.remove(itemToRemove);
     }
 
     @Override
     public boolean checkID(final String userId, final String id) {
-        T t = entityRepository.findOneByIdAndUserId(id, userId);
+        @Nullable T t = entityRepository.findOneByIdAndUserId(id, userId);
         return t!=null;
     }
 

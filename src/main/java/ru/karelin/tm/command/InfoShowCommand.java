@@ -1,12 +1,13 @@
 package ru.karelin.tm.command;
 
 import com.jcabi.manifests.Manifests;
+import org.jetbrains.annotations.NotNull;
 import ru.karelin.tm.api.util.ServiceLocator;
 
 
 public class InfoShowCommand extends AbstractCommand {
     private static final boolean SECURED = false;
-    public InfoShowCommand(final ServiceLocator locator) {
+    public InfoShowCommand(@NotNull final ServiceLocator locator) {
         super(locator, SECURED);
     }
     public InfoShowCommand() {

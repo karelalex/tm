@@ -1,5 +1,6 @@
 package ru.karelin.tm.command;
 
+import org.jetbrains.annotations.NotNull;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.entity.Project;
 import ru.karelin.tm.api.service.ProjectService;
@@ -11,7 +12,7 @@ import java.util.List;
 public final class ProjectListShowCommand extends AbstractCommand {
     private static final boolean SECURED = true;
 
-    public ProjectListShowCommand(final ServiceLocator locator) {
+    public ProjectListShowCommand(@NotNull final ServiceLocator locator) {
         super(locator, SECURED);
     }
     public ProjectListShowCommand(){super(SECURED);}
@@ -28,9 +29,9 @@ public final class ProjectListShowCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) {
-        final ProjectService projectService = locator.getProjectService();
-        final DateFormat dateFormat = locator.getDateFormat();
-        final List<Project> projects = projectService.getList(locator.getCurrentUser().getId());
+        @NotNull final ProjectService projectService = locator.getProjectService();
+        @NotNull final DateFormat dateFormat = locator.getDateFormat();
+        @NotNull final List<Project> projects = projectService.getList(locator.getCurrentUser().getId());
         for (Project p :projects) {
             System.out.println("Project ID: " + p.getId());
             System.out.println("Project name: " + p.getName() );

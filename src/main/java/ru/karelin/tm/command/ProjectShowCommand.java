@@ -1,5 +1,7 @@
 package ru.karelin.tm.command;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.entity.Project;
 import ru.karelin.tm.api.service.ProjectService;
@@ -27,20 +29,20 @@ public final class ProjectShowCommand extends AbstractCommand{
 
     @Override
     public void execute(final String... params) {
-        final String projectId;
+        @Nullable final String projectId;
         if (params.length > 0) projectId = params[0];
         else {
             System.out.println("You must enter projectId");
             return;
         }
-        final ProjectService projectService = locator.getProjectService();
-        final DateFormat dateFormat = locator.getDateFormat();
-        final String currentUserId = locator.getCurrentUser().getId();
-        if(!projectService.checkID(currentUserId,projectId)) {
+        @NotNull final ProjectService projectService = locator.getProjectService();
+        @Nullable final DateFormat dateFormat = locator.getDateFormat();
+        @Nullable final String currentUserId = locator.getCurrentUser().getId();
+        if(!projectService.checkID(currentUserId, projectId)) {
             System.out.println("Wrong ID "+ projectId);
             return;
         }
-        final Project project = projectService.getOne(currentUserId, projectId);
+        @NotNull final Project project = projectService.getOne(currentUserId, projectId);
         System.out.println("Project name: " + project.getName() );
         System.out.println("Project description: " + project.getDescription());
         System.out.println("Start Date: " + dateFormat.format(project.getStartDate()));

@@ -1,5 +1,7 @@
 package ru.karelin.tm.command;
 
+import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.NotNull;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.entity.Task;
 import ru.karelin.tm.api.service.ProjectService;
@@ -11,7 +13,7 @@ import java.util.List;
 public final class TaskListShowCommand extends AbstractCommand {
     private static final boolean SECURED = true;
 
-    public TaskListShowCommand(final ServiceLocator locator) {
+    public TaskListShowCommand(@NotNull final ServiceLocator locator) {
         super(locator, SECURED);
     }
 
@@ -31,13 +33,13 @@ public final class TaskListShowCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) {
-        final String currentUserId = locator.getCurrentUser().getId();
-        final String projectId;
+        @Nullable final String currentUserId = locator.getCurrentUser().getId();
+        @NotNull final String projectId;
         if (params.length > 0) projectId = params[0];
         else projectId = "";
-        final TaskService taskService = locator.getTaskService();
-        final ProjectService projectService = locator.getProjectService();
-        final List<Task> tasks;
+        @NotNull final TaskService taskService = locator.getTaskService();
+        @NotNull final ProjectService projectService = locator.getProjectService();
+        @NotNull final List<Task> tasks;
         boolean showProjectId = true;
         if (projectId.isEmpty()) tasks = taskService.getList(currentUserId);
         else if (projectService.checkID(currentUserId, projectId)) {

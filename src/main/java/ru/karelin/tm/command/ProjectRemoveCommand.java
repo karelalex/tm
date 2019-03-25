@@ -1,5 +1,6 @@
 package ru.karelin.tm.command;
 
+import org.jetbrains.annotations.NotNull;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.ProjectService;
 
@@ -7,7 +8,7 @@ import ru.karelin.tm.api.service.ProjectService;
 public final class ProjectRemoveCommand extends AbstractCommand {
     private static final boolean SECURED = true;
 
-    public ProjectRemoveCommand(final ServiceLocator locator) {
+    public ProjectRemoveCommand(@NotNull final ServiceLocator locator) {
         super( locator,SECURED);
     }
     public ProjectRemoveCommand(){super(SECURED);}
@@ -30,7 +31,7 @@ public final class ProjectRemoveCommand extends AbstractCommand {
             System.out.println("You must enter projectId");
             return;
         }
-        final ProjectService projectService = locator.getProjectService();
+        @NotNull final ProjectService projectService = locator.getProjectService();
         projectService.remove(locator.getCurrentUser().getId(), projectId);
     }
 }

@@ -1,5 +1,6 @@
 package ru.karelin.tm.command;
 
+import org.jetbrains.annotations.NotNull;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.ProjectService;
 
@@ -9,7 +10,7 @@ import java.util.Date;
 
 public final class ProjectCreateCommand extends AbstractCommand {
     private static final boolean SECURED = true;
-    public ProjectCreateCommand(final ServiceLocator locator) {
+    public ProjectCreateCommand(@NotNull final ServiceLocator locator) {
         super( locator, SECURED);
     }
     public ProjectCreateCommand(){super(SECURED);}
@@ -25,14 +26,14 @@ public final class ProjectCreateCommand extends AbstractCommand {
 
     @Override
     public void execute(final String ... params){
-        final DateFormat dateFormat = locator.getDateFormat();
-        final ProjectService projectService = locator.getProjectService();
+        @NotNull final DateFormat dateFormat = locator.getDateFormat();
+        @NotNull final ProjectService projectService = locator.getProjectService();
         System.out.println("Enter project name");
-        final String projectName = ts.readLn();
+        @NotNull final String projectName = ts.readLn();
         System.out.println("Enter project description");
         final String projectDescription = ts.readLn();
-        String date;
-        Date projectStartDate;
+        @NotNull String date;
+        @NotNull Date projectStartDate;
         while(true) {
             System.out.println("Enter starting date (format DD.MM.YYYY) or leave empty for today");
             date = ts.readLn();
@@ -49,7 +50,7 @@ public final class ProjectCreateCommand extends AbstractCommand {
             }
         }
 
-        Date projectFinishDate;
+        @NotNull Date projectFinishDate;
         while (true) {
             System.out.println("Enter ending date (format DD.MM.YYYY)");
             date = ts.readLn();

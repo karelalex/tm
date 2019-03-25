@@ -1,5 +1,6 @@
 package ru.karelin.tm.repository;
 
+import org.jetbrains.annotations.NotNull;
 import ru.karelin.tm.exception.ObjectAlreadyExistsException;
 import ru.karelin.tm.api.repository.Repository;
 import ru.karelin.tm.entity.AbstractEntity;
@@ -7,7 +8,7 @@ import ru.karelin.tm.entity.AbstractEntity;
 import java.util.*;
 
 public class AbstractRepository<T extends AbstractEntity> implements Repository<T> {
-    protected Map<String, T> items = new LinkedHashMap<>();
+    @NotNull protected Map<String, T> items = new LinkedHashMap<>();
 
     @Override
     public List<T> findAll() {

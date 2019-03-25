@@ -1,5 +1,6 @@
 package ru.karelin.tm.command;
 
+import org.jetbrains.annotations.NotNull;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.ProjectService;
 
@@ -11,7 +12,7 @@ import java.util.Date;
 public final class ProjectEditCommand extends AbstractCommand {
     private static final boolean SECURED = true;
 
-    public ProjectEditCommand(final ServiceLocator locator) {
+    public ProjectEditCommand(@NotNull final ServiceLocator locator) {
         super(locator, SECURED);
     }
     public ProjectEditCommand(){super(SECURED);}
@@ -28,7 +29,7 @@ public final class ProjectEditCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) {
-        String projectId;
+        @NotNull String projectId;
         if (params.length > 0) projectId = params[0];
         else {
             System.out.println("You must enter projectId");

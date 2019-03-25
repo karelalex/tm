@@ -1,5 +1,6 @@
 package ru.karelin.tm.command;
 
+import org.jetbrains.annotations.NotNull;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.entity.User;
 
@@ -7,7 +8,7 @@ public final class UserShowCurrentCommand extends AbstractCommand {
 
     private static final boolean SECURED = true;
 
-    public UserShowCurrentCommand(ServiceLocator locator) {
+    public UserShowCurrentCommand(@NotNull ServiceLocator locator) {
         super(locator, SECURED);
     }
     public UserShowCurrentCommand(){super(SECURED);}
@@ -24,7 +25,7 @@ public final class UserShowCurrentCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) {
-        final User currentUser = locator.getCurrentUser();
+        @NotNull final User currentUser = locator.getCurrentUser();
         System.out.println("Login: "+ currentUser.getLogin());
         System.out.println("Name: " + currentUser.getUserName());
         System.out.println("Role: " + currentUser.getRole());

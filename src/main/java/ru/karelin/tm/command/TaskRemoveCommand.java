@@ -1,5 +1,6 @@
 package ru.karelin.tm.command;
 
+import org.jetbrains.annotations.NotNull;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.TaskService;
 
@@ -8,7 +9,7 @@ public final class TaskRemoveCommand extends AbstractCommand {
 
     private static final boolean SECURED = true;
 
-    public TaskRemoveCommand(final ServiceLocator locator) {
+    public TaskRemoveCommand(@NotNull final ServiceLocator locator) {
         super(locator, SECURED);
     }
 

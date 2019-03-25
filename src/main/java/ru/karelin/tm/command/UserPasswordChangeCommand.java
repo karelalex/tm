@@ -1,5 +1,7 @@
 package ru.karelin.tm.command;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.UserService;
 
@@ -27,8 +29,8 @@ public final class UserPasswordChangeCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
-        final UserService userService = locator.getUserService();
-        final String currentUserId = locator.getCurrentUser().getId();
+        @NotNull final UserService userService = locator.getUserService();
+        @NotNull final String currentUserId = locator.getCurrentUser().getId();
         System.out.println("Enter your old pass");
         final char[] oldPass;
         char[] newPass, newPassRepeat;

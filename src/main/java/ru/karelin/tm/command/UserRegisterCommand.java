@@ -1,5 +1,6 @@
 package ru.karelin.tm.command;
 
+import org.jetbrains.annotations.NotNull;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.UserService;
 
@@ -10,7 +11,7 @@ public final class UserRegisterCommand extends AbstractCommand {
 
     private static final boolean SECURED = false;
 
-    public UserRegisterCommand(ServiceLocator locator) {
+    public UserRegisterCommand(@NotNull ServiceLocator locator) {
         super(locator, SECURED);
     }
     public UserRegisterCommand(){super(SECURED);}
@@ -27,9 +28,9 @@ public final class UserRegisterCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) {
-        final UserService userService = locator.getUserService();
+        @NotNull final UserService userService = locator.getUserService();
         System.out.println("Enter login");
-        String login = ts.readLn();
+        @NotNull String login = ts.readLn();
         while (userService.isUserExistByLogin(login)) {
             System.out.println("Choose another login");
             login = ts.readLn();
@@ -47,7 +48,7 @@ public final class UserRegisterCommand extends AbstractCommand {
             break;
         }
         System.out.println("Enter your name");
-        final String name = ts.readLn();
+        @NotNull final String name = ts.readLn();
         userService.registerNewUser(login, pass, name);
         System.out.println("Thank you for registration");
     }

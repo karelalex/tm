@@ -1,5 +1,6 @@
 package ru.karelin.tm.command;
 
+import org.jetbrains.annotations.NotNull;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.UserService;
 
@@ -25,8 +26,8 @@ public final class UserProfileEditCommand extends AbstractCommand{
     @Override
     public void execute(String... params) {
         System.out.println("Enter user name or just press enter if you do not want to change it");
-        final String userName = ts.readLn();
-        final UserService userService = locator.getUserService();
+        @NotNull final String userName = ts.readLn();
+        @NotNull final UserService userService = locator.getUserService();
         userService.editUser(locator.getCurrentUser().getId(), userName);
     }
 }

@@ -1,5 +1,7 @@
 package ru.karelin.tm.command;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.ProjectService;
 import ru.karelin.tm.api.service.TaskService;
@@ -12,7 +14,7 @@ import java.util.Date;
 public final class TaskEditCommand extends AbstractCommand {
     private static final boolean SECURED = true;
 
-    public TaskEditCommand(ServiceLocator locator) {
+    public TaskEditCommand(@NotNull ServiceLocator locator) {
         super(locator, SECURED);
     }
     public TaskEditCommand(){super(SECURED);}
@@ -29,26 +31,26 @@ public final class TaskEditCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) {
-        final String taskId;
+        @NotNull final String taskId;
         if (params.length > 0) taskId = params[0];
         else {
             System.out.println("You must enter taskId");
             return;
         }
-        final TaskService taskService = locator.getTaskService();
-        final DateFormat dateFormat = locator.getDateFormat();
-        final String currentUserId = locator.getCurrentUser().getId();
-        final ProjectService projectService = locator.getProjectService();
+        @NotNull final TaskService taskService = locator.getTaskService();
+        @NotNull final DateFormat dateFormat = locator.getDateFormat();
+        @Nullable final String currentUserId = locator.getCurrentUser().getId();
+        @NotNull final ProjectService projectService = locator.getProjectService();
         if (!taskService.checkID(currentUserId, taskId)) {
             System.out.println("Wrong ID!");
             return;
         }
         System.out.println("Enter new task name or just press enter if you do not want to change it");
-        final String taskName = ts.readLn();
+        @NotNull final String taskName = ts.readLn();
         System.out.println("Enter new task description or just press enter if you do not want to change it");
-        final String taskDescription = ts.readLn();
-        String date;
-        Date taskStartDate;
+        @NotNull final String taskDescription = ts.readLn();
+        @NotNull String date;
+        @Nullable Date taskStartDate;
         while (true) {
             System.out.println("Enter starting date (format DD.MM.YYYY) or just press enter if you do not want to change it");
             date = ts.readLn();
@@ -64,7 +66,7 @@ public final class TaskEditCommand extends AbstractCommand {
                 }
             }
         }
-        Date taskFinishDate;
+        @Nullable Date taskFinishDate;
         while (true) {
             System.out.println("Enter ending date (format DD.MM.YYYY) or just press enter if you do not want to change it");
             date = ts.readLn();
@@ -81,7 +83,7 @@ public final class TaskEditCommand extends AbstractCommand {
             }
         }
         System.out.println("Enter new project id for task or just press enter if you do not want to change it");
-        String projectId = ts.readLn();
+        @NotNull String projectId = ts.readLn();
         while (!projectId.isEmpty() && !projectService.checkID(currentUserId, projectId)) {
             System.out.println("Wrong project id try again or leave it empty");
             projectId = ts.readLn();
