@@ -17,4 +17,5 @@ public interface TaskService extends SecuredEntityService<Task> {
 
     List<Task> getSortedList(String userId, String sortField, boolean isStraight);
 
+    List<Task> getListByKeyword(String userId, String keyword);
 }

@@ -14,5 +14,7 @@ public interface ProjectService extends SecuredEntityService<Project> {
 
     List<Project> getSortedList(String userId, String sortField, boolean isStraight);
 
+    List<Project> getListByKeyword(String userId, String keyword);
+
 
 }

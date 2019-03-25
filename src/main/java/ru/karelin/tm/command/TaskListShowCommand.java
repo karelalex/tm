@@ -58,10 +58,11 @@ public final class TaskListShowCommand extends AbstractCommand {
                         iter++;
                         if (iter < params.length && !params[iter].startsWith("-")) {
                             if (params[iter].startsWith("desc")) isStraight = false;
-                            iter++;
+
                         }
                     }
                 }
+                iter++;
             }
 
         } else projectId = "";

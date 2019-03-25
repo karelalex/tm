@@ -4,7 +4,6 @@ import ru.karelin.tm.api.repository.SecuredEntityRepository;
 import ru.karelin.tm.entity.AbstractSecuredEntity;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public abstract class AbstractSecuredEntityRepository<T extends AbstractSecuredEntity> extends AbstractRepository<T> implements SecuredEntityRepository<T> {

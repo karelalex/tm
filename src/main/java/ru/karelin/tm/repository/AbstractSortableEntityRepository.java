@@ -31,7 +31,6 @@ public abstract class AbstractSortableEntityRepository<T extends AbstractSortabl
                 comp = new SortByCreationDate();
                 break;
             case "stat":
-                default:
                 comp = new SortByStatus();
                 break;
         }

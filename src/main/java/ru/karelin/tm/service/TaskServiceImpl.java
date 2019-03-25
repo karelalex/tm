@@ -14,11 +14,11 @@ import java.util.List;
 
 public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> implements TaskService {
 
-    private TaskRepository taskRepository;
+
 
     public TaskServiceImpl(final TaskRepository taskRepository) {
         super(taskRepository);
-        this.taskRepository = taskRepository;
+
     }
 
 
@@ -52,24 +52,29 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
 
     @Override
     public List<Task> getListByProjectId(final String userId, final String projectId) {
-        return taskRepository.findAllByProjectIdAndUserId(projectId, userId);
+        return ((TaskRepository)entityRepository).findAllByProjectIdAndUserId(projectId, userId);
     }
 
 
     @Override
     public void remove(final String userId, final String taskId) {
-       @Nullable final Task task = taskRepository.findOneByIdAndUserId(taskId, userId);
+       @Nullable final Task task = ((TaskRepository)entityRepository).findOneByIdAndUserId(taskId, userId);
         if (task != null)
-            taskRepository.remove(task);
+            ((TaskRepository)entityRepository).remove(task);
     }
 
     @Override
     public List<Task> getSortedListByProjectId(String userId, String projectId, String sortField, boolean isStraight) {
-        return taskRepository.findAllByProjectIdAndUserId(projectId, userId, sortField, isStraight);
+        return ((TaskRepository)entityRepository).findAllByProjectIdAndUserId(projectId, userId, sortField, isStraight);
     }
 
     @Override
     public List<Task> getSortedList(String userId, String sortField, boolean isStraight) {
-        return null;
+        return ((TaskRepository)entityRepository).findAllByUserId(userId, sortField, isStraight);
+    }
+
+    @Override
+    public List<Task> getListByKeyword(String userId, String keyword) {
+        return ((TaskRepository)entityRepository).findAllByUserIdAndKeyword(userId, keyword);
     }
 }

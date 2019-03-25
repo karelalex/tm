@@ -20,9 +20,11 @@ public final class ProjectServiceImpl extends AbstractSecuredEntityService<Proje
 
     final private TaskRepository taskRepository;
 
+
     public ProjectServiceImpl(@NotNull final ProjectRepository projectRepository, @NotNull final TaskRepository taskRepository) {
         super(projectRepository);
         this.taskRepository = taskRepository;
+
     }
 
     @Override
@@ -62,5 +64,8 @@ public final class ProjectServiceImpl extends AbstractSecuredEntityService<Proje
         taskRepository.removeAll(taskList);
     }
 
-
+    @Override
+    public List<Project> getListByKeyword(String userId, String keyword) {
+        return ((ProjectRepository)entityRepository).findAllByUserIdAndKeyword(userId, keyword);
+    }
 }

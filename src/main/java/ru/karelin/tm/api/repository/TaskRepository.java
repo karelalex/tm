@@ -13,4 +13,5 @@ public interface TaskRepository extends SortableEntityRepository<Task> {
 
     List<Task> findAllByProjectIdAndUserId(String projectId, String userId, String sortField, boolean isStraight);
 
+    List<Task> findAllByUserIdAndKeyword(String userId, String key);
 }
