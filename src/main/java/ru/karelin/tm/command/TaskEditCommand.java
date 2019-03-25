@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.ProjectService;
 import ru.karelin.tm.api.service.TaskService;
+import ru.karelin.tm.enumeration.Status;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -49,6 +50,28 @@ public final class TaskEditCommand extends AbstractCommand {
         @NotNull final String taskName = ts.readLn();
         System.out.println("Enter new task description or just press enter if you do not want to change it");
         @NotNull final String taskDescription = ts.readLn();
+        String taskStatusString;
+        Status taskStatus;
+        stat:
+        while (true){
+            System.out.println("Enter new project status or leave empty to keep current status.\nYou must enter one of the these values: ");
+            for (Status s: Status.values()
+            ) {
+                System.out.print(s.toString()+", ");
+            }
+            System.out.println("\b\b");
+            taskStatusString = ts.readLn();
+            if(taskStatusString.isEmpty()) {
+                taskStatus=null;
+                break stat;
+            }
+            for (Status s : Status.values()) {
+                if (s.toString().equals(taskStatusString)) {
+                    taskStatus = s;
+                    break stat;
+                }
+            }
+        }
         @NotNull String date;
         @Nullable Date taskStartDate;
         while (true) {
@@ -89,7 +112,7 @@ public final class TaskEditCommand extends AbstractCommand {
             projectId = ts.readLn();
         }
 
-        taskService.edit(currentUserId, taskId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
+        taskService.edit(currentUserId, taskId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId, taskStatus);
 
     }
 }

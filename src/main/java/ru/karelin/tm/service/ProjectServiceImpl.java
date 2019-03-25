@@ -9,6 +9,7 @@ import ru.karelin.tm.entity.Task;
 import ru.karelin.tm.api.repository.ProjectRepository;
 import ru.karelin.tm.api.repository.TaskRepository;
 import ru.karelin.tm.enumeration.Status;
+import ru.karelin.tm.exception.WrongStatusException;
 
 import java.util.Date;
 import java.util.List;
@@ -37,13 +38,14 @@ public final class ProjectServiceImpl extends AbstractSecuredEntityService<Proje
     }
 
     @Override
-    public void edit(final String userId, final String id, final String name, final String description, final Date startDate, final Date finishDate) {
+    public void edit(final String userId, final String id, final String name, final String description, final Date startDate, final Date finishDate, Status status) {
         @Nullable final Project project = entityRepository.findOneByIdAndUserId(id, userId);
         if (project != null) {
             if (!name.isEmpty()) project.setName(name);
             if (!description.isEmpty()) project.setDescription(description);
             if (startDate != null) project.setStartDate(startDate);
             if (finishDate != null) project.setFinishDate(finishDate);
+            if (status!=null) project.setStatus(status);
             entityRepository.merge(project);
         }
     }

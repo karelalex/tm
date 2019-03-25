@@ -36,7 +36,7 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
     }
 
     @Override
-    public void edit(final String userId, final String id, final String name, final String description, final Date startDate, final Date finishDate, final String projectId) {
+    public void edit(final String userId, final String id, final String name, final String description, final Date startDate, final Date finishDate, final String projectId, final Status status) {
         @Nullable final Task task = entityRepository.findOneByIdAndUserId(id, userId);
         if (task != null) {
             if (!name.isEmpty()) task.setName(name);
@@ -44,6 +44,7 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
             if (startDate != null) task.setStartDate(startDate);
             if (finishDate != null) task.setFinishDate(finishDate);
             if (!projectId.isEmpty()) task.setProjectID(projectId);
+            if(status!=null) task.setStatus(status);
             entityRepository.merge(task);
         }
     }

@@ -47,6 +47,7 @@ public final class ProjectShowCommand extends AbstractCommand{
         System.out.println("Project description: " + project.getDescription());
         System.out.println("Start Date: " + dateFormat.format(project.getStartDate()));
         System.out.println("End Date: " + dateFormat.format(project.getFinishDate()));
+        System.out.println("Status: " + project.getStatus().toString());
         System.out.println();
     }
 }

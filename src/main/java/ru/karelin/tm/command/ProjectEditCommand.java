@@ -3,6 +3,7 @@ package ru.karelin.tm.command;
 import org.jetbrains.annotations.NotNull;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.service.ProjectService;
+import ru.karelin.tm.enumeration.Status;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -46,6 +47,28 @@ public final class ProjectEditCommand extends AbstractCommand {
         final String projectName = ts.readLn();
         System.out.println("Enter new project description or just press enter if you do not want to change it");
         final String projectDescription = ts.readLn();
+        String projectStatusString;
+        Status projectStatus;
+        stat:
+        while (true){
+            System.out.println("Enter new project status or leave empty to keep current status.\nYou must enter one of the these values: ");
+            for (Status s: Status.values()
+            ) {
+                System.out.print(s.toString()+", ");
+            }
+            System.out.println("\b\b");
+            projectStatusString = ts.readLn();
+            if(projectStatusString.isEmpty()) {
+                projectStatus=null;
+                break stat;
+            }
+            for (Status s : Status.values()) {
+                if (s.toString().equals(projectStatusString)) {
+                    projectStatus = s;
+                    break stat;
+                }
+            }
+        }
         String date;
         Date projectStartDate;
         while (true) {
@@ -80,7 +103,7 @@ public final class ProjectEditCommand extends AbstractCommand {
                 }
             }
         }
-        projectService.edit(currentUserId, projectId, projectName, projectDescription, projectStartDate, projectFinishDate);
+        projectService.edit(currentUserId, projectId, projectName, projectDescription, projectStartDate, projectFinishDate, projectStatus);
     }
 }
 

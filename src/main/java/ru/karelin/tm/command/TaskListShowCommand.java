@@ -1,6 +1,6 @@
 package ru.karelin.tm.command;
 
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.entity.Task;
