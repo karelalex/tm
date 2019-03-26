@@ -110,8 +110,8 @@ public final class Bootstrap implements ServiceLocator {
         //end of command registration block
 
         // create two users block
-        userService.registerNewUser("sk", "pp".toCharArray(), "alex", RoleType.ORDINARY_USER);
-        userService.registerNewUser("bb", "ee".toCharArray(), "boris", RoleType.ADMIN);
+        //userService.registerNewUser("sk", "pp".toCharArray(), "alex", RoleType.ORDINARY_USER);
+        //userService.registerNewUser("bb", "ee".toCharArray(), "boris", RoleType.ADMIN);
 
         // end of create two users block
 

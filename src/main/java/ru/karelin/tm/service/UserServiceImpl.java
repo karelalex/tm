@@ -9,6 +9,9 @@ import ru.karelin.tm.api.service.UserService;
 import ru.karelin.tm.entity.User;
 import ru.karelin.tm.api.repository.UserRepository;
 
+import java.io.*;
+import java.util.List;
+
 public final class UserServiceImpl implements UserService {
     private final MD5Generator md5Generator;
     private final UserRepository userRepository;
@@ -56,10 +59,38 @@ public final class UserServiceImpl implements UserService {
 
     @Override
     public boolean changePassword(final String userId, final char[] oldPass, final char[] newPass) {
-        @Nullable  final User user = userRepository.findOne(userId);
+        @Nullable final User user = userRepository.findOne(userId);
         if (user == null || !user.getPasswordHash().equals(md5Generator.generate(oldPass))) return false;
         user.setPasswordHash(md5Generator.generate(newPass));
         userRepository.merge(user);
         return true;
+    }
+
+    @Override
+    public void getSerialize() throws IOException, ClassNotFoundException {
+        File f = new File("users.ser");
+        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));
+        Object o;
+        while ((o = objectInputStream.readObject()) != null) {
+            System.out.println(o.getClass().getSimpleName());
+            if (o instanceof User) {
+                userRepository.merge((User) o);
+            }
+        }
+        objectInputStream.close();
+    }
+
+    @Override
+    public void saveSerialize() throws IOException {
+        File f = new File("users.ser");
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(f))){
+            List<User> list = userRepository.findAll();
+            for (User u : list) {
+                objectOutputStream.writeObject(u);
+            }
+        }
+        catch (EOFException e){
+            e.printStackTrace();
+        }
     }
 }

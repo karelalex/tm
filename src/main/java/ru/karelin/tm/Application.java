@@ -27,7 +27,10 @@ public class Application {
                 UserProfileEditCommand.class,
 
                 HelpShowCommand.class,
-                InfoShowCommand.class};
+                InfoShowCommand.class,
+
+                DomainGetSerializationCommand.class,
+                DomainSaveSerializationCommand.class};
         new Bootstrap().init(commandClasses);
 
     }

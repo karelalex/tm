@@ -3,7 +3,7 @@ package ru.karelin.tm.api.service;
 import ru.karelin.tm.enumeration.RoleType;
 import ru.karelin.tm.entity.User;
 
-public interface UserService {
+public interface UserService extends Service{
 
     User getUserByLoginAndPassword(String login, char[] password);
 

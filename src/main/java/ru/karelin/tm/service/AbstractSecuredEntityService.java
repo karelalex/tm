@@ -6,9 +6,10 @@ import ru.karelin.tm.api.repository.SortableEntityRepository;
 import ru.karelin.tm.api.service.SecuredEntityService;
 import ru.karelin.tm.entity.AbstractSortableEntity;
 
+import java.io.IOException;
 import java.util.List;
 
-public class AbstractSecuredEntityService<T extends AbstractSortableEntity> implements SecuredEntityService<T>
+public abstract class AbstractSecuredEntityService<T extends AbstractSortableEntity> implements SecuredEntityService<T>
 {
     @NotNull protected final SortableEntityRepository<T> entityRepository;
     public AbstractSecuredEntityService(@NotNull final SortableEntityRepository<T> repo) {
@@ -36,4 +37,5 @@ public class AbstractSecuredEntityService<T extends AbstractSortableEntity> impl
     public T getOne(final String userId, final String id) {
         return entityRepository.findOneByIdAndUserId(id, userId);
     }
-}
+
+   }

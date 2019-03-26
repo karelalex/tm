@@ -11,6 +11,7 @@ import ru.karelin.tm.api.repository.TaskRepository;
 import ru.karelin.tm.enumeration.Status;
 import ru.karelin.tm.exception.WrongStatusException;
 
+import java.io.*;
 import java.util.Date;
 import java.util.List;
 
@@ -67,5 +68,37 @@ public final class ProjectServiceImpl extends AbstractSecuredEntityService<Proje
     @Override
     public List<Project> getListByKeyword(String userId, String keyword) {
         return ((ProjectRepository)entityRepository).findAllByUserIdAndKeyword(userId, keyword);
+    }
+
+    @Override
+    public void saveSerialize() throws IOException {
+        File f = new File("projects.ser");
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(f));
+        List<Project> list = entityRepository.findAll();
+        for (Project p: list) {
+            objectOutputStream.writeObject(p);
+        }
+        objectOutputStream.close();
+    }
+
+    @Override
+    public void getSerialize() throws IOException, ClassNotFoundException {
+        File f = new File("projects.ser");
+
+        Object o;
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));){
+            while((o = objectInputStream.readObject())!=null) {
+                System.out.println(o.getClass().getSimpleName());
+                if(o instanceof Project) {
+                    entityRepository.merge((Project)o);
+                }
+            }
+        }
+        catch (EOFException e){
+            e.printStackTrace();
+        }
+
+
+
     }
 }

@@ -8,6 +8,7 @@ import ru.karelin.tm.entity.Task;
 import ru.karelin.tm.api.repository.TaskRepository;
 import ru.karelin.tm.enumeration.Status;
 
+import java.io.*;
 import java.util.Date;
 import java.util.List;
 
@@ -76,5 +77,37 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
     @Override
     public List<Task> getListByKeyword(String userId, String keyword) {
         return ((TaskRepository)entityRepository).findAllByUserIdAndKeyword(userId, keyword);
+    }
+
+    @Override
+    public void saveSerialize() throws IOException {
+        File f = new File("tasks.ser");
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(f));
+        List<Task> list = entityRepository.findAll();
+        for (Task t: list) {
+            objectOutputStream.writeObject(t);
+        }
+        objectOutputStream.close();
+    }
+
+    @Override
+    public void getSerialize() throws IOException, ClassNotFoundException {
+        File f = new File("projects.ser");
+
+        Object o;
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));){
+            while((o = objectInputStream.readObject())!=null) {
+                System.out.println(o.getClass().getSimpleName());
+                if(o instanceof Task) {
+                    entityRepository.merge((Task) o);
+                }
+            }
+        }
+        catch (EOFException e){
+            e.printStackTrace();
+        }
+
+
+
     }
 }
