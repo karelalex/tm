@@ -1,6 +1,7 @@
 package ru.karelin.tm.service;
 
 
+import org.eclipse.persistence.jaxb.MarshallerProperties;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tm.api.service.TaskService;
@@ -8,15 +9,23 @@ import ru.karelin.tm.entity.Task;
 import ru.karelin.tm.api.repository.TaskRepository;
 import ru.karelin.tm.enumeration.Status;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 
 public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> implements TaskService {
     private final static String SERIALIZE_FILE_NAME = "tasks.ser";
-
+    private final static String JAX_XLM_FILE_NAME = "tasksJax.xml";
 
     public TaskServiceImpl(final TaskRepository taskRepository) {
         super(taskRepository);
@@ -110,12 +119,30 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
     }
 
     @Override
-    public void saveJaxXML() {
-
+    public void saveJaxXML() throws JAXBException {
+        final JAXBContext jaxbContext = JAXBContext.newInstance(TaskHolder.class, Task.class);
+        final Marshaller marshaller = jaxbContext.createMarshaller();
+        final List<Task> list = entityRepository.findAll();
+        final TaskHolder taskHolder = new TaskHolder();
+        taskHolder.taskList = list;
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        marshaller.marshal(taskHolder, new File(JAX_XLM_FILE_NAME));
     }
 
     @Override
     public void getJaxXML() throws JAXBException {
+        final JAXBContext jaxbContext = JAXBContext.newInstance(TaskHolder.class, Task.class);
+        final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        final TaskHolder taskHolder = (TaskHolder) unmarshaller.unmarshal(new File(JAX_XLM_FILE_NAME));
+        for (Task t:taskHolder.taskList) {
+            entityRepository.merge(t);
+        }
+    }
 
+    @XmlRootElement(name = "Tasks")
+    @XmlAccessorType(XmlAccessType.FIELD)
+    static class TaskHolder {
+        @XmlElement(name = "Task")
+        List<Task> taskList = new ArrayList<>();
     }
 }

@@ -109,22 +109,22 @@ public final class UserServiceImpl implements UserService {
 
     @Override
     public void saveJaxXML() throws JAXBException {
-        final JAXBContext jaxbContext = JAXBContext.newInstance(Users.class, User.class);
+        final JAXBContext jaxbContext = JAXBContext.newInstance(UserHolder.class, User.class);
         final Marshaller marshaller = jaxbContext.createMarshaller();
         final List<User> list = userRepository.findAll();
-        final Users users = new Users();
-        users.setUserList(list);
+        final UserHolder userHolder = new UserHolder();
+        userHolder.userList=list;
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(users, new File(JAX_XLM_FILE_NAME));
+        marshaller.marshal(userHolder, new File(JAX_XLM_FILE_NAME));
 
     }
 
     @Override
     public void getJaxXML() throws JAXBException {
-       final JAXBContext jaxbContext = JAXBContext.newInstance(Users.class, User.class);
+       final JAXBContext jaxbContext = JAXBContext.newInstance(UserHolder.class, User.class);
        final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-       final Users users = (Users) unmarshaller.unmarshal(new File(JAX_XLM_FILE_NAME));
-        for (User u: users.getUserList()) {
+       final UserHolder userHolder = (UserHolder) unmarshaller.unmarshal(new File(JAX_XLM_FILE_NAME));
+        for (User u: userHolder.getUserList()) {
             userRepository.merge(u);
         }
     }
@@ -133,7 +133,7 @@ public final class UserServiceImpl implements UserService {
     @XmlAccessorType(XmlAccessType.FIELD) //does not work without it
     @Getter
     @Setter
-    static class Users {
+    static class UserHolder { //does not work with non-static class
         @XmlElement(name = "User")
         List<User> userList = new ArrayList<>();
     }

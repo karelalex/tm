@@ -3,22 +3,30 @@ package ru.karelin.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.karelin.tm.api.repository.ProjectRepository;
+import ru.karelin.tm.api.repository.TaskRepository;
 import ru.karelin.tm.api.service.ProjectService;
 import ru.karelin.tm.entity.Project;
 import ru.karelin.tm.entity.Task;
-import ru.karelin.tm.api.repository.ProjectRepository;
-import ru.karelin.tm.api.repository.TaskRepository;
 import ru.karelin.tm.enumeration.Status;
-import ru.karelin.tm.exception.WrongStatusException;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 
 public final class ProjectServiceImpl extends AbstractSecuredEntityService<Project> implements ProjectService {
     private final static String SERIALIZE_FILE_NAME = "projects.ser";
+    private final static String JAX_XLM_FILE_NAME = "projects.xml";
 
     final private TaskRepository taskRepository;
 
@@ -100,12 +108,31 @@ public final class ProjectServiceImpl extends AbstractSecuredEntityService<Proje
     }
 
     @Override
-    public void saveJaxXML() {
+    public void saveJaxXML() throws JAXBException {
+        final JAXBContext jaxbContext = JAXBContext.newInstance(ProjectHolder.class, Project.class);
+        final Marshaller marshaller = jaxbContext.createMarshaller();
+        final List<Project> list = entityRepository.findAll();
+        final ProjectHolder projectHolder = new ProjectHolder();
+        projectHolder.projectList = list;
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        marshaller.marshal(projectHolder, new File(JAX_XLM_FILE_NAME));
 
     }
 
     @Override
     public void getJaxXML() throws JAXBException {
+        final JAXBContext jaxbContext = JAXBContext.newInstance(ProjectHolder.class, Project.class);
+        final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        final ProjectHolder projectHolder = (ProjectHolder)unmarshaller.unmarshal(new File(JAX_XLM_FILE_NAME));
+        for(Project p: projectHolder.projectList){
+            entityRepository.merge(p);
+        }
+    }
 
+    @XmlRootElement(name = "Projects")
+    @XmlAccessorType(XmlAccessType.FIELD)
+    static class ProjectHolder {
+        @XmlElement(name = "Project")
+        List<Project> projectList = new ArrayList<>();
     }
 }

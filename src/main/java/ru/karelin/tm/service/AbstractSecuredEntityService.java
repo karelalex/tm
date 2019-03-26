@@ -6,7 +6,6 @@ import ru.karelin.tm.api.repository.SortableEntityRepository;
 import ru.karelin.tm.api.service.SecuredEntityService;
 import ru.karelin.tm.entity.AbstractSortableEntity;
 
-import java.io.IOException;
 import java.util.List;
 
 public abstract class AbstractSecuredEntityService<T extends AbstractSortableEntity> implements SecuredEntityService<T>
