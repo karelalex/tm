@@ -34,5 +34,5 @@ public abstract class AbstractCommand {
     }
     public abstract String getName();
     public abstract String getDescription();
-    abstract public void execute(final String ... params);
+    abstract public void execute(final String ... params) throws Exception;
 }

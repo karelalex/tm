@@ -133,7 +133,12 @@ public final class Bootstrap implements ServiceLocator {
                 continue;
             }
             if (!abstractCommand.isSecured() || currentUser != null)
-                abstractCommand.execute(params);
+                try{
+                    abstractCommand.execute(params);
+                }
+            catch (Exception e){
+                    e.printStackTrace();
+            }
             else System.out.println("Login first.");
         }
 
