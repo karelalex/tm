@@ -11,13 +11,14 @@ import ru.karelin.tm.api.repository.TaskRepository;
 import ru.karelin.tm.enumeration.Status;
 import ru.karelin.tm.exception.WrongStatusException;
 
+import javax.xml.bind.JAXBException;
 import java.io.*;
 import java.util.Date;
 import java.util.List;
 
 
 public final class ProjectServiceImpl extends AbstractSecuredEntityService<Project> implements ProjectService {
-
+    private final static String SERIALIZE_FILE_NAME = "projects.ser";
 
     final private TaskRepository taskRepository;
 
@@ -72,7 +73,7 @@ public final class ProjectServiceImpl extends AbstractSecuredEntityService<Proje
 
     @Override
     public void saveSerialize() throws IOException {
-        File f = new File("projects.ser");
+        File f = new File(SERIALIZE_FILE_NAME);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(f));
         List<Project> list = entityRepository.findAll();
         for (Project p: list) {
@@ -83,8 +84,7 @@ public final class ProjectServiceImpl extends AbstractSecuredEntityService<Proje
 
     @Override
     public void getSerialize() throws IOException, ClassNotFoundException {
-        File f = new File("projects.ser");
-
+        File f = new File(SERIALIZE_FILE_NAME);
         Object o;
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));){
             while((o = objectInputStream.readObject())!=null) {
@@ -97,8 +97,15 @@ public final class ProjectServiceImpl extends AbstractSecuredEntityService<Proje
         catch (EOFException e){
             e.printStackTrace();
         }
+    }
 
+    @Override
+    public void saveJaxXML() {
 
+    }
+
+    @Override
+    public void getJaxXML() throws JAXBException {
 
     }
 }

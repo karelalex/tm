@@ -8,13 +8,14 @@ import ru.karelin.tm.entity.Task;
 import ru.karelin.tm.api.repository.TaskRepository;
 import ru.karelin.tm.enumeration.Status;
 
+import javax.xml.bind.JAXBException;
 import java.io.*;
 import java.util.Date;
 import java.util.List;
 
 
 public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> implements TaskService {
-
+    private final static String SERIALIZE_FILE_NAME = "tasks.ser";
 
 
     public TaskServiceImpl(final TaskRepository taskRepository) {
@@ -81,7 +82,7 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
 
     @Override
     public void saveSerialize() throws IOException {
-        File f = new File("tasks.ser");
+        File f = new File(SERIALIZE_FILE_NAME);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(f));
         List<Task> list = entityRepository.findAll();
         for (Task t: list) {
@@ -92,7 +93,7 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
 
     @Override
     public void getSerialize() throws IOException, ClassNotFoundException {
-        File f = new File("projects.ser");
+        File f = new File(SERIALIZE_FILE_NAME);
 
         Object o;
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));){
@@ -106,8 +107,15 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
         catch (EOFException e){
             e.printStackTrace();
         }
+    }
 
+    @Override
+    public void saveJaxXML() {
 
+    }
+
+    @Override
+    public void getJaxXML() throws JAXBException {
 
     }
 }

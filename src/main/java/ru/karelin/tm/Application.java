@@ -30,7 +30,9 @@ public class Application {
                 InfoShowCommand.class,
 
                 DomainGetSerializationCommand.class,
-                DomainSaveSerializationCommand.class};
+                DomainSaveSerializationCommand.class,
+                DomainSaveJaxBXlmlCommand.class,
+                DomainGetJaxBXmlCommand.class};
         new Bootstrap().init(commandClasses);
 
     }
