@@ -3,6 +3,7 @@ package ru.karelin.tm.service;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -43,7 +44,7 @@ public class DomainServiceImpl implements DomainService {
     private final static String JAX_XLM_FILE_NAME = "domainJAX.xml";
     private final static String JAX_JSON_FILE_NAME = "domainJAX.json";
     private final static String FASTER_XML_FILE_NAME = "domainFASTER.xml";
-    private final static String FASTER_JSON_FILE_NAME = "domainFAsTER.json";
+    private final static String FASTER_JSON_FILE_NAME = "domainFASTER.json";
 
     @NotNull
     private final UserRepository userRepository;
@@ -142,6 +143,7 @@ public class DomainServiceImpl implements DomainService {
     @Override
     public void getFasterXML() throws IOException {
         XmlMapper mapper = new XmlMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         extractHolder(mapper.readValue(new File(FASTER_XML_FILE_NAME), Holder.class));
     }
 
@@ -155,6 +157,7 @@ public class DomainServiceImpl implements DomainService {
     @Override
     public void getFasterJSON() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         extractHolder(mapper.readValue(new File(FASTER_JSON_FILE_NAME), Holder.class));
     }
 
@@ -181,26 +184,22 @@ public class DomainServiceImpl implements DomainService {
     @XmlRootElement(name = "Domain")
     @XmlAccessorType(XmlAccessType.FIELD)
     @JacksonXmlRootElement(localName = "Domain")
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonRootName("Domain")
     static class Holder {
 
         @XmlElement(name = "Task")
-        //@JacksonXmlElementWrapper(localName = "Task")
         @JacksonXmlElementWrapper(useWrapping = false)
         @JacksonXmlProperty(localName = "Task")
         @JsonProperty("Task")
         List<Task> taskList = new ArrayList<>();
 
         @XmlElement(name = "Project")
-        // @JacksonXmlElementWrapper(localName = "Project")
         @JacksonXmlProperty(localName = "Project")
         @JacksonXmlElementWrapper(useWrapping = false)
         @JsonProperty("Project")
         List<Project> projectList = new ArrayList<>();
 
         @XmlElement(name = "User")
-        //@JacksonXmlElementWrapper(localName = "User")
         @JacksonXmlProperty(localName = "User")
         @JacksonXmlElementWrapper(useWrapping = false)
         @JsonProperty("User")
