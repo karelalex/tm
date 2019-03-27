@@ -14,4 +14,12 @@ public interface DomainService {
     void saveJaxJSON() throws JAXBException;
 
     void getJaxJSON() throws JAXBException;
+
+    void saveFasterXML() throws IOException;
+
+    void getFasterXML() throws IOException;
+
+    void saveFasterJSON() throws IOException;
+
+    void getFasterJSON() throws IOException;
 }

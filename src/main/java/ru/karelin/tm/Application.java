@@ -26,15 +26,20 @@ public class Application {
                 UserPasswordChangeCommand.class,
                 UserProfileEditCommand.class,
 
-                HelpShowCommand.class,
-                InfoShowCommand.class,
-
                 DomainGetSerializationCommand.class,
                 DomainSaveSerializationCommand.class,
                 DomainSaveJaxBXmlCommand.class,
                 DomainGetJaxBXmlCommand.class,
                 DomainSaveJaxBJsonCommand.class,
-                DomainGetJaxBJsonCommand.class};
+                DomainGetJaxBJsonCommand.class,
+                DomainSaveFasterXmlCommand.class,
+                DomainGetFasterXmlCommand.class,
+                DomainSaveFasterJsonCommand.class,
+                DomainGetFasterJsonCommand.class,
+
+                HelpShowCommand.class,
+                InfoShowCommand.class
+        };
         new Bootstrap().init(commandClasses);
 
     }
