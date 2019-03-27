@@ -17,5 +17,5 @@ mvn package
 
 ### run command
 ```
-java -jar tm-1.0-SNAPSHOT.jar
+java -jar tmclient-1.0-SNAPSHOT.jar
 ```
