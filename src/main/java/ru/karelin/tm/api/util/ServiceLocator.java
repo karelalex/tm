@@ -1,5 +1,6 @@
 package ru.karelin.tm.api.util;
 
+import ru.karelin.tm.api.service.DomainService;
 import ru.karelin.tm.command.AbstractCommand;
 import ru.karelin.tm.entity.User;
 import ru.karelin.tm.api.service.ProjectService;
@@ -26,6 +27,8 @@ public interface ServiceLocator {
     ProjectService getProjectService();
 
     TaskService getTaskService();
+
+    DomainService getDomainService();
 
     void init(Class[] commandClasses);
 }

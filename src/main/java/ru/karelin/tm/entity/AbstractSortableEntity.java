@@ -12,6 +12,8 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 public abstract class AbstractSortableEntity extends AbstractSecuredEntity implements Serializable {
+
+    private static final long serialVersionUID = -8597157050956055822L;
     private Date startDate;
     private Date finishDate;
     private Date creationDate = new Date();

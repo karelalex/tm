@@ -1,18 +1,19 @@
 package ru.karelin.tm.command;
 
 import org.jetbrains.annotations.NotNull;
+import ru.karelin.tm.api.service.DomainService;
 import ru.karelin.tm.api.service.ProjectService;
 import ru.karelin.tm.api.service.TaskService;
 import ru.karelin.tm.api.service.UserService;
 import ru.karelin.tm.api.util.ServiceLocator;
 
-public class DomainSaveJaxBXlmlCommand extends AbstractCommand {
+public class DomainSaveJaxBXmlCommand extends AbstractCommand {
     private static final boolean SECURED = true;
-    public DomainSaveJaxBXlmlCommand(@NotNull ServiceLocator locator, boolean isSecured) {
+    public DomainSaveJaxBXmlCommand(@NotNull ServiceLocator locator, boolean isSecured) {
         super(locator, SECURED);
     }
 
-    public DomainSaveJaxBXlmlCommand() {
+    public DomainSaveJaxBXmlCommand() {
         super(SECURED);
     }
 
@@ -28,11 +29,7 @@ public class DomainSaveJaxBXlmlCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) throws Exception {
-        ProjectService projectService = locator.getProjectService();
-        UserService userService = locator.getUserService();
-        TaskService taskService = locator.getTaskService();
-        projectService.saveJaxXML();
-        userService.saveJaxXML();
-        taskService.saveJaxXML();
+        DomainService domainService = locator.getDomainService();
+        domainService.saveJaxXML();
     }
 }

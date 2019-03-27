@@ -31,8 +31,10 @@ public class Application {
 
                 DomainGetSerializationCommand.class,
                 DomainSaveSerializationCommand.class,
-                DomainSaveJaxBXlmlCommand.class,
-                DomainGetJaxBXmlCommand.class};
+                DomainSaveJaxBXmlCommand.class,
+                DomainGetJaxBXmlCommand.class,
+                DomainSaveJaxBJsonCommand.class,
+                DomainGetJaxBJsonCommand.class};
         new Bootstrap().init(commandClasses);
 
     }

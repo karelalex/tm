@@ -13,6 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @XmlRootElement
 public class User extends AbstractEntity implements Serializable {
+    private static final long serialVersionUID = -8629030995842007484L;
     private String login;
     private String passwordHash;
     private String userName;

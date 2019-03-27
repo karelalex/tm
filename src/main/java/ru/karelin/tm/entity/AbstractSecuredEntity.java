@@ -10,6 +10,8 @@ import java.io.Serializable;
 @Getter
 @NoArgsConstructor
 public abstract class AbstractSecuredEntity extends AbstractEntity implements Serializable {
+
+    private static final long serialVersionUID = -4934536461890031112L;
     private String userId;
 
 }

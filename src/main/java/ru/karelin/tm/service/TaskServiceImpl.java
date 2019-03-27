@@ -2,6 +2,7 @@ package ru.karelin.tm.service;
 
 
 import org.eclipse.persistence.jaxb.MarshallerProperties;
+import org.eclipse.persistence.oxm.MediaType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tm.api.service.TaskService;
@@ -26,6 +27,7 @@ import java.util.List;
 public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> implements TaskService {
     private final static String SERIALIZE_FILE_NAME = "tasks.ser";
     private final static String JAX_XLM_FILE_NAME = "tasksJax.xml";
+    private static final String JAX_JSON_FILE_NAME = "tasksJax.json";
 
     public TaskServiceImpl(final TaskRepository taskRepository) {
         super(taskRepository);
@@ -89,60 +91,4 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
         return ((TaskRepository)entityRepository).findAllByUserIdAndKeyword(userId, keyword);
     }
 
-    @Override
-    public void saveSerialize() throws IOException {
-        File f = new File(SERIALIZE_FILE_NAME);
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(f));
-        List<Task> list = entityRepository.findAll();
-        for (Task t: list) {
-            objectOutputStream.writeObject(t);
-        }
-        objectOutputStream.close();
-    }
-
-    @Override
-    public void getSerialize() throws IOException, ClassNotFoundException {
-        File f = new File(SERIALIZE_FILE_NAME);
-
-        Object o;
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));){
-            while((o = objectInputStream.readObject())!=null) {
-                System.out.println(o.getClass().getSimpleName());
-                if(o instanceof Task) {
-                    entityRepository.merge((Task) o);
-                }
-            }
-        }
-        catch (EOFException e){
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void saveJaxXML() throws JAXBException {
-        final JAXBContext jaxbContext = JAXBContext.newInstance(TaskHolder.class, Task.class);
-        final Marshaller marshaller = jaxbContext.createMarshaller();
-        final List<Task> list = entityRepository.findAll();
-        final TaskHolder taskHolder = new TaskHolder();
-        taskHolder.taskList = list;
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(taskHolder, new File(JAX_XLM_FILE_NAME));
-    }
-
-    @Override
-    public void getJaxXML() throws JAXBException {
-        final JAXBContext jaxbContext = JAXBContext.newInstance(TaskHolder.class, Task.class);
-        final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        final TaskHolder taskHolder = (TaskHolder) unmarshaller.unmarshal(new File(JAX_XLM_FILE_NAME));
-        for (Task t:taskHolder.taskList) {
-            entityRepository.merge(t);
-        }
-    }
-
-    @XmlRootElement(name = "Tasks")
-    @XmlAccessorType(XmlAccessType.FIELD)
-    static class TaskHolder {
-        @XmlElement(name = "Task")
-        List<Task> taskList = new ArrayList<>();
-    }
 }

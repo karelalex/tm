@@ -2,6 +2,7 @@ package ru.karelin.tm.util;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.karelin.tm.api.service.DomainService;
 import ru.karelin.tm.api.util.ServiceLocator;
 import ru.karelin.tm.api.repository.ProjectRepository;
 import ru.karelin.tm.api.repository.TaskRepository;
@@ -33,6 +34,7 @@ public final class Bootstrap implements ServiceLocator {
     @NotNull private ProjectService projectService;
     @NotNull private TaskService taskService;
     @NotNull private UserService userService;
+    @NotNull private DomainService domainService;
 
 
 
@@ -69,8 +71,10 @@ public final class Bootstrap implements ServiceLocator {
         return dateFormat;
     }
 
-
-
+    @NotNull
+    public DomainService getDomainService() {
+        return domainService;
+    }
 
     @Override
     @NotNull public UserService getUserService() {
@@ -96,6 +100,7 @@ public final class Bootstrap implements ServiceLocator {
         @NotNull final MD5Generator md5Generator = new MD5Generator();
         @NotNull final UserRepository userRepository = new UserRepositoryImpl();
         userService = new UserServiceImpl(md5Generator, userRepository);
+        domainService = new DomainServiceImpl(userRepository, taskRepository, projectRepository);
 
 
         //command registration block

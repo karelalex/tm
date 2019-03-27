@@ -1,6 +1,7 @@
 package ru.karelin.tm.command;
 
 import org.jetbrains.annotations.NotNull;
+import ru.karelin.tm.api.service.DomainService;
 import ru.karelin.tm.api.service.ProjectService;
 import ru.karelin.tm.api.service.TaskService;
 import ru.karelin.tm.api.service.UserService;
@@ -28,11 +29,7 @@ public class DomainGetJaxBXmlCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) throws Exception {
-        ProjectService projectService = locator.getProjectService();
-        UserService userService = locator.getUserService();
-        TaskService taskService = locator.getTaskService();
-        projectService.getJaxXML();
-        userService.getJaxXML();
-        taskService.getJaxXML();
+        DomainService domainService = locator.getDomainService();
+        domainService.getJaxXML();
     }
 }

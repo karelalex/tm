@@ -2,7 +2,7 @@ package ru.karelin.tm.api.service;
 
 import java.util.List;
 
-public interface SecuredEntityService<T> extends Service{
+public interface SecuredEntityService<T>{
 
     List<T> getList(String userId);
 

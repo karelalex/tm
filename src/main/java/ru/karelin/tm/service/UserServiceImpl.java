@@ -2,14 +2,16 @@ package ru.karelin.tm.service;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.eclipse.persistence.jaxb.JAXBContextFactory;
+import org.eclipse.persistence.jaxb.JAXBContextProperties;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.karelin.tm.util.MD5Generator;
-import ru.karelin.tm.exception.ObjectAlreadyExistsException;
-import ru.karelin.tm.enumeration.RoleType;
+import ru.karelin.tm.api.repository.UserRepository;
 import ru.karelin.tm.api.service.UserService;
 import ru.karelin.tm.entity.User;
-import ru.karelin.tm.api.repository.UserRepository;
+import ru.karelin.tm.enumeration.RoleType;
+import ru.karelin.tm.exception.ObjectAlreadyExistsException;
+import ru.karelin.tm.util.MD5Generator;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -21,13 +23,16 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class UserServiceImpl implements UserService {
     private final MD5Generator md5Generator;
     private final UserRepository userRepository;
     private final static String SERIALIZE_FILE_NAME = "users.ser";
     private final static String JAX_XLM_FILE_NAME = "usersJax.xml";
+    private final static String JAX_JSON_FILE_NAME = "usersJax.json";
 
     public UserServiceImpl(@NotNull final MD5Generator md5Generator, @NotNull final UserRepository userRepository) {
         this.md5Generator = md5Generator;
@@ -79,62 +84,5 @@ public final class UserServiceImpl implements UserService {
         return true;
     }
 
-    @Override
-    public void getSerialize() throws IOException, ClassNotFoundException {
-        File f = new File(SERIALIZE_FILE_NAME);
-        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));
-        Object o;
-        while ((o = objectInputStream.readObject()) != null) {
-            System.out.println(o.getClass().getSimpleName());
-            if (o instanceof User) {
-                userRepository.merge((User) o);
-            }
-        }
-        objectInputStream.close();
-    }
 
-    @Override
-    public void saveSerialize() throws IOException {
-        final File f = new File(SERIALIZE_FILE_NAME);
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(f))){
-            List<User> list = userRepository.findAll();
-            for (User u : list) {
-                objectOutputStream.writeObject(u);
-            }
-        }
-        catch (EOFException e){
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void saveJaxXML() throws JAXBException {
-        final JAXBContext jaxbContext = JAXBContext.newInstance(UserHolder.class, User.class);
-        final Marshaller marshaller = jaxbContext.createMarshaller();
-        final List<User> list = userRepository.findAll();
-        final UserHolder userHolder = new UserHolder();
-        userHolder.userList=list;
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(userHolder, new File(JAX_XLM_FILE_NAME));
-
-    }
-
-    @Override
-    public void getJaxXML() throws JAXBException {
-       final JAXBContext jaxbContext = JAXBContext.newInstance(UserHolder.class, User.class);
-       final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-       final UserHolder userHolder = (UserHolder) unmarshaller.unmarshal(new File(JAX_XLM_FILE_NAME));
-        for (User u: userHolder.getUserList()) {
-            userRepository.merge(u);
-        }
-    }
-
-    @XmlRootElement(name = "Users")
-    @XmlAccessorType(XmlAccessType.FIELD) //does not work without it
-    @Getter
-    @Setter
-    static class UserHolder { //does not work with non-static class
-        @XmlElement(name = "User")
-        List<User> userList = new ArrayList<>();
-    }
 }

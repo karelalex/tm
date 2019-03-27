@@ -11,6 +11,8 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 public class AbstractEntity implements Serializable {
+
+    private static final long serialVersionUID = 2699580275687182107L;
     private String id= UUID.randomUUID().toString();
 
 }
