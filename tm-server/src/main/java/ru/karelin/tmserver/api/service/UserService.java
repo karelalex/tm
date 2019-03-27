@@ -3,9 +3,13 @@ package ru.karelin.tmserver.api.service;
 import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.enumeration.RoleType;
 
+
+
+
 public interface UserService{
 
-    User getUserByLoginAndPassword(String login, char[] password);
+
+    User getUserByLoginAndPassword( String login, char[] password);
 
     boolean isUserExistByLogin(String login);
 

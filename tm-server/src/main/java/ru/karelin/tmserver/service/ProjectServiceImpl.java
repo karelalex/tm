@@ -15,12 +15,8 @@ import java.util.List;
 
 
 public final class ProjectServiceImpl extends AbstractSecuredEntityService<Project> implements ProjectService {
-    private final static String SERIALIZE_FILE_NAME = "projects.ser";
-    private final static String JAX_XLM_FILE_NAME = "projectsJax.xml";
-    private static final String JAX_JSON_FILE_NAME = "projectsJax.json" ;
 
     final private TaskRepository taskRepository;
-
 
     public ProjectServiceImpl(@NotNull final ProjectRepository projectRepository, @NotNull final TaskRepository taskRepository) {
         super(projectRepository);

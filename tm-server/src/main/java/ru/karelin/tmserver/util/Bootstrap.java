@@ -10,7 +10,9 @@ import ru.karelin.tmserver.api.service.ProjectService;
 import ru.karelin.tmserver.api.service.TaskService;
 import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.api.util.ServiceLocator;
+import ru.karelin.tmserver.endpoint.UserEndpoint;
 import ru.karelin.tmserver.entity.User;
+import ru.karelin.tmserver.enumeration.RoleType;
 import ru.karelin.tmserver.repository.ProjectRepositoryImpl;
 import ru.karelin.tmserver.repository.TaskRepositoryImpl;
 import ru.karelin.tmserver.repository.UserRepositoryImpl;
@@ -19,6 +21,7 @@ import ru.karelin.tmserver.service.ProjectServiceImpl;
 import ru.karelin.tmserver.service.TaskServiceImpl;
 import ru.karelin.tmserver.service.UserServiceImpl;
 
+import javax.xml.ws.Endpoint;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -88,15 +91,15 @@ public final class Bootstrap implements ServiceLocator {
         userService = new UserServiceImpl(md5Generator, userRepository);
         domainService = new DomainServiceImpl(userRepository, taskRepository, projectRepository);
 
-
+        Endpoint.publish("http://localhost:8080/UserEndpoint?wsdl", new UserEndpoint());
         //command registration block
 
 
         //end of command registration block
 
         // create two users block
-        //userService.registerNewUser("sk", "pp".toCharArray(), "alex", RoleType.ORDINARY_USER);
-        //userService.registerNewUser("bb", "ee".toCharArray(), "boris", RoleType.ADMIN);
+        userService.registerNewUser("sk", "pp".toCharArray(), "alex", RoleType.ORDINARY_USER);
+        userService.registerNewUser("bb", "ee".toCharArray(), "boris", RoleType.ADMIN);
 
         // end of create two users block
 

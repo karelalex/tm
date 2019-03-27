@@ -9,6 +9,7 @@ import ru.karelin.tmserver.enumeration.RoleType;
 import ru.karelin.tmserver.exception.ObjectAlreadyExistsException;
 import ru.karelin.tmserver.util.MD5Generator;
 
+
 public final class UserServiceImpl implements UserService {
     private final MD5Generator md5Generator;
     private final UserRepository userRepository;
@@ -38,10 +39,10 @@ public final class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void editUser(final String userId, final String username) {
+    public void editUser(final String userId, final String userName) {
         @Nullable final User user = userRepository.findOne(userId);
         if (user != null) {
-            if (!username.isEmpty()) user.setUserName(username);
+            if (!userName.isEmpty()) user.setUserName(userName);
             userRepository.merge(user);
         }
     }
