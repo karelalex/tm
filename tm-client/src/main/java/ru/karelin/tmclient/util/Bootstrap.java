@@ -2,17 +2,15 @@ package ru.karelin.tmclient.util;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.karelin.tm.api.repository.ProjectRepository;
-import ru.karelin.tm.api.repository.TaskRepository;
-import ru.karelin.tm.api.repository.UserRepository;
-import ru.karelin.tm.api.service.DomainService;
-import ru.karelin.tm.api.service.ProjectService;
-import ru.karelin.tm.api.service.TaskService;
-import ru.karelin.tm.api.service.UserService;
-import ru.karelin.tm.api.util.ServiceLocator;
-import ru.karelin.tm.api.util.TerminalService;
-import ru.karelin.tm.entity.User;
-import ru.karelin.tm.exception.CommandRegisteredException;
+
+import ru.karelin.tmclient.api.service.DomainService;
+import ru.karelin.tmclient.api.service.ProjectService;
+import ru.karelin.tmclient.api.service.TaskService;
+import ru.karelin.tmclient.api.service.UserService;
+import ru.karelin.tmclient.api.util.ServiceLocator;
+import ru.karelin.tmclient.api.util.TerminalService;
+import ru.karelin.tmclient.entity.User;
+import ru.karelin.tmclient.exception.CommandRegisteredException;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -88,12 +86,10 @@ public final class Bootstrap implements ServiceLocator {
 
     @Override
     public void init(Class[] commandClasses) {
-        @NotNull final ProjectRepository projectRepository = new ProjectRepositoryImpl();
-        @NotNull final TaskRepository taskRepository = new TaskRepositoryImpl();
+
         projectService = new ProjectServiceImpl(projectRepository, taskRepository);
         taskService = new TaskServiceImpl(taskRepository);
-        @NotNull final MD5Generator md5Generator = new MD5Generator();
-        @NotNull final UserRepository userRepository = new UserRepositoryImpl();
+
         userService = new UserServiceImpl(md5Generator, userRepository);
         domainService = new DomainServiceImpl(userRepository, taskRepository, projectRepository);
 

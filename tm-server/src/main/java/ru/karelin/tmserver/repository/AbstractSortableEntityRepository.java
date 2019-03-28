@@ -6,7 +6,6 @@ import ru.karelin.tmserver.entity.AbstractSortableEntity;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import ru.karelin.tmserver.enumeration.Status;
 
 public abstract class AbstractSortableEntityRepository<T extends AbstractSortableEntity> extends AbstractSecuredEntityRepository<T> implements SortableEntityRepository<T> {
     @Override

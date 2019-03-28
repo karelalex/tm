@@ -91,7 +91,7 @@ public final class Bootstrap implements ServiceLocator {
         userService = new UserServiceImpl(md5Generator, userRepository);
         domainService = new DomainServiceImpl(userRepository, taskRepository, projectRepository);
 
-        Endpoint.publish("http://localhost:8080/UserEndpoint?wsdl", new UserEndpoint());
+        Endpoint.publish("http://localhost:8080/UserEndpoint?wsdl", new UserEndpoint(userService));
         //command registration block
 
 
