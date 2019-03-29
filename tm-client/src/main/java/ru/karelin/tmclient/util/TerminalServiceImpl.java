@@ -1,6 +1,6 @@
 package ru.karelin.tmclient.util;
 
-import ru.karelin.tm.api.util.TerminalService;
+import ru.karelin.tmclient.api.util.TerminalService;
 
 import java.io.Console;
 import java.util.Scanner;

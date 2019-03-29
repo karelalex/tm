@@ -25,7 +25,24 @@
                             <sourceRoot>${project.basedir}/src/main/java</sourceRoot>
                             <wsdlOptions>
                                 <wsdlOption>
-                                    <wsdl>http://localhost:8080/UserEndpoint?wsdl</wsdl>
+                                    <wsdl>
+                                        http://localhost:8080/UserEndpoint?wsdl
+                                    </wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>
+                                        http://localhost:8080/ProjectEndpoint?wsdl
+                                    </wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>
+                                        http://localhost:8080/TaskEndpoint?wsdl
+                                    </wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>
+                                        http://localhost:8080/DomainEndpoint?wsdl
+                                    </wsdl>
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>

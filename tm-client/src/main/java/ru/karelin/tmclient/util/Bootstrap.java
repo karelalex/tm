@@ -2,15 +2,14 @@ package ru.karelin.tmclient.util;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import ru.karelin.tmclient.api.service.DomainService;
-import ru.karelin.tmclient.api.service.ProjectService;
-import ru.karelin.tmclient.api.service.TaskService;
-import ru.karelin.tmclient.api.service.UserService;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.api.util.TerminalService;
-import ru.karelin.tmclient.entity.User;
+import ru.karelin.tmclient.command.AbstractCommand;
 import ru.karelin.tmclient.exception.CommandRegisteredException;
+import ru.karelin.tmserver.endpoint.DomainEndpoint;
+import ru.karelin.tmserver.endpoint.ProjectEndpoint;
+import ru.karelin.tmserver.endpoint.TaskEndpoint;
+import ru.karelin.tmserver.endpoint.UserEndpoint;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,10 +23,10 @@ public final class Bootstrap implements ServiceLocator {
     private static final String QUIT = "exit";
 
 
-    @NotNull private ProjectService projectService;
-    @NotNull private TaskService taskService;
-    @NotNull private UserService userService;
-    @NotNull private DomainService domainService;
+    @NotNull private ProjectEndpoint projectEndpoint;
+    @NotNull private TaskEndpoint taskEndpoint;
+    @NotNull private UserEndpoint userEndpoint;
+    @NotNull private DomainEndpoint domainEndpoint;
 
 
 
@@ -103,13 +102,6 @@ public final class Bootstrap implements ServiceLocator {
             }
         }
 
-        //end of command registration block
-
-        // create two users block
-        //userService.registerNewUser("sk", "pp".toCharArray(), "alex", RoleType.ORDINARY_USER);
-        //userService.registerNewUser("bb", "ee".toCharArray(), "boris", RoleType.ADMIN);
-
-        // end of create two users block
 
         // main loop
 

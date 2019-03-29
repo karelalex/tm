@@ -27,7 +27,7 @@ public abstract class AbstractSecuredEntityService<T extends AbstractSortableEnt
     }
 
     @Override
-    public boolean checkID(final String userId, final String id) {
+    public boolean checkId(final String userId, final String id) {
         @Nullable T t = entityRepository.findOneByIdAndUserId(id, userId);
         return t!=null;
     }

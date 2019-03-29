@@ -15,9 +15,9 @@ public interface UserService{
 
     void registerNewUser(String login, char[] pass, String name);
 
-    void editUser(String UserId, String username);
+    void editUser(String userId, String userName);
 
     void registerNewUser(String login, char[] pass, String name, RoleType role);
 
-    boolean changePassword(String id, char[] oldPass, char[] newPass);
+    boolean changePassword(String userId, char[] oldPass, char[] newPass);
 }

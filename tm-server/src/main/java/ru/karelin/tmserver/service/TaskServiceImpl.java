@@ -58,8 +58,8 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
 
 
     @Override
-    public void remove(final String userId, final String taskId) {
-       @Nullable final Task task = ((TaskRepository)entityRepository).findOneByIdAndUserId(taskId, userId);
+    public void remove(final String userId, final String id) {
+       @Nullable final Task task = ((TaskRepository)entityRepository).findOneByIdAndUserId(id, userId);
         if (task != null)
             ((TaskRepository)entityRepository).remove(task);
     }

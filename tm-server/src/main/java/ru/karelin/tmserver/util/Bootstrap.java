@@ -10,6 +10,9 @@ import ru.karelin.tmserver.api.service.ProjectService;
 import ru.karelin.tmserver.api.service.TaskService;
 import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.api.util.ServiceLocator;
+import ru.karelin.tmserver.endpoint.DomainEndpoint;
+import ru.karelin.tmserver.endpoint.ProjectEndpoint;
+import ru.karelin.tmserver.endpoint.TaskEndpoint;
 import ru.karelin.tmserver.endpoint.UserEndpoint;
 import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.enumeration.RoleType;
@@ -92,6 +95,9 @@ public final class Bootstrap implements ServiceLocator {
         domainService = new DomainServiceImpl(userRepository, taskRepository, projectRepository);
 
         Endpoint.publish("http://localhost:8080/UserEndpoint?wsdl", new UserEndpoint(userService));
+        Endpoint.publish("http://localhost:8080/ProjectEndpoint?wsdl", new ProjectEndpoint(projectService));
+        Endpoint.publish("http://localhost:8080/TaskEndpoint?wsdl", new TaskEndpoint(taskService));
+        Endpoint.publish("http://localhost:8080/DomainEndpoint?wsdl", new DomainEndpoint(domainService));
         //command registration block
 
 
@@ -103,11 +109,7 @@ public final class Bootstrap implements ServiceLocator {
 
         // end of create two users block
 
-        // main loop
 
-
-
-        // end of main loop
 
 
     }
