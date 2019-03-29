@@ -1,8 +1,9 @@
 package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
-import ru.karelin.tm.api.util.ServiceLocator;
-import ru.karelin.tm.entity.User;
+import ru.karelin.tmclient.api.util.ServiceLocator;
+import ru.karelin.tmserver.endpoint.User;
+
 
 public final class UserShowCurrentCommand extends AbstractCommand {
 

@@ -2,11 +2,14 @@ package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.karelin.tm.api.service.ProjectService;
-import ru.karelin.tm.api.service.TaskService;
-import ru.karelin.tm.api.util.ServiceLocator;
-import ru.karelin.tm.enumeration.Status;
+import ru.karelin.tmclient.api.util.ServiceLocator;
+import ru.karelin.tmclient.util.DateConverter;
+import ru.karelin.tmserver.endpoint.ProjectEndpoint;
+import ru.karelin.tmserver.endpoint.Status;
+import ru.karelin.tmserver.endpoint.TaskEndpoint;
 
+
+import javax.xml.datatype.DatatypeConfigurationException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
@@ -18,7 +21,10 @@ public final class TaskEditCommand extends AbstractCommand {
     public TaskEditCommand(@NotNull ServiceLocator locator) {
         super(locator, SECURED);
     }
-    public TaskEditCommand(){super(SECURED);}
+
+    public TaskEditCommand() {
+        super(SECURED);
+    }
 
     @Override
     public String getName() {
@@ -31,18 +37,19 @@ public final class TaskEditCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(final String... params) {
+    public void execute(final String... params) throws DatatypeConfigurationException {
         @NotNull final String taskId;
         if (params.length > 0) taskId = params[0];
         else {
             System.out.println("You must enter taskId");
             return;
         }
-        @NotNull final TaskService taskService = locator.getTaskService();
+        @NotNull final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
+        @NotNull final DateConverter dateConverter = locator.getDateConverter();
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
         @Nullable final String currentUserId = locator.getCurrentUser().getId();
-        @NotNull final ProjectService projectService = locator.getProjectService();
-        if (!taskService.checkID(currentUserId, taskId)) {
+        @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
+        if (!taskEndpoint.checkTaskId(currentUserId, taskId)) {
             System.out.println("Wrong ID!");
             return;
         }
@@ -51,20 +58,16 @@ public final class TaskEditCommand extends AbstractCommand {
         System.out.println("Enter new task description or just press enter if you do not want to change it");
         @NotNull final String taskDescription = ts.readLn();
         String taskStatusString;
-        Status taskStatus;
+        @Nullable Status taskStatus;
         stat:
-        while (true){
+        while (true) {
             System.out.println("Enter new project status or leave empty to keep current status.\nYou must enter one of the these values: ");
-            for (Status s: Status.values()
+            for (Status s : Status.values()
             ) {
-                System.out.print(s.toString()+", ");
+                System.out.print(s.toString() + ", ");
             }
             System.out.println("\b\b");
             taskStatusString = ts.readLn();
-            if(taskStatusString.isEmpty()) {
-                taskStatus=null;
-                break stat;
-            }
             for (Status s : Status.values()) {
                 if (s.toString().equals(taskStatusString)) {
                     taskStatus = s;
@@ -107,12 +110,12 @@ public final class TaskEditCommand extends AbstractCommand {
         }
         System.out.println("Enter new project id for task or just press enter if you do not want to change it");
         @NotNull String projectId = ts.readLn();
-        while (!projectId.isEmpty() && !projectService.checkID(currentUserId, projectId)) {
+        while (!projectId.isEmpty() && !projectEndpoint.checkProjectId(currentUserId, projectId)) {
             System.out.println("Wrong project id try again or leave it empty");
             projectId = ts.readLn();
         }
 
-        taskService.edit(currentUserId, taskId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId, taskStatus);
+        taskEndpoint.editTask(currentUserId, taskId, taskName, taskDescription, dateConverter.convert(taskStartDate), dateConverter.convert(taskFinishDate), projectId, taskStatus);
 
     }
 }

@@ -1,11 +1,10 @@
 package ru.karelin.tmclient.api.util;
 
-import ru.karelin.tm.api.service.DomainService;
-import ru.karelin.tm.api.service.ProjectService;
-import ru.karelin.tm.api.service.TaskService;
-import ru.karelin.tm.api.service.UserService;
-import ru.karelin.tm.command.AbstractCommand;
-import ru.karelin.tm.entity.User;
+
+import org.jetbrains.annotations.NotNull;
+import ru.karelin.tmclient.command.AbstractCommand;
+import ru.karelin.tmclient.util.DateConverter;
+import ru.karelin.tmserver.endpoint.*;
 
 import java.text.DateFormat;
 import java.util.Map;
@@ -21,13 +20,16 @@ public interface ServiceLocator {
 
     TerminalService getTerminalService();
 
-    UserService getUserService();
+    UserEndpoint getUserEndpoint();
 
-    ProjectService getProjectService();
+    @NotNull
+    DateConverter getDateConverter();
 
-    TaskService getTaskService();
+    ProjectEndpoint getProjectEndpoint();
 
-    DomainService getDomainService();
+    TaskEndpoint getTaskEndpoint();
+
+    DomainEndpoint getDomainEndpoint();
 
     void init(Class[] commandClasses);
 }

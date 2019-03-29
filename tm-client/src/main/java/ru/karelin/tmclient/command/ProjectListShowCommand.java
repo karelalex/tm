@@ -1,9 +1,10 @@
 package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
-import ru.karelin.tm.api.service.ProjectService;
-import ru.karelin.tm.api.util.ServiceLocator;
-import ru.karelin.tm.entity.Project;
+import ru.karelin.tmclient.api.util.ServiceLocator;
+import ru.karelin.tmclient.util.DateConverter;
+import ru.karelin.tmserver.endpoint.Project;
+import ru.karelin.tmserver.endpoint.ProjectEndpoint;
 
 import java.text.DateFormat;
 import java.util.List;
@@ -30,8 +31,9 @@ public final class ProjectListShowCommand extends AbstractCommand {
     @Override
     public void execute(final String... params) {
 
-        @NotNull final ProjectService projectService = locator.getProjectService();
+        @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
+        @NotNull final DateConverter dateConverter = locator.getDateConverter();
         @NotNull final String currentUserId = locator.getCurrentUser().getId();
         boolean isSorted = false;
         @NotNull String sortField = "";
@@ -67,15 +69,15 @@ public final class ProjectListShowCommand extends AbstractCommand {
         }
 
         @NotNull final List<Project> projects;
-        if (isFind) projects = projectService.getListByKeyword(currentUserId, searchItem);
-        else if (isSorted) projects= projectService.getSortedList(locator.getCurrentUser().getId(), sortField, true);
-        else projects = projectService.getList(locator.getCurrentUser().getId());
+        if (isFind) projects = projectEndpoint.getProjectListByKeyword(currentUserId, searchItem);
+        else if (isSorted) projects= projectEndpoint.getProjectSortedList(locator.getCurrentUser().getId(), sortField, true);
+        else projects = projectEndpoint.getProjectList(locator.getCurrentUser().getId());
         for (Project p :projects) {
             System.out.println("Project ID: " + p.getId());
             System.out.println("Project name: " + p.getName() );
             System.out.println("Creation date: " + p.getCreationDate());
-            System.out.println("Start Date: " + dateFormat.format(p.getStartDate()));
-            System.out.println("End Date: " + dateFormat.format(p.getFinishDate()));
+            System.out.println("Start Date: " + dateFormat.format(dateConverter.convert(p.getStartDate())));
+            System.out.println("End Date: " + dateFormat.format(dateConverter.convert(p.getFinishDate())));
             System.out.println("Status: " + p.getStatus().toString());
             System.out.println();
         }

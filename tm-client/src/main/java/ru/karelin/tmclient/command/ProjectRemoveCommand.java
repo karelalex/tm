@@ -1,8 +1,8 @@
 package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
-import ru.karelin.tm.api.service.ProjectService;
-import ru.karelin.tm.api.util.ServiceLocator;
+import ru.karelin.tmclient.api.util.ServiceLocator;
+import ru.karelin.tmserver.endpoint.ProjectEndpoint;
 
 
 public final class ProjectRemoveCommand extends AbstractCommand {
@@ -31,7 +31,7 @@ public final class ProjectRemoveCommand extends AbstractCommand {
             System.out.println("You must enter projectId");
             return;
         }
-        @NotNull final ProjectService projectService = locator.getProjectService();
-        projectService.remove(locator.getCurrentUser().getId(), projectId);
+        @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
+        projectEndpoint.removeProject(locator.getCurrentUser().getId(), projectId);
     }
 }

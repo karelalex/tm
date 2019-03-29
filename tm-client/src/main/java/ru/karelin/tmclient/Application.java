@@ -1,6 +1,8 @@
 package ru.karelin.tmclient;
 
-import ru.karelin.tm.util.Bootstrap;
+
+import ru.karelin.tmclient.command.*;
+import ru.karelin.tmclient.util.Bootstrap;
 
 public class Application {
 

@@ -1,9 +1,11 @@
 package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
-import ru.karelin.tm.api.service.ProjectService;
-import ru.karelin.tm.api.util.ServiceLocator;
+import ru.karelin.tmclient.api.util.ServiceLocator;
+import ru.karelin.tmclient.util.DateConverter;
+import ru.karelin.tmserver.endpoint.ProjectEndpoint;
 
+import javax.xml.datatype.DatatypeConfigurationException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
@@ -25,9 +27,10 @@ public final class ProjectCreateCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(final String ... params){
+    public void execute(final String ... params) throws DatatypeConfigurationException {
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
-        @NotNull final ProjectService projectService = locator.getProjectService();
+        @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
+        @NotNull final DateConverter dateConverter = locator.getDateConverter();
         System.out.println("Enter project name");
         @NotNull final String projectName = ts.readLn();
         System.out.println("Enter project description");
@@ -61,7 +64,6 @@ public final class ProjectCreateCommand extends AbstractCommand {
                 e.printStackTrace();
             }
         }
-        projectService.create(locator.getCurrentUser().getId(), projectName, projectDescription, projectStartDate, projectFinishDate);
-
+        projectEndpoint.createProject(locator.getCurrentUser().getId(), projectName, projectDescription, dateConverter.convert(projectStartDate), dateConverter.convert(projectFinishDate));
     }
 }

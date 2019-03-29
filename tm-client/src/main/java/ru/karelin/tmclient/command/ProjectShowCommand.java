@@ -2,9 +2,10 @@ package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.karelin.tm.api.service.ProjectService;
-import ru.karelin.tm.api.util.ServiceLocator;
-import ru.karelin.tm.entity.Project;
+import ru.karelin.tmclient.api.util.ServiceLocator;
+import ru.karelin.tmclient.util.DateConverter;
+import ru.karelin.tmserver.endpoint.Project;
+import ru.karelin.tmserver.endpoint.ProjectEndpoint;
 
 import java.text.DateFormat;
 
@@ -35,19 +36,21 @@ public final class ProjectShowCommand extends AbstractCommand{
             System.out.println("You must enter projectId");
             return;
         }
-        @NotNull final ProjectService projectService = locator.getProjectService();
+        @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         @Nullable final DateFormat dateFormat = locator.getDateFormat();
+        @NotNull final DateConverter dateConverter = locator.getDateConverter();
         @Nullable final String currentUserId = locator.getCurrentUser().getId();
-        if(!projectService.checkID(currentUserId, projectId)) {
+        if(!projectEndpoint.checkProjectId(currentUserId, projectId)) {
             System.out.println("Wrong ID "+ projectId);
             return;
         }
-        @NotNull final Project project = projectService.getOne(currentUserId, projectId);
+        @NotNull final Project project = projectEndpoint.getProject(currentUserId, projectId);
+        if (project == null) System.out.println("No projects with");
         System.out.println("Project name: " + project.getName() );
         System.out.println("Project description: " + project.getDescription());
         System.out.println("Creation date: " + project.getCreationDate());
-        System.out.println("Start Date: " + dateFormat.format(project.getStartDate()));
-        System.out.println("End Date: " + dateFormat.format(project.getFinishDate()));
+        System.out.println("Start Date: " + dateFormat.format(dateConverter.convert(project.getStartDate())));
+        System.out.println("End Date: " + dateFormat.format(dateConverter.convert(project.getFinishDate())));
         System.out.println("Status: " + project.getStatus().toString());
         System.out.println();
     }

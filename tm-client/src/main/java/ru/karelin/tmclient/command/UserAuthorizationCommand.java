@@ -2,9 +2,9 @@ package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.karelin.tm.api.service.UserService;
-import ru.karelin.tm.api.util.ServiceLocator;
-import ru.karelin.tm.entity.User;
+import ru.karelin.tmclient.api.util.ServiceLocator;
+import ru.karelin.tmserver.endpoint.User;
+import ru.karelin.tmserver.endpoint.UserEndpoint;
 
 
 public final class UserAuthorizationCommand extends AbstractCommand {
@@ -27,12 +27,12 @@ public final class UserAuthorizationCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) {
-        @NotNull final UserService userService = locator.getUserService();
+        @NotNull final UserEndpoint userEndpoint = locator.getUserEndpoint();
         System.out.println("Enter login");
         @NotNull final String login = ts.readLn();
         System.out.println("Enter password");
         final char[] pass = ts.readPass();
-        @Nullable final User user = userService.getUserByLoginAndPassword(login, pass);
+        @Nullable final User user = userEndpoint.getUser(login, new String(pass));
         if(user==null){
             System.out.println("Wrong login or pass");
         }

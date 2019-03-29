@@ -1,10 +1,13 @@
 package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
-import ru.karelin.tm.api.service.ProjectService;
-import ru.karelin.tm.api.util.ServiceLocator;
-import ru.karelin.tm.enumeration.Status;
+import ru.karelin.tmclient.api.util.ServiceLocator;
+import ru.karelin.tmclient.util.DateConverter;
+import ru.karelin.tmserver.endpoint.ProjectEndpoint;
+import ru.karelin.tmserver.endpoint.Status;
 
+
+import javax.xml.datatype.DatatypeConfigurationException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
@@ -29,17 +32,18 @@ public final class ProjectEditCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(final String... params) {
+    public void execute(final String... params) throws DatatypeConfigurationException {
         @NotNull String projectId;
         if (params.length > 0) projectId = params[0];
         else {
             System.out.println("You must enter projectId");
             return;
         }
-        final ProjectService projectService = locator.getProjectService();
+        final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         final String currentUserId = locator.getCurrentUser().getId();
         final DateFormat dateFormat = locator.getDateFormat();
-        if (!projectService.checkID(currentUserId, projectId)) {
+        final DateConverter dateConverter = locator.getDateConverter();
+        if (!projectEndpoint.checkProjectId(currentUserId, projectId)) {
             System.out.println("Wrong ID " + projectId);
             return;
         }
@@ -103,7 +107,13 @@ public final class ProjectEditCommand extends AbstractCommand {
                 }
             }
         }
-        projectService.edit(currentUserId, projectId, projectName, projectDescription, projectStartDate, projectFinishDate, projectStatus);
+        projectEndpoint.editProject(currentUserId,
+                projectId,
+                projectName,
+                projectDescription,
+                dateConverter.convert(projectStartDate),
+                dateConverter.convert(projectFinishDate),
+                projectStatus);
     }
 }
 

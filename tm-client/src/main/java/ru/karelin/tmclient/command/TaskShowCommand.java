@@ -2,9 +2,10 @@ package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.karelin.tm.api.service.TaskService;
-import ru.karelin.tm.api.util.ServiceLocator;
-import ru.karelin.tm.entity.Task;
+import ru.karelin.tmclient.api.util.ServiceLocator;
+import ru.karelin.tmclient.util.DateConverter;
+import ru.karelin.tmserver.endpoint.Task;
+import ru.karelin.tmserver.endpoint.TaskEndpoint;
 
 import java.text.DateFormat;
 
@@ -30,7 +31,7 @@ public final class TaskShowCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) {
-        @NotNull final TaskService taskService = locator.getTaskService();
+        @NotNull final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
         @NotNull final String taskId;
         if (params.length > 0) taskId = params[0];
         else {
@@ -38,17 +39,18 @@ public final class TaskShowCommand extends AbstractCommand {
             return;
         }
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
+        @NotNull final DateConverter dateConverter = locator.getDateConverter();
         @Nullable final String currentUserId = locator.getCurrentUser().getId();
-        if (!taskService.checkID(currentUserId, taskId)) {
+        if (!taskEndpoint.checkTaskId(currentUserId, taskId)) {
             System.out.println("Wrong ID");
             return;
         }
-        @NotNull final Task task = taskService.getOne(currentUserId, taskId);
+        @NotNull final Task task = taskEndpoint.getTask(currentUserId, taskId);
         System.out.println("Task name: " + task.getName());
         System.out.println("Task description: " + task.getDescription());
         System.out.println("Creation date: " + task.getCreationDate());
-        System.out.println("Task start date: " + dateFormat.format(task.getStartDate()));
-        System.out.println("Task finish date " + dateFormat.format(task.getFinishDate()));
+        System.out.println("Task start date: " + dateFormat.format(dateConverter.convert(task.getStartDate())));
+        System.out.println("Task finish date " + dateFormat.format(dateConverter.convert(task.getFinishDate())));
         System.out.println("Status: " + task.getStatus().toString());
         System.out.println("Project ID: " + task.getProjectID());
         System.out.println();

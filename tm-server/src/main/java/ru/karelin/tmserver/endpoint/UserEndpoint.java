@@ -44,4 +44,5 @@ public class UserEndpoint {
                                   @WebParam (name = "newPassword") final String newPassword){
         return userService.changePassword(userId, password.toCharArray(), newPassword.toCharArray());
     }
+
 }

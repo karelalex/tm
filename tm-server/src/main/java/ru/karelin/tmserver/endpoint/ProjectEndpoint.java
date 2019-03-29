@@ -71,7 +71,7 @@ public class ProjectEndpoint {
     }
 
     @WebMethod
-    public List<Project> getListByKeyword(@WebParam(name = "userId") final String userId,
+    public List<Project> getProjectListByKeyword(@WebParam(name = "userId") final String userId,
                                           @WebParam(name = "searchString") String keyword){
         return projectService.getListByKeyword(userId, keyword);
     }

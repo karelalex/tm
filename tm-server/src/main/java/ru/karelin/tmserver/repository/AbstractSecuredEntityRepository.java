@@ -20,7 +20,7 @@ public abstract class AbstractSecuredEntityRepository<T extends AbstractSecuredE
     @Override
     public T findOneByIdAndUserId(String id, String userId) {
         final T t = findOne(id);
-        if (t.getUserId().equals(userId)) {
+        if (t!=null && t.getUserId().equals(userId)) {
             return t;
         }
         return null;

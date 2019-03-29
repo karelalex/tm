@@ -1,8 +1,9 @@
 package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
-import ru.karelin.tm.api.service.UserService;
-import ru.karelin.tm.api.util.ServiceLocator;
+import ru.karelin.tmclient.api.util.ServiceLocator;
+import ru.karelin.tmserver.endpoint.UserEndpoint;
+
 
 import java.util.Arrays;
 
@@ -27,7 +28,7 @@ public final class UserPasswordChangeCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) {
-        @NotNull final UserService userService = locator.getUserService();
+        @NotNull final UserEndpoint userEndpoint = locator.getUserEndpoint();
         @NotNull final String currentUserId = locator.getCurrentUser().getId();
         System.out.println("Enter your old pass");
         final char[] oldPass;
@@ -44,7 +45,7 @@ public final class UserPasswordChangeCommand extends AbstractCommand {
             }
             break;
         }
-        final boolean success = userService.changePassword(currentUserId, oldPass, newPass);
+        final boolean success = userEndpoint.changePassword(currentUserId, new String(oldPass),new String( newPass));
         if(success) System.out.println("Password was changed");
         else System.out.println("Password was NOT changed. Make sure you typed correct old password");
 

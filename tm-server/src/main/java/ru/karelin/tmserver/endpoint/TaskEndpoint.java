@@ -48,7 +48,7 @@ public class TaskEndpoint {
     }
 
     @WebMethod
-    public List<Task> getTaskSortedListByProjectId(@WebParam(name = "userId") final String userId,
+    public List<Task> getSortedTaskListByProjectId(@WebParam(name = "userId") final String userId,
                                                    @WebParam(name = "tasksProjectId") final String projectId,
                                                    @WebParam(name = "sortField") String sortField,
                                                    @WebParam(name = "isOrderStraight") boolean isStraight) {

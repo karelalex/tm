@@ -2,10 +2,12 @@ package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.karelin.tm.api.service.ProjectService;
-import ru.karelin.tm.api.service.TaskService;
-import ru.karelin.tm.api.util.ServiceLocator;
-import ru.karelin.tm.entity.Task;
+import ru.karelin.tmclient.api.util.ServiceLocator;
+import ru.karelin.tmclient.util.DateConverter;
+import ru.karelin.tmserver.endpoint.ProjectEndpoint;
+import ru.karelin.tmserver.endpoint.Task;
+import ru.karelin.tmserver.endpoint.TaskEndpoint;
+
 
 import java.text.DateFormat;
 import java.util.List;
@@ -36,6 +38,7 @@ public final class TaskListShowCommand extends AbstractCommand {
     public void execute(final String... params) {
         @Nullable final String currentUserId = locator.getCurrentUser().getId();
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
+        @NotNull final DateConverter dateConverter = locator.getDateConverter();
         @NotNull final String projectId;
         boolean isSorted = false;
         String sortField = "";
@@ -76,20 +79,20 @@ public final class TaskListShowCommand extends AbstractCommand {
             }
 
         } else projectId = "";
-        @NotNull final TaskService taskService = locator.getTaskService();
-        @NotNull final ProjectService projectService = locator.getProjectService();
+        @NotNull final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
+        @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         @NotNull final List<Task> tasks;
         boolean showProjectId = true;
-        if (isFind) tasks = taskService.getListByKeyword(currentUserId, searchItem);
+        if (isFind) tasks = taskEndpoint.getTaskListByKeyword(currentUserId, searchItem);
         else if (projectId.isEmpty()) {
             if (isSorted) {
-                tasks = taskService.getSortedList(currentUserId, sortField, isStraight);
-            } else tasks = taskService.getList(currentUserId);
-        } else if (projectService.checkID(currentUserId, projectId)) {
+                tasks = taskEndpoint.getSortedTaskList(currentUserId, sortField, isStraight);
+            } else tasks = taskEndpoint.getTaskList(currentUserId);
+        } else if (projectEndpoint.checkProjectId(currentUserId, projectId)) {
             if(isSorted){
-                tasks = taskService.getSortedListByProjectId(currentUserId, projectId, sortField, isStraight);
+                tasks = taskEndpoint.getSortedTaskListByProjectId(currentUserId, projectId, sortField, isStraight);
             }
-            else tasks = taskService.getListByProjectId(currentUserId, projectId);
+            else tasks = taskEndpoint.getTaskListByProjectId(currentUserId, projectId);
             showProjectId = false;
         } else {
             System.out.println("Wrong Project ID");
@@ -100,8 +103,8 @@ public final class TaskListShowCommand extends AbstractCommand {
             System.out.println("Task name: " + t.getName());
             System.out.println("Task description: " + t.getDescription());
             System.out.println("Creation date: " + t.getCreationDate());
-            System.out.println("Task start date: " + dateFormat.format(t.getStartDate()));
-            System.out.println("Task finish date " + dateFormat.format(t.getFinishDate()));
+            System.out.println("Task start date: " + dateFormat.format(dateConverter.convert(t.getStartDate())));
+            System.out.println("Task finish date " + dateFormat.format(dateConverter.convert(t.getFinishDate())));
             System.out.println("Status: " + t.getStatus().toString());
             if (showProjectId) System.out.println("Project ID: " + t.getProjectID());
             System.out.println();

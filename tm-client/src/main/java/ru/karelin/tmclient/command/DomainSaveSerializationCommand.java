@@ -1,8 +1,9 @@
 package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
-import ru.karelin.tm.api.service.DomainService;
-import ru.karelin.tm.api.util.ServiceLocator;
+import ru.karelin.tmclient.api.util.ServiceLocator;
+import ru.karelin.tmserver.endpoint.DomainEndpoint;
+
 
 public class DomainSaveSerializationCommand extends AbstractCommand {
     private static final boolean SECURED = true;
@@ -26,7 +27,7 @@ public class DomainSaveSerializationCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) throws Exception {
-        DomainService domainService = locator.getDomainService();
-        domainService.saveSerialize();
+        DomainEndpoint domainEndpoint = locator.getDomainEndpoint();
+        domainEndpoint.saveDomainByJavaSerialization();
     }
 }

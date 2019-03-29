@@ -6,10 +6,7 @@ import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.api.util.TerminalService;
 import ru.karelin.tmclient.command.AbstractCommand;
 import ru.karelin.tmclient.exception.CommandRegisteredException;
-import ru.karelin.tmserver.endpoint.DomainEndpoint;
-import ru.karelin.tmserver.endpoint.ProjectEndpoint;
-import ru.karelin.tmserver.endpoint.TaskEndpoint;
-import ru.karelin.tmserver.endpoint.UserEndpoint;
+import ru.karelin.tmserver.endpoint.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -30,23 +27,53 @@ public final class Bootstrap implements ServiceLocator {
 
 
 
+    @NotNull private DateConverter dateConverter = new DateConverter();
+
+
+
     @NotNull private final TerminalService terminalService= new TerminalServiceImpl();
     @NotNull private final Map<String, AbstractCommand> commands = new LinkedHashMap<>();
     @NotNull private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
     @Nullable private User currentUser;
 
     @Override
-    @Nullable public User getCurrentUser() {
-        return currentUser;
+    @NotNull
+    public ProjectEndpoint getProjectEndpoint() {
+        return projectEndpoint;
+    }
+
+    @Override
+    @NotNull
+    public DateConverter getDateConverter() {
+        return dateConverter;
     }
 
     @NotNull
     @Override
-    public TerminalService getTerminalService() {
-        return terminalService;
+    public TaskEndpoint getTaskEndpoint() {
+        return taskEndpoint;
     }
+
+
     @Override
-    public void setCurrentUser(@Nullable User currentUser) {
+    @NotNull
+    public UserEndpoint getUserEndpoint() {
+        return userEndpoint;
+    }
+
+    @Override
+    @NotNull
+    public DomainEndpoint getDomainEndpoint() {
+        return domainEndpoint;
+    }
+
+    @Override
+    @Nullable public User getCurrentUser() {
+        return currentUser;
+    }
+
+    @Override
+    public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
 
@@ -56,7 +83,6 @@ public final class Bootstrap implements ServiceLocator {
         return commands;
     }
 
-
     @NotNull
     @Override
     public DateFormat getDateFormat() {
@@ -64,33 +90,20 @@ public final class Bootstrap implements ServiceLocator {
     }
 
     @NotNull
-    public DomainService getDomainService() {
-        return domainService;
+    @Override
+    public TerminalService getTerminalService() {
+        return terminalService;
     }
 
-    @Override
-    @NotNull public UserService getUserService() {
-        return userService;
-    }
-
-    @Override
-    @NotNull public ProjectService getProjectService() {
-        return projectService;
-    }
-
-    @Override
-    @NotNull public TaskService getTaskService() {
-        return taskService;
-    }
 
     @Override
     public void init(Class[] commandClasses) {
 
-        projectService = new ProjectServiceImpl(projectRepository, taskRepository);
-        taskService = new TaskServiceImpl(taskRepository);
+        projectEndpoint = new ProjectEndpointService().getProjectEndpointPort();
+        taskEndpoint = new TaskEndpointService().getTaskEndpointPort();
+        domainEndpoint = new DomainEndpointService().getDomainEndpointPort();
+        userEndpoint = new UserEndpointService().getUserEndpointPort();
 
-        userService = new UserServiceImpl(md5Generator, userRepository);
-        domainService = new DomainServiceImpl(userRepository, taskRepository, projectRepository);
 
 
         //command registration block

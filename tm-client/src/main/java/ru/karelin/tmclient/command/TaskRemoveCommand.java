@@ -1,8 +1,8 @@
 package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
-import ru.karelin.tm.api.service.TaskService;
-import ru.karelin.tm.api.util.ServiceLocator;
+import ru.karelin.tmclient.api.util.ServiceLocator;
+import ru.karelin.tmserver.endpoint.TaskEndpoint;
 
 
 public final class TaskRemoveCommand extends AbstractCommand {
@@ -27,13 +27,13 @@ public final class TaskRemoveCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) {
-        final TaskService taskService = locator.getTaskService();
+        final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
         final String taskId;
         if (params.length > 0) taskId = params[0];
         else {
             System.out.println("You must enter taskId");
             return;
         }
-        taskService.remove(locator.getCurrentUser().getId(), taskId);
+        taskEndpoint.removeTask(locator.getCurrentUser().getId(), taskId);
     }
 }

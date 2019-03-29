@@ -2,7 +2,7 @@ package ru.karelin.tmclient.command;
 
 import com.jcabi.manifests.Manifests;
 import org.jetbrains.annotations.NotNull;
-import ru.karelin.tm.api.util.ServiceLocator;
+import ru.karelin.tmclient.api.util.ServiceLocator;
 
 
 public class InfoShowCommand extends AbstractCommand {

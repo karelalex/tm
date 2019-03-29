@@ -1,7 +1,7 @@
 package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
-import ru.karelin.tm.api.util.ServiceLocator;
+import ru.karelin.tmclient.api.util.ServiceLocator;
 
 
 public final class UserLogoutCommand extends AbstractCommand {

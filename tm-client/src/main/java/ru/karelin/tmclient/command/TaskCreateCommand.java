@@ -2,10 +2,13 @@ package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.karelin.tm.api.service.ProjectService;
-import ru.karelin.tm.api.service.TaskService;
-import ru.karelin.tm.api.util.ServiceLocator;
+import ru.karelin.tmclient.api.util.ServiceLocator;
+import ru.karelin.tmclient.util.DateConverter;
+import ru.karelin.tmserver.endpoint.ProjectEndpoint;
+import ru.karelin.tmserver.endpoint.TaskEndpoint;
 
+
+import javax.xml.datatype.DatatypeConfigurationException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
@@ -31,11 +34,13 @@ public final class TaskCreateCommand  extends AbstractCommand {
     }
 
     @Override
-    public void execute(final String... params) {
+    public void execute(final String... params) throws DatatypeConfigurationException {
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
-        @NotNull final ProjectService projectService = locator.getProjectService();
-        @NotNull final TaskService taskService = locator.getTaskService();
+        @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
+        @NotNull final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
         @Nullable final String currentUserId = locator.getCurrentUser().getId();
+        @NotNull final DateConverter dateConverter = locator.getDateConverter();
+
         @NotNull String projectId="";
         if (params.length>0) projectId=params[0];
         System.out.println("Enter task name");
@@ -75,12 +80,12 @@ public final class TaskCreateCommand  extends AbstractCommand {
             System.out.println("Enter project id where task will be added or leave it empty");
             projectId = ts.readLn();
         }
-        while (!projectId.isEmpty() && !projectService.checkID(currentUserId, projectId)) {
+        while (!projectId.isEmpty() && !projectEndpoint.checkProjectId(currentUserId, projectId)) {
             System.out.println("Wrong project id try again or leave it empty");
             projectId = ts.readLn();
         }
 
-        taskService.create(currentUserId, taskName, taskDescription, taskStartDate, taskFinishDate, projectId);
+        taskEndpoint.createTask(currentUserId, taskName, taskDescription, dateConverter.convert(taskStartDate), dateConverter.convert(taskFinishDate), projectId);
 
     }
 }
