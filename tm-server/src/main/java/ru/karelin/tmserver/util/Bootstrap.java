@@ -32,25 +32,32 @@ import java.text.SimpleDateFormat;
 public final class Bootstrap implements ServiceLocator {
 
     private static final String QUIT = "exit";
+    private static final String USER_ENDPOINT_URL = "http://localhost:8080/UserEndpoint?wsdl";
+    private static final String PROJECT_ENDPOINT_URL = "http://localhost:8080/ProjectEndpoint?wsdl";
+    private static final String TASK_ENDPOINT_URL = "http://localhost:8080/TaskEndpoint?wsdl";
+    private static final String DOMAIN_ENDPOINT_URL = "http://localhost:8080/DomainEndpoint?wsdl";
 
 
-    @NotNull private ProjectService projectService;
-    @NotNull private TaskService taskService;
-    @NotNull private UserService userService;
-    @NotNull private DomainService domainService;
+    @NotNull
+    private ProjectService projectService;
+    @NotNull
+    private TaskService taskService;
+    @NotNull
+    private UserService userService;
+    @NotNull
+    private DomainService domainService;
 
 
-
-
-    @NotNull private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-    @Nullable private User currentUser;
+    @NotNull
+    private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    @Nullable
+    private User currentUser;
 
     @Override
-    @Nullable public User getCurrentUser() {
+    @Nullable
+    public User getCurrentUser() {
         return currentUser;
     }
-
-
 
     @Override
     public void setCurrentUser(@Nullable User currentUser) {
@@ -69,17 +76,20 @@ public final class Bootstrap implements ServiceLocator {
     }
 
     @Override
-    @NotNull public UserService getUserService() {
+    @NotNull
+    public UserService getUserService() {
         return userService;
     }
 
     @Override
-    @NotNull public ProjectService getProjectService() {
+    @NotNull
+    public ProjectService getProjectService() {
         return projectService;
     }
 
     @Override
-    @NotNull public TaskService getTaskService() {
+    @NotNull
+    public TaskService getTaskService() {
         return taskService;
     }
 
@@ -94,10 +104,14 @@ public final class Bootstrap implements ServiceLocator {
         userService = new UserServiceImpl(md5Generator, userRepository);
         domainService = new DomainServiceImpl(userRepository, taskRepository, projectRepository);
 
-        Endpoint.publish("http://localhost:8080/UserEndpoint?wsdl", new UserEndpoint(userService));
-        Endpoint.publish("http://localhost:8080/ProjectEndpoint?wsdl", new ProjectEndpoint(projectService));
-        Endpoint.publish("http://localhost:8080/TaskEndpoint?wsdl", new TaskEndpoint(taskService));
-        Endpoint.publish("http://localhost:8080/DomainEndpoint?wsdl", new DomainEndpoint(domainService));
+        Endpoint.publish(USER_ENDPOINT_URL, new UserEndpoint(userService));
+        System.out.println("Endpoint with url " + USER_ENDPOINT_URL + " started.");
+        Endpoint.publish(PROJECT_ENDPOINT_URL, new ProjectEndpoint(projectService));
+        System.out.println("Endpoint with url " + PROJECT_ENDPOINT_URL + " started.");
+        Endpoint.publish(TASK_ENDPOINT_URL, new TaskEndpoint(taskService));
+        System.out.println("Endpoint with url " + TASK_ENDPOINT_URL + " started.");
+        Endpoint.publish(DOMAIN_ENDPOINT_URL, new DomainEndpoint(domainService));
+        System.out.println("Endpoint with url " + DOMAIN_ENDPOINT_URL + " started.");
         //command registration block
 
 
@@ -108,8 +122,6 @@ public final class Bootstrap implements ServiceLocator {
         userService.registerNewUser("bb", "ee".toCharArray(), "boris", RoleType.ADMIN);
 
         // end of create two users block
-
-
 
 
     }

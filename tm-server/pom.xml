@@ -32,6 +32,21 @@
                     <outputDirectory>${project.build.directory}/out/bin</outputDirectory>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.webcohesion.enunciate</groupId>
+                <artifactId>enunciate-maven-plugin</artifactId>
+                <version>2.11.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>docs</goal>
+                        </goals>
+                        <configuration>
+                            <docsDir>${project.build.directory}/out/</docsDir>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
