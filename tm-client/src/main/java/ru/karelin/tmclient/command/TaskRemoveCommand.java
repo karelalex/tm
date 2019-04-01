@@ -3,6 +3,7 @@ package ru.karelin.tmclient.command;
 import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.TaskEndpoint;
+import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
 
 public final class TaskRemoveCommand extends AbstractCommand {
@@ -26,7 +27,7 @@ public final class TaskRemoveCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(final String... params) {
+    public void execute(final String... params) throws WrongSessionException_Exception {
         final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
         final String taskId;
         if (params.length > 0) taskId = params[0];

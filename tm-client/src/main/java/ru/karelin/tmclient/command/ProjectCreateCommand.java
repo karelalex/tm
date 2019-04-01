@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
+import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import java.text.DateFormat;
@@ -27,7 +28,7 @@ public final class ProjectCreateCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(final String ... params) throws DatatypeConfigurationException {
+    public void execute(final String ... params) throws DatatypeConfigurationException, WrongSessionException_Exception {
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
         @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         @NotNull final DateConverter dateConverter = locator.getDateConverter();

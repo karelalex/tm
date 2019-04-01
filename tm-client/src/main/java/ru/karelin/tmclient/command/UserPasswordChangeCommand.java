@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.Session;
 import ru.karelin.tmserver.endpoint.UserEndpoint;
+import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
 
 import java.util.Arrays;
@@ -28,7 +29,7 @@ public final class UserPasswordChangeCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String... params) {
+    public void execute(String... params) throws WrongSessionException_Exception {
         @NotNull final UserEndpoint userEndpoint = locator.getUserEndpoint();
         @NotNull final Session session = locator.getCurrentSession();
         System.out.println("Enter your old pass");

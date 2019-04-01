@@ -2,6 +2,7 @@ package ru.karelin.tmserver.endpoint;
 
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.entity.Session;
+import ru.karelin.tmserver.exception.WrongSessionException;
 import ru.karelin.tmserver.service.SessionService;
 
 import javax.jws.WebMethod;
@@ -23,7 +24,7 @@ public class SessionEndpoint {
     }
 
     @WebMethod
-    public void logout(@WebParam(name = "session") @Nullable final Session session)  {
+    public void logout(@WebParam(name = "session") @Nullable final Session session) throws WrongSessionException {
         if (sessionService.isSessionExists(session)){
             sessionService.removeSession(session.getId());
         }

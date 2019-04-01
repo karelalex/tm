@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.User;
 import ru.karelin.tmserver.endpoint.UserEndpoint;
+import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
 
 public final class UserShowCurrentCommand extends AbstractCommand {
@@ -26,7 +27,7 @@ public final class UserShowCurrentCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(final String... params) {
+    public void execute(final String... params) throws WrongSessionException_Exception {
         @NotNull final UserEndpoint userEndpoint = locator.getUserEndpoint();
         @NotNull final User currentUser = userEndpoint.getCurrentUser(locator.getCurrentSession());
         System.out.println("Login: "+ currentUser.getLogin());

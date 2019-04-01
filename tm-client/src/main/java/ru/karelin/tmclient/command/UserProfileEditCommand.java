@@ -3,6 +3,7 @@ package ru.karelin.tmclient.command;
 import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.UserEndpoint;
+import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
 public final class UserProfileEditCommand extends AbstractCommand{
 
@@ -24,7 +25,7 @@ public final class UserProfileEditCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute(String... params) {
+    public void execute(String... params) throws WrongSessionException_Exception {
         System.out.println("Enter user name or just press enter if you do not want to change it");
         @NotNull final String userName = ts.readLn();
         @NotNull final UserEndpoint userEndpoint = locator.getUserEndpoint();

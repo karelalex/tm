@@ -21,6 +21,9 @@ import ru.karelin.tmserver.entity.AbstractEntity;
 import ru.karelin.tmserver.entity.Project;
 import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.entity.User;
+import ru.karelin.tmserver.enumeration.RoleType;
+import ru.karelin.tmserver.exception.PermissionException;
+import sun.security.pkcs.ParsingException;
 
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBContext;
@@ -60,7 +63,8 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public void saveSerialize() throws IOException {
+    public void saveSerialize(String userId) throws IOException, PermissionException {
+        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
         File f = new File(SERIALIZE_FILE_NAME);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(f));
         List<AbstractEntity> list = new ArrayList<AbstractEntity>(userRepository.findAll());
@@ -73,7 +77,8 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public void getSerialize() throws IOException, ClassNotFoundException {
+    public void getSerialize(String userId) throws IOException, ClassNotFoundException, PermissionException {
+        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
         File f = new File(SERIALIZE_FILE_NAME);
         Object o;
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));) {
@@ -94,7 +99,8 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public void saveJaxXML() throws JAXBException {
+    public void saveJaxXML(String userId) throws JAXBException, PermissionException {
+        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
         final JAXBContext jaxbContext = JAXBContext.newInstance(Holder.class, User.class, Project.class, Task.class);
         final Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -102,7 +108,8 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public void getJaxXML() throws JAXBException {
+    public void getJaxXML(String userId) throws JAXBException, PermissionException {
+        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
         final JAXBContext jaxbContext = JAXBContext.newInstance(Holder.class, User.class, Project.class, Task.class);
         final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
         extractHolder((Holder) unmarshaller.unmarshal(new File(JAX_XLM_FILE_NAME)));
@@ -110,7 +117,8 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public void saveJaxJSON() throws JAXBException {
+    public void saveJaxJSON(String userId) throws JAXBException, PermissionException {
+        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
         Map<String, Object> properties = new HashMap<>();
         properties.put(JAXBContextProperties.MEDIA_TYPE, "application/json");
         properties.put(JAXBContextProperties.JSON_INCLUDE_ROOT, false);
@@ -122,7 +130,8 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public void getJaxJSON() throws JAXBException {
+    public void getJaxJSON(String userId) throws JAXBException, PermissionException {
+        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
         Map<String, Object> properties = new HashMap<>();
         properties.put(JAXBContextProperties.MEDIA_TYPE, "application/json");
         properties.put(JAXBContextProperties.JSON_INCLUDE_ROOT, false);
@@ -132,7 +141,8 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public void saveFasterXML() throws IOException {
+    public void saveFasterXML(String userId) throws IOException, PermissionException {
+        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
         XmlMapper xmlMapper = new XmlMapper();
         xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
         xmlMapper.writeValue(new File(FASTER_XML_FILE_NAME), createHolder());
@@ -140,21 +150,24 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public void getFasterXML() throws IOException {
+    public void getFasterXML(String userId) throws IOException, PermissionException {
+        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
         XmlMapper mapper = new XmlMapper();
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         extractHolder(mapper.readValue(new File(FASTER_XML_FILE_NAME), Holder.class));
     }
 
     @Override
-    public void saveFasterJSON() throws IOException {
+    public void saveFasterJSON(String userId) throws IOException, PermissionException {
+        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         mapper.writeValue(new File(FASTER_JSON_FILE_NAME), createHolder());
     }
 
     @Override
-    public void getFasterJSON() throws IOException {
+    public void getFasterJSON(String userId) throws IOException, PermissionException {
+        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
         ObjectMapper mapper = new ObjectMapper();
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         extractHolder(mapper.readValue(new File(FASTER_JSON_FILE_NAME), Holder.class));

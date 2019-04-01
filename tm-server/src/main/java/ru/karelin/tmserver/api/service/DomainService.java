@@ -1,25 +1,28 @@
 package ru.karelin.tmserver.api.service;
 
+import ru.karelin.tmserver.exception.PermissionException;
+
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 
 public interface DomainService {
-    void saveSerialize() throws IOException;
-    void getSerialize() throws IOException, ClassNotFoundException;
+    void saveSerialize(String userId) throws IOException, PermissionException;
 
-    void saveJaxXML() throws JAXBException;
+    void getSerialize(String userId) throws IOException, ClassNotFoundException, PermissionException;
 
-    void getJaxXML() throws JAXBException;
+    void saveJaxXML(String userId) throws JAXBException, PermissionException;
 
-    void saveJaxJSON() throws JAXBException;
+    void getJaxXML(String userId) throws JAXBException, PermissionException;
 
-    void getJaxJSON() throws JAXBException;
+    void saveJaxJSON(String userId) throws JAXBException, PermissionException;
 
-    void saveFasterXML() throws IOException;
+    void getJaxJSON(String userId) throws JAXBException, PermissionException;
 
-    void getFasterXML() throws IOException;
+    void saveFasterXML(String userId) throws IOException, PermissionException;
 
-    void saveFasterJSON() throws IOException;
+    void getFasterXML(String userId) throws IOException, PermissionException;
 
-    void getFasterJSON() throws IOException;
+    void saveFasterJSON(String userId) throws IOException, PermissionException;
+
+    void getFasterJSON(String userId) throws IOException, PermissionException;
 }

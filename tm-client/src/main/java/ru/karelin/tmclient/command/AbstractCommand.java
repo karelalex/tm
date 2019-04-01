@@ -3,6 +3,7 @@ package ru.karelin.tmclient.command;
 import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.api.util.TerminalService;
+import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
 
 public abstract class AbstractCommand {

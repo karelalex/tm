@@ -4,10 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.util.DateConverter;
-import ru.karelin.tmserver.endpoint.ProjectEndpoint;
-import ru.karelin.tmserver.endpoint.Session;
-import ru.karelin.tmserver.endpoint.Status;
-import ru.karelin.tmserver.endpoint.TaskEndpoint;
+import ru.karelin.tmserver.endpoint.*;
 
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -38,7 +35,7 @@ public final class TaskEditCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(final String... params) throws DatatypeConfigurationException {
+    public void execute(final String... params) throws DatatypeConfigurationException, WrongSessionException_Exception {
         @NotNull final String taskId;
         if (params.length > 0) taskId = params[0];
         else {

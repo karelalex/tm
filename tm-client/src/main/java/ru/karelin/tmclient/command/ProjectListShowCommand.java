@@ -6,6 +6,7 @@ import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.Project;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
 import ru.karelin.tmserver.endpoint.Session;
+import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
 import java.text.DateFormat;
 import java.util.List;
@@ -30,7 +31,7 @@ public final class ProjectListShowCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(final String... params) {
+    public void execute(final String... params) throws WrongSessionException_Exception {
 
         @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         @NotNull final DateFormat dateFormat = locator.getDateFormat();

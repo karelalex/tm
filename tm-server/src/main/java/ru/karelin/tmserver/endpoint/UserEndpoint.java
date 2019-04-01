@@ -3,6 +3,7 @@ package ru.karelin.tmserver.endpoint;
 import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.entity.Session;
 import ru.karelin.tmserver.entity.User;
+import ru.karelin.tmserver.exception.WrongSessionException;
 import ru.karelin.tmserver.service.SessionService;
 
 import javax.jws.WebMethod;
@@ -31,7 +32,7 @@ public class UserEndpoint {
     }
 
     @WebMethod
-    public User getCurrentUser(@WebParam(name = "session") final Session session){
+    public User getCurrentUser(@WebParam(name = "session") final Session session) throws WrongSessionException {
         if(sessionService.isSessionExists(session)) {
             return userService.getUserById(session.getUserId());
         }
@@ -40,7 +41,7 @@ public class UserEndpoint {
 
     @WebMethod
     public void editUser (@WebParam(name = "session") final Session session,
-                          @WebParam (name = "userName") final String userName){
+                          @WebParam (name = "userName") final String userName) throws WrongSessionException {
         if(sessionService.isSessionExists(session)) {
             userService.editUser(session.getUserId(), userName);
         }
@@ -49,7 +50,7 @@ public class UserEndpoint {
     @WebMethod
     public boolean changePassword(@WebParam (name = "session") final Session session,
                                   @WebParam (name = "oldPassword") final String password,
-                                  @WebParam (name = "newPassword") final String newPassword){
+                                  @WebParam (name = "newPassword") final String newPassword) throws WrongSessionException {
         if(sessionService.isSessionExists(session)) {
             return userService.changePassword(session.getUserId(), password.toCharArray(), newPassword.toCharArray());
         }

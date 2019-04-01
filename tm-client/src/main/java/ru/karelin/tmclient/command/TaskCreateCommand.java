@@ -7,6 +7,7 @@ import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
 import ru.karelin.tmserver.endpoint.Session;
 import ru.karelin.tmserver.endpoint.TaskEndpoint;
+import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -35,7 +36,7 @@ public final class TaskCreateCommand  extends AbstractCommand {
     }
 
     @Override
-    public void execute(final String... params) throws DatatypeConfigurationException {
+    public void execute(final String... params) throws DatatypeConfigurationException, WrongSessionException_Exception {
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
         @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         @NotNull final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();

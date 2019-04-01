@@ -3,6 +3,7 @@ package ru.karelin.tmclient.command;
 import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
+import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
 
 public final class ProjectRemoveCommand extends AbstractCommand {
@@ -24,7 +25,7 @@ public final class ProjectRemoveCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(final String... params) {
+    public void execute(final String... params) throws WrongSessionException_Exception {
         String projectId;
         if (params.length > 0) projectId = params[0];
         else {

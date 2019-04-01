@@ -6,6 +6,7 @@ import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
 import ru.karelin.tmserver.endpoint.Session;
 import ru.karelin.tmserver.endpoint.Status;
+import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -33,7 +34,7 @@ public final class ProjectEditCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(final String... params) throws DatatypeConfigurationException {
+    public void execute(final String... params) throws DatatypeConfigurationException, WrongSessionException_Exception {
         @NotNull String projectId;
         if (params.length > 0) projectId = params[0];
         else {

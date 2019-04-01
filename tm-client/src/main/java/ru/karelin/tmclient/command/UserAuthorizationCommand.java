@@ -3,10 +3,7 @@ package ru.karelin.tmclient.command;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmclient.api.util.ServiceLocator;
-import ru.karelin.tmserver.endpoint.Session;
-import ru.karelin.tmserver.endpoint.SessionEndpoint;
-import ru.karelin.tmserver.endpoint.User;
-import ru.karelin.tmserver.endpoint.UserEndpoint;
+import ru.karelin.tmserver.endpoint.*;
 
 
 public final class UserAuthorizationCommand extends AbstractCommand {
@@ -28,7 +25,7 @@ public final class UserAuthorizationCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(final String... params) {
+    public void execute(final String... params) throws WrongSessionException_Exception {
         @NotNull final SessionEndpoint sessionEndpoint = locator.getSessionEndpoint();
         @NotNull final UserEndpoint userEndpoint = locator.getUserEndpoint();
         System.out.println("Enter login");

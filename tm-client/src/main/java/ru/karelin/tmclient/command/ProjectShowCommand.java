@@ -7,6 +7,7 @@ import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.Project;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
 import ru.karelin.tmserver.endpoint.Session;
+import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
 import java.text.DateFormat;
 
@@ -30,7 +31,7 @@ public final class ProjectShowCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute(final String... params) {
+    public void execute(final String... params) throws WrongSessionException_Exception {
         @Nullable final String projectId;
         if (params.length > 0) projectId = params[0];
         else {

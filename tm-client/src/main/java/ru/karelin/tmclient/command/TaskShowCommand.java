@@ -7,6 +7,7 @@ import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.Session;
 import ru.karelin.tmserver.endpoint.Task;
 import ru.karelin.tmserver.endpoint.TaskEndpoint;
+import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
 import java.text.DateFormat;
 
@@ -31,7 +32,7 @@ public final class TaskShowCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(final String... params) {
+    public void execute(final String... params) throws WrongSessionException_Exception {
         @NotNull final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
         @NotNull final String taskId;
         if (params.length > 0) taskId = params[0];

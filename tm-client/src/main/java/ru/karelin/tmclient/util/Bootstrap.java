@@ -148,6 +148,14 @@ public final class Bootstrap implements ServiceLocator {
                 try{
                     abstractCommand.execute(params);
                 }
+            catch (PermissionException_Exception e){
+                    System.out.println(e.getMessage());
+            }
+            catch (WrongSessionException_Exception e){
+                System.out.println(e.getMessage());
+                System.out.println("try to login again");
+                setCurrentSession(null);
+            }
             catch (Exception e){
                     e.printStackTrace();
             }

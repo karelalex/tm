@@ -34,7 +34,7 @@ public final class SessionService {
         return null;
     }
 
-    public void removeSession(@Nullable String sessionId){
+    public void removeSession(@Nullable String sessionId) throws WrongSessionException {
         final Session session = sessionRepository.findOne(sessionId);
         if(session!=null) {
             sessionRepository.remove(session);
@@ -42,7 +42,7 @@ public final class SessionService {
         else throw new WrongSessionException("No such session found");
     }
 
-    public boolean isSessionExists(@Nullable Session session){
+    public boolean isSessionExists(@Nullable Session session) throws WrongSessionException {
         if(session==null) throw new WrongSessionException("No such session found");
         String signature = session.getSignature();
         session.setSignature(null);
