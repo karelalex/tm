@@ -5,7 +5,7 @@ import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.DomainEndpoint;
 
 public class DomainGetFasterXmlCommand extends AbstractCommand {
-    private static final boolean SECURED = false;
+    private static final boolean SECURED = true;
     public DomainGetFasterXmlCommand(@NotNull ServiceLocator locator, boolean isSecured) {
         super(locator, SECURED);
     }
@@ -27,6 +27,6 @@ public class DomainGetFasterXmlCommand extends AbstractCommand {
     @Override
     public void execute(String... params) throws Exception {
         DomainEndpoint domainEndpoint = locator.getDomainEndpoint();
-        domainEndpoint.restoreDomainFromXmlByFasterXml();
+        domainEndpoint.restoreDomainFromXmlByFasterXml(locator.getCurrentSession());
     }
 }

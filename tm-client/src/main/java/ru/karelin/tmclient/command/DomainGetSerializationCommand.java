@@ -6,7 +6,7 @@ import ru.karelin.tmserver.endpoint.DomainEndpoint;
 
 
 public class DomainGetSerializationCommand extends AbstractCommand {
-    private static final boolean SECURED = false;
+    private static final boolean SECURED = true;
     public DomainGetSerializationCommand(@NotNull ServiceLocator locator, boolean isSecured) {
         super(locator, SECURED);
     }

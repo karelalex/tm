@@ -6,7 +6,7 @@ import ru.karelin.tmserver.endpoint.DomainEndpoint;
 
 
 public class DomainGetFasterJsonCommand extends AbstractCommand {
-    private static final boolean SECURED = false;
+    private static final boolean SECURED = true;
     public DomainGetFasterJsonCommand(@NotNull ServiceLocator locator, boolean isSecured) {
         super(locator, SECURED);
     }
@@ -28,7 +28,7 @@ public class DomainGetFasterJsonCommand extends AbstractCommand {
     @Override
     public void execute(String... params) throws Exception {
         DomainEndpoint domainEndpoint = locator.getDomainEndpoint();
-        domainEndpoint.restoreDomainFromJsonByFasterXml();
+        domainEndpoint.restoreDomainFromJsonByFasterXml(locator.getCurrentSession());
 
     }
 }

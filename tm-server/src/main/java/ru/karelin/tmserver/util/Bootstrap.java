@@ -1,7 +1,6 @@
 package ru.karelin.tmserver.util;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.api.repository.ProjectRepository;
 import ru.karelin.tmserver.api.repository.SessionRepository;
 import ru.karelin.tmserver.api.repository.TaskRepository;
@@ -12,7 +11,6 @@ import ru.karelin.tmserver.api.service.TaskService;
 import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.*;
-import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.enumeration.RoleType;
 import ru.karelin.tmserver.repository.ProjectRepositoryImpl;
 import ru.karelin.tmserver.repository.SessionRepositoryImpl;
@@ -49,19 +47,6 @@ public final class Bootstrap implements ServiceLocator {
 
     @NotNull
     private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-    @Nullable
-    private User currentUser;
-
-    @Override
-    @Nullable
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    @Override
-    public void setCurrentUser(@Nullable User currentUser) {
-        this.currentUser = currentUser;
-    }
 
     @NotNull
     @Override
@@ -107,7 +92,7 @@ public final class Bootstrap implements ServiceLocator {
 
         Endpoint.publish(USER_ENDPOINT_URL, new UserEndpoint(userService,sessionService));
         System.out.println("Endpoint with url " + USER_ENDPOINT_URL + " started.");
-        Endpoint.publish(PROJECT_ENDPOINT_URL, new ProjectEndpoint(projectService));
+        Endpoint.publish(PROJECT_ENDPOINT_URL, new ProjectEndpoint(projectService, sessionService));
         System.out.println("Endpoint with url " + PROJECT_ENDPOINT_URL + " started.");
         Endpoint.publish(TASK_ENDPOINT_URL, new TaskEndpoint(taskService, sessionService));
         System.out.println("Endpoint with url " + TASK_ENDPOINT_URL + " started.");

@@ -5,7 +5,7 @@ import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.DomainEndpoint;
 
 public class DomainGetJaxBJsonCommand extends AbstractCommand {
-    private static final boolean SECURED = false;
+    private static final boolean SECURED = true;
     public DomainGetJaxBJsonCommand(@NotNull ServiceLocator locator, boolean isSecured) {
         super(locator, SECURED);
     }
@@ -27,6 +27,6 @@ public class DomainGetJaxBJsonCommand extends AbstractCommand {
     @Override
     public void execute(String... params) throws Exception {
         DomainEndpoint domainEndpoint = locator.getDomainEndpoint();
-        domainEndpoint.restoreDomainFromJsonByJaxB();
+        domainEndpoint.restoreDomainFromJsonByJaxB(locator.getCurrentSession());
     }
 }

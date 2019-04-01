@@ -9,9 +9,6 @@ import java.text.DateFormat;
 
 
 public interface ServiceLocator {
-    User getCurrentUser();
-
-    void setCurrentUser(User currentUser);
 
     DateFormat getDateFormat();
 

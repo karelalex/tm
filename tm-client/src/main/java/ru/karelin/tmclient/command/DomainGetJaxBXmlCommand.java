@@ -5,7 +5,7 @@ import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.DomainEndpoint;
 
 public class DomainGetJaxBXmlCommand extends AbstractCommand {
-    private static final boolean SECURED = false;
+    private static final boolean SECURED = true;
     public DomainGetJaxBXmlCommand(@NotNull ServiceLocator locator, boolean isSecured) {
         super(locator, SECURED);
     }
