@@ -12,13 +12,13 @@ import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.*;
 import ru.karelin.tmserver.enumeration.RoleType;
-import ru.karelin.tmserver.repository.ProjectRepositoryImpl;
-import ru.karelin.tmserver.repository.SessionRepositoryImpl;
-import ru.karelin.tmserver.repository.TaskRepositoryImpl;
-import ru.karelin.tmserver.repository.UserRepositoryImpl;
+import ru.karelin.tmserver.repository.*;
 import ru.karelin.tmserver.service.*;
 
 import javax.xml.ws.Endpoint;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -78,17 +78,20 @@ public final class Bootstrap implements ServiceLocator {
     }
 
     @Override
-    public void init() {
+    public void init() throws SQLException, IOException, ClassNotFoundException {
+        Connection connection = DbConnector.init();
         @NotNull final ProjectRepository projectRepository = new ProjectRepositoryImpl();
         @NotNull final TaskRepository taskRepository = new TaskRepositoryImpl();
         projectService = new ProjectServiceImpl(projectRepository, taskRepository);
         taskService = new TaskServiceImpl(taskRepository);
         @NotNull final MD5Generator md5Generator = new MD5Generator();
-        @NotNull final UserRepository userRepository = new UserRepositoryImpl();
+        //@NotNull final UserRepository userRepository = new UserRepositoryImpl();
+        @NotNull final UserRepository userRepository = new UserRepositoryJdbc(connection);
         userService = new UserServiceImpl(md5Generator, userRepository);
         domainService = new DomainServiceImpl(userRepository, taskRepository, projectRepository);
         @NotNull SessionRepository sessionRepository = new SessionRepositoryImpl();
         sessionService = new SessionService(sessionRepository, userRepository);
+
 
         Endpoint.publish(USER_ENDPOINT_URL, new UserEndpoint(userService,sessionService));
         System.out.println("Endpoint with url " + USER_ENDPOINT_URL + " started.");

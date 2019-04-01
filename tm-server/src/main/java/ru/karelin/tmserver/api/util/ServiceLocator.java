@@ -5,6 +5,9 @@ import ru.karelin.tmserver.api.service.ProjectService;
 import ru.karelin.tmserver.api.service.TaskService;
 import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.entity.User;
+
+import java.io.IOException;
+import java.sql.SQLException;
 import java.text.DateFormat;
 
 
@@ -20,5 +23,5 @@ public interface ServiceLocator {
 
     DomainService getDomainService();
 
-    void init();
+    void init() throws SQLException, IOException, ClassNotFoundException;
 }

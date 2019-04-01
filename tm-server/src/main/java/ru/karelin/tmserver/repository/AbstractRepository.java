@@ -29,9 +29,9 @@ public class AbstractRepository<T extends AbstractEntity> implements Repository<
     }
 
     @Override
-    public T merge(final T t) {
+    public void merge(final T t) {
         items.put(t.getId(), t);
-        return items.get(t.getId());
+
     }
 
     @Override
