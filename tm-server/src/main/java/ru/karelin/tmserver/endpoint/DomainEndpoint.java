@@ -1,6 +1,8 @@
 package ru.karelin.tmserver.endpoint;
 
 import ru.karelin.tmserver.api.service.DomainService;
+import ru.karelin.tmserver.entity.Session;
+import ru.karelin.tmserver.service.SessionService;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -11,58 +13,60 @@ import java.io.IOException;
 public class DomainEndpoint {
 
     private DomainService domainService;
+    private SessionService sessionService;
 
-    public DomainEndpoint(DomainService domainService) {
+    public DomainEndpoint(DomainService domainService, SessionService sessionService) {
         this.domainService = domainService;
+        this.sessionService = sessionService;
     }
 
     @WebMethod (operationName = "saveDomainByJavaSerialization")
-    public void saveSerialize() throws IOException {
-        domainService.saveSerialize();
+    public void saveSerialize(Session session) throws IOException {
+        if(sessionService.isSessionExists(session)) domainService.saveSerialize();
     }
 
     @WebMethod (operationName = "restoreDomainFromJavaSerializedFile")
-    public void getSerialize() throws IOException, ClassNotFoundException {
-        domainService.getSerialize();
+    public void getSerialize(Session session) throws IOException, ClassNotFoundException {
+        if(sessionService.isSessionExists(session)) domainService.getSerialize();
     }
 
     @WebMethod(operationName = "saveDomainToXmlByJaxB")
-    public void saveJaxXML() throws JAXBException {
-        domainService.saveJaxXML();
+    public void saveJaxXML(Session session) throws JAXBException {
+        if(sessionService.isSessionExists(session)) domainService.saveJaxXML();
     }
 
     @WebMethod(operationName = "restoreDomainFromXmlByJaxB")
-    public void getJaxXML() throws JAXBException {
-        domainService.getJaxXML();
+    public void getJaxXML(Session session) throws JAXBException {
+        if(sessionService.isSessionExists(session)) domainService.getJaxXML();
     }
 
     @WebMethod(operationName = "saveDomainToJsonByJaxB")
-    public void saveJaxJSON() throws JAXBException {
-        domainService.saveJaxJSON();
+    public void saveJaxJSON(Session session) throws JAXBException {
+        if(sessionService.isSessionExists(session)) domainService.saveJaxJSON();
     }
 
     @WebMethod(operationName = "restoreDomainFromJsonByJaxB")
-    public void getJaxJSON() throws JAXBException {
-        domainService.getJaxJSON();
+    public void getJaxJSON(Session session) throws JAXBException {
+        if(sessionService.isSessionExists(session)) domainService.getJaxJSON();
     }
 
     @WebMethod(operationName = "saveDomainToXmlByFasterXml")
-    public void saveFasterXML() throws IOException {
-        domainService.saveFasterXML();
+    public void saveFasterXML(Session session) throws IOException {
+        if(sessionService.isSessionExists(session)) domainService.saveFasterXML();
     }
 
     @WebMethod(operationName = "restoreDomainFromXmlByFasterXml")
-    public void getFasterXML() throws IOException {
-        domainService.getFasterXML();
+    public void getFasterXML(Session session) throws IOException {
+        if(sessionService.isSessionExists(session)) domainService.getFasterXML();
     }
 
     @WebMethod(operationName = "saveDomainToJsonByFasterXml")
-    public void saveFasterJSON() throws IOException {
-        domainService.saveFasterJSON();
+    public void saveFasterJSON(Session session) throws IOException {
+        if(sessionService.isSessionExists(session)) domainService.saveFasterJSON();
     }
 
     @WebMethod(operationName = "restoreDomainFromJsonByFasterXml")
-    public void getFasterJSON() throws IOException {
-        domainService.getFasterJSON();
+    public void getFasterJSON(Session session) throws IOException {
+        if(sessionService.isSessionExists(session)) domainService.getFasterJSON();
     }
 }

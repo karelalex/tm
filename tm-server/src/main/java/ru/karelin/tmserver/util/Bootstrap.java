@@ -3,6 +3,7 @@ package ru.karelin.tmserver.util;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.api.repository.ProjectRepository;
+import ru.karelin.tmserver.api.repository.SessionRepository;
 import ru.karelin.tmserver.api.repository.TaskRepository;
 import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.api.service.DomainService;
@@ -10,19 +11,14 @@ import ru.karelin.tmserver.api.service.ProjectService;
 import ru.karelin.tmserver.api.service.TaskService;
 import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.api.util.ServiceLocator;
-import ru.karelin.tmserver.endpoint.DomainEndpoint;
-import ru.karelin.tmserver.endpoint.ProjectEndpoint;
-import ru.karelin.tmserver.endpoint.TaskEndpoint;
-import ru.karelin.tmserver.endpoint.UserEndpoint;
+import ru.karelin.tmserver.endpoint.*;
 import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.enumeration.RoleType;
 import ru.karelin.tmserver.repository.ProjectRepositoryImpl;
+import ru.karelin.tmserver.repository.SessionRepositoryImpl;
 import ru.karelin.tmserver.repository.TaskRepositoryImpl;
 import ru.karelin.tmserver.repository.UserRepositoryImpl;
-import ru.karelin.tmserver.service.DomainServiceImpl;
-import ru.karelin.tmserver.service.ProjectServiceImpl;
-import ru.karelin.tmserver.service.TaskServiceImpl;
-import ru.karelin.tmserver.service.UserServiceImpl;
+import ru.karelin.tmserver.service.*;
 
 import javax.xml.ws.Endpoint;
 import java.text.DateFormat;
@@ -36,6 +32,7 @@ public final class Bootstrap implements ServiceLocator {
     private static final String PROJECT_ENDPOINT_URL = "http://localhost:8080/ProjectEndpoint?wsdl";
     private static final String TASK_ENDPOINT_URL = "http://localhost:8080/TaskEndpoint?wsdl";
     private static final String DOMAIN_ENDPOINT_URL = "http://localhost:8080/DomainEndpoint?wsdl";
+    private static final String SESSION_ENDPOINT_URL = "http://localhost:8080/SessionEndpoint?wsdl";
 
 
     @NotNull
@@ -46,6 +43,8 @@ public final class Bootstrap implements ServiceLocator {
     private UserService userService;
     @NotNull
     private DomainService domainService;
+    @NotNull
+    private SessionService sessionService;
 
 
     @NotNull
@@ -103,19 +102,20 @@ public final class Bootstrap implements ServiceLocator {
         @NotNull final UserRepository userRepository = new UserRepositoryImpl();
         userService = new UserServiceImpl(md5Generator, userRepository);
         domainService = new DomainServiceImpl(userRepository, taskRepository, projectRepository);
+        @NotNull SessionRepository sessionRepository = new SessionRepositoryImpl();
+        sessionService = new SessionService(sessionRepository, userRepository);
 
-        Endpoint.publish(USER_ENDPOINT_URL, new UserEndpoint(userService));
+        Endpoint.publish(USER_ENDPOINT_URL, new UserEndpoint(userService,sessionService));
         System.out.println("Endpoint with url " + USER_ENDPOINT_URL + " started.");
         Endpoint.publish(PROJECT_ENDPOINT_URL, new ProjectEndpoint(projectService));
         System.out.println("Endpoint with url " + PROJECT_ENDPOINT_URL + " started.");
-        Endpoint.publish(TASK_ENDPOINT_URL, new TaskEndpoint(taskService));
+        Endpoint.publish(TASK_ENDPOINT_URL, new TaskEndpoint(taskService, sessionService));
         System.out.println("Endpoint with url " + TASK_ENDPOINT_URL + " started.");
-        Endpoint.publish(DOMAIN_ENDPOINT_URL, new DomainEndpoint(domainService));
+        Endpoint.publish(DOMAIN_ENDPOINT_URL, new DomainEndpoint(domainService, sessionService));
         System.out.println("Endpoint with url " + DOMAIN_ENDPOINT_URL + " started.");
-        //command registration block
+        Endpoint.publish(SESSION_ENDPOINT_URL, new SessionEndpoint(sessionService));
+        System.out.println("Endpoint with url " + SESSION_ENDPOINT_URL + " started");
 
-
-        //end of command registration block
 
         // create two users block
         userService.registerNewUser("sk", "pp".toCharArray(), "alex", RoleType.ORDINARY_USER);

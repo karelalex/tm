@@ -16,7 +16,10 @@ public class MD5Generator {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        byte[] byteOut = md5.digest(input.getBytes());
+        byte[] byteOut = new byte[0];
+        if (md5 != null) {
+            byteOut = md5.digest(input.getBytes());
+        }
         return String.format("%032x", new BigInteger(1, byteOut));
     }
     public String generate(char[] input){
@@ -31,7 +34,10 @@ public class MD5Generator {
         byte[] bytes = Arrays.copyOfRange(byteBuffer.array(),
                 byteBuffer.position(), byteBuffer.limit());
         Arrays.fill(byteBuffer.array(), (byte) 0);
-        byte[] byteOut = md5.digest(bytes);
+        byte[] byteOut = new byte[0];
+        if (md5 != null) {
+            byteOut = md5.digest(bytes);
+        }
         return String.format("%032x", new BigInteger(1, byteOut));
     }
 }

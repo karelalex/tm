@@ -15,6 +15,8 @@ public interface UserService{
 
     void registerNewUser(String login, char[] pass, String name);
 
+    User getUserById(String userId);
+
     void editUser(String userId, String userName);
 
     void registerNewUser(String login, char[] pass, String name, RoleType role);

@@ -24,6 +24,7 @@ public final class Bootstrap implements ServiceLocator {
     @NotNull private TaskEndpoint taskEndpoint;
     @NotNull private UserEndpoint userEndpoint;
     @NotNull private DomainEndpoint domainEndpoint;
+    @NotNull private SessionEndpoint sessionEndpoint;
 
 
 
@@ -34,7 +35,9 @@ public final class Bootstrap implements ServiceLocator {
     @NotNull private final TerminalService terminalService= new TerminalServiceImpl();
     @NotNull private final Map<String, AbstractCommand> commands = new LinkedHashMap<>();
     @NotNull private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-    @Nullable private User currentUser;
+
+
+    @Nullable private Session currentSession;
 
     @Override
     @NotNull
@@ -67,14 +70,16 @@ public final class Bootstrap implements ServiceLocator {
         return domainEndpoint;
     }
 
+
     @Override
-    @Nullable public User getCurrentUser() {
-        return currentUser;
+    @Nullable
+    public Session getCurrentSession() {
+        return currentSession;
     }
 
     @Override
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
+    public void setCurrentSession(@Nullable Session currentSession) {
+        this.currentSession = currentSession;
     }
 
     @NotNull
@@ -95,6 +100,11 @@ public final class Bootstrap implements ServiceLocator {
         return terminalService;
     }
 
+    @Override
+    @NotNull
+    public SessionEndpoint getSessionEndpoint() {
+        return sessionEndpoint;
+    }
 
     @Override
     public void init(Class[] commandClasses) {
@@ -103,6 +113,7 @@ public final class Bootstrap implements ServiceLocator {
         taskEndpoint = new TaskEndpointService().getTaskEndpointPort();
         domainEndpoint = new DomainEndpointService().getDomainEndpointPort();
         userEndpoint = new UserEndpointService().getUserEndpointPort();
+        sessionEndpoint = new SessionEndpointService().getSessionEndpointPort();
 
 
 
@@ -133,7 +144,7 @@ public final class Bootstrap implements ServiceLocator {
                 System.out.println("Wrong command name");
                 continue;
             }
-            if (!abstractCommand.isSecured() || currentUser != null)
+            if (!abstractCommand.isSecured() || currentSession != null)
                 try{
                     abstractCommand.execute(params);
                 }

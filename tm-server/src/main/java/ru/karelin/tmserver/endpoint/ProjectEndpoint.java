@@ -3,77 +3,98 @@ package ru.karelin.tmserver.endpoint;
 import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmserver.api.service.ProjectService;
 import ru.karelin.tmserver.entity.Project;
+import ru.karelin.tmserver.entity.Session;
 import ru.karelin.tmserver.enumeration.Status;
+import ru.karelin.tmserver.service.SessionService;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 @WebService
 public class ProjectEndpoint {
 
-    @NotNull final private ProjectService projectService;
+    @NotNull
+    final private ProjectService projectService;
+    @NotNull
+    private SessionService sessionService;
 
-    public ProjectEndpoint(@NotNull final ProjectService projectService) {
+    public ProjectEndpoint(@NotNull final ProjectService projectService, @NotNull SessionService sessionService) {
         this.projectService = projectService;
+        this.sessionService = sessionService;
     }
 
     @WebMethod
-    public List <Project> getProjectList (@WebParam(name="userId") final String userId){
-        return projectService.getList(userId);
+    public List<Project> getProjectList(@WebParam(name = "session") final Session session) {
+        if (sessionService.isSessionExists(session)) return projectService.getList(session.getUserId());
+        return Collections.emptyList();
+
     }
 
     @WebMethod
-    public void removeProject (@WebParam(name="userId") final String userId,
-                               @WebParam(name = "projectId") final String id){
-        projectService.remove(userId, id);
+    public void removeProject(@WebParam(name = "session") final Session session,
+                              @WebParam(name = "projectId") final String id) {
+        if (sessionService.isSessionExists(session)) projectService.remove(session.getUserId(), id);
     }
 
     @WebMethod
-    public boolean checkProjectId(@WebParam(name="userId") final String userId,
-                                  @WebParam(name = "projectId") final String id){
-        return projectService.checkId(userId, id);
+    public boolean checkProjectId(@WebParam(name = "session") final Session session,
+                                  @WebParam(name = "projectId") final String id) {
+        if (sessionService.isSessionExists(session)) return projectService.checkId(session.getUserId(), id);
+        return false;
     }
 
     @WebMethod
-    public Project getProject(@WebParam(name="userId") final String userId,
-                              @WebParam(name = "projectId") final String id){
-        return projectService.getOne(userId, id);
+    public Project getProject(@WebParam(name = "session") final Session session,
+                              @WebParam(name = "projectId") final String id) {
+        if (sessionService.isSessionExists(session)) return projectService.getOne(session.getUserId(), id);
+        return null;
     }
 
     @WebMethod
-    public void createProject (@WebParam(name="userId") final String userId,
-                               @WebParam(name = "projectName") final String name,
-                               @WebParam(name = "projectDescription") final String description,
-                               @WebParam(name = "projectStartDate") final Date startDate,
-                               @WebParam (name = "projectFinishDate") final Date finishDate){
-        projectService.create(userId, name, description, startDate, finishDate);
+    public void createProject(@WebParam(name = "session") final Session session,
+                              @WebParam(name = "projectName") final String name,
+                              @WebParam(name = "projectDescription") final String description,
+                              @WebParam(name = "projectStartDate") final Date startDate,
+                              @WebParam(name = "projectFinishDate") final Date finishDate) {
+        if (sessionService.isSessionExists(session)) {
+            projectService.create(session.getUserId(), name, description, startDate, finishDate);
+        }
     }
 
     @WebMethod
-    public void editProject (@WebParam(name="userId") final String userId,
-                      @WebParam(name = "projectId") final String id,
-                      @WebParam(name = "projectName") final String name,
-                      @WebParam(name = "projectDescription") final String description,
-                      @WebParam(name = "projectStartDate") final Date startDate,
-                      @WebParam (name = "projectFinishDate") final Date finishDate,
-                      @WebParam(name="projectStatus") final Status status){
-        projectService.edit(userId, id, name, description,startDate, finishDate, status);
+    public void editProject(@WebParam(name = "session") final Session session,
+                            @WebParam(name = "projectId") final String id,
+                            @WebParam(name = "projectName") final String name,
+                            @WebParam(name = "projectDescription") final String description,
+                            @WebParam(name = "projectStartDate") final Date startDate,
+                            @WebParam(name = "projectFinishDate") final Date finishDate,
+                            @WebParam(name = "projectStatus") final Status status) {
+        if (sessionService.isSessionExists(session)) {
+            projectService.edit(session.getUserId(), id, name, description, startDate, finishDate, status);
+        }
     }
 
     @WebMethod
-    public List<Project> getProjectSortedList(@WebParam(name="userId") final String userId,
-                                       @WebParam(name = "sortField") final String sortField,
-                                       @WebParam(name = "isOrderStraight") final boolean isStraight){
-        return projectService.getSortedList(userId, sortField,isStraight);
+    public List<Project> getProjectSortedList(@WebParam(name = "session") final Session session,
+                                              @WebParam(name = "sortField") final String sortField,
+                                              @WebParam(name = "isOrderStraight") final boolean isStraight) {
+        if (sessionService.isSessionExists(session)) {
+            return projectService.getSortedList(session.getUserId(), sortField, isStraight);
+        }
+        return Collections.emptyList();
     }
 
     @WebMethod
-    public List<Project> getProjectListByKeyword(@WebParam(name = "userId") final String userId,
-                                          @WebParam(name = "searchString") String keyword){
-        return projectService.getListByKeyword(userId, keyword);
+    public List<Project> getProjectListByKeyword(@WebParam(name = "session") final Session session,
+                                                 @WebParam(name = "searchString") String keyword) {
+        if (sessionService.isSessionExists(session)) {
+            return projectService.getListByKeyword(session.getUserId(), keyword);
+        }
+        return Collections.emptyList();
     }
 
 

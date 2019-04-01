@@ -1,7 +1,9 @@
 package ru.karelin.tmserver.endpoint;
 
 import ru.karelin.tmserver.api.service.UserService;
+import ru.karelin.tmserver.entity.Session;
 import ru.karelin.tmserver.entity.User;
+import ru.karelin.tmserver.service.SessionService;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -11,9 +13,11 @@ import javax.jws.WebService;
 public class UserEndpoint {
 
     private UserService userService;
+    private SessionService sessionService;
 
-    public UserEndpoint(UserService userService) {
+    public UserEndpoint(UserService userService, SessionService sessionService) {
         this.userService = userService;
+        this.sessionService = sessionService;
     }
 
     @WebMethod public boolean isUserExistsByLogin (@WebParam(name = "login") final String login){
@@ -27,22 +31,29 @@ public class UserEndpoint {
     }
 
     @WebMethod
-    public User getUser(@WebParam(name = "login") final String login,
-                        @WebParam(name = "password") final String password){
-        return userService.getUserByLoginAndPassword(login, password.toCharArray());
+    public User getCurrentUser(@WebParam(name = "session") final Session session){
+        if(sessionService.isSessionExists(session)) {
+            return userService.getUserById(session.getUserId());
+        }
+        return null;
     }
 
     @WebMethod
-    public void editUser (@WebParam(name = "userId") final String userId,
+    public void editUser (@WebParam(name = "session") final Session session,
                           @WebParam (name = "userName") final String userName){
-        userService.editUser(userId, userName);
+        if(sessionService.isSessionExists(session)) {
+            userService.editUser(session.getUserId(), userName);
+        }
     }
 
     @WebMethod
-    public boolean changePassword(@WebParam (name = "userId") final String userId,
+    public boolean changePassword(@WebParam (name = "session") final Session session,
                                   @WebParam (name = "oldPassword") final String password,
                                   @WebParam (name = "newPassword") final String newPassword){
-        return userService.changePassword(userId, password.toCharArray(), newPassword.toCharArray());
+        if(sessionService.isSessionExists(session)) {
+            return userService.changePassword(session.getUserId(), password.toCharArray(), newPassword.toCharArray());
+        }
+        return false;
     }
 
 }

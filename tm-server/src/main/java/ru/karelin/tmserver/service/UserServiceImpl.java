@@ -39,6 +39,11 @@ public final class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserById(final String userId){
+        return userRepository.findOne(userId);
+    }
+
+    @Override
     public void editUser(final String userId, final String userName) {
         @Nullable final User user = userRepository.findOne(userId);
         if (user != null) {
