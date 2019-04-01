@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
+import ru.karelin.tmserver.endpoint.Session;
 import ru.karelin.tmserver.endpoint.Task;
 import ru.karelin.tmserver.endpoint.TaskEndpoint;
 
@@ -36,7 +37,7 @@ public final class TaskListShowCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) {
-        @Nullable final String currentUserId = locator.getCurrentUser().getId();
+        @Nullable final Session session = locator.getCurrentSession();
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
         @NotNull final DateConverter dateConverter = locator.getDateConverter();
         @NotNull final String projectId;
@@ -83,16 +84,16 @@ public final class TaskListShowCommand extends AbstractCommand {
         @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         @NotNull final List<Task> tasks;
         boolean showProjectId = true;
-        if (isFind) tasks = taskEndpoint.getTaskListByKeyword(currentUserId, searchItem);
+        if (isFind) tasks = taskEndpoint.getTaskListByKeyword(session, searchItem);
         else if (projectId.isEmpty()) {
             if (isSorted) {
-                tasks = taskEndpoint.getSortedTaskList(currentUserId, sortField, isStraight);
-            } else tasks = taskEndpoint.getTaskList(currentUserId);
-        } else if (projectEndpoint.checkProjectId(currentUserId, projectId)) {
+                tasks = taskEndpoint.getSortedTaskList(session, sortField, isStraight);
+            } else tasks = taskEndpoint.getTaskList(session);
+        } else if (projectEndpoint.checkProjectId(session, projectId)) {
             if(isSorted){
-                tasks = taskEndpoint.getSortedTaskListByProjectId(currentUserId, projectId, sortField, isStraight);
+                tasks = taskEndpoint.getSortedTaskListByProjectId(session, projectId, sortField, isStraight);
             }
-            else tasks = taskEndpoint.getTaskListByProjectId(currentUserId, projectId);
+            else tasks = taskEndpoint.getTaskListByProjectId(session, projectId);
             showProjectId = false;
         } else {
             System.out.println("Wrong Project ID");

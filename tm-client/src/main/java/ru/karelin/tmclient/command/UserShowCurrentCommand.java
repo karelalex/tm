@@ -3,6 +3,7 @@ package ru.karelin.tmclient.command;
 import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.User;
+import ru.karelin.tmserver.endpoint.UserEndpoint;
 
 
 public final class UserShowCurrentCommand extends AbstractCommand {
@@ -26,7 +27,8 @@ public final class UserShowCurrentCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) {
-        @NotNull final User currentUser = locator.getCurrentUser();
+        @NotNull final UserEndpoint userEndpoint = locator.getUserEndpoint();
+        @NotNull final User currentUser = userEndpoint.getCurrentUser(locator.getCurrentSession());
         System.out.println("Login: "+ currentUser.getLogin());
         System.out.println("Name: " + currentUser.getUserName());
         System.out.println("Role: " + currentUser.getRole());

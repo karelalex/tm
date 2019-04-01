@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
+import ru.karelin.tmserver.endpoint.Session;
 import ru.karelin.tmserver.endpoint.TaskEndpoint;
 
 
@@ -38,7 +39,7 @@ public final class TaskCreateCommand  extends AbstractCommand {
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
         @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         @NotNull final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
-        @Nullable final String currentUserId = locator.getCurrentUser().getId();
+        @Nullable final Session session = locator.getCurrentSession();
         @NotNull final DateConverter dateConverter = locator.getDateConverter();
 
         @NotNull String projectId="";
@@ -80,12 +81,12 @@ public final class TaskCreateCommand  extends AbstractCommand {
             System.out.println("Enter project id where task will be added or leave it empty");
             projectId = ts.readLn();
         }
-        while (!projectId.isEmpty() && !projectEndpoint.checkProjectId(currentUserId, projectId)) {
+        while (!projectId.isEmpty() && !projectEndpoint.checkProjectId(session, projectId)) {
             System.out.println("Wrong project id try again or leave it empty");
             projectId = ts.readLn();
         }
 
-        taskEndpoint.createTask(currentUserId, taskName, taskDescription, dateConverter.convert(taskStartDate), dateConverter.convert(taskFinishDate), projectId);
+        taskEndpoint.createTask(session, taskName, taskDescription, dateConverter.convert(taskStartDate), dateConverter.convert(taskFinishDate), projectId);
 
     }
 }

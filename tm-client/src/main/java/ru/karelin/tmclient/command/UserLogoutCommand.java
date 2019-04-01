@@ -2,6 +2,7 @@ package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmclient.api.util.ServiceLocator;
+import ru.karelin.tmserver.endpoint.SessionEndpoint;
 
 
 public final class UserLogoutCommand extends AbstractCommand {
@@ -25,7 +26,9 @@ public final class UserLogoutCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) {
-        locator.setCurrentUser(null);
+        SessionEndpoint sessionEndpoint = locator.getSessionEndpoint();
+        sessionEndpoint.logout(locator.getCurrentSession());
+        locator.setCurrentSession(null);
         System.out.println("You have successfully logged out");
     }
 }

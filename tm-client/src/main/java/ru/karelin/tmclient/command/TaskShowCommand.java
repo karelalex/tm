@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.util.DateConverter;
+import ru.karelin.tmserver.endpoint.Session;
 import ru.karelin.tmserver.endpoint.Task;
 import ru.karelin.tmserver.endpoint.TaskEndpoint;
 
@@ -40,12 +41,12 @@ public final class TaskShowCommand extends AbstractCommand {
         }
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
         @NotNull final DateConverter dateConverter = locator.getDateConverter();
-        @Nullable final String currentUserId = locator.getCurrentUser().getId();
-        if (!taskEndpoint.checkTaskId(currentUserId, taskId)) {
+        @Nullable final Session session = locator.getCurrentSession();
+        if (!taskEndpoint.checkTaskId(session, taskId)) {
             System.out.println("Wrong ID");
             return;
         }
-        @NotNull final Task task = taskEndpoint.getTask(currentUserId, taskId);
+        @NotNull final Task task = taskEndpoint.getTask(session, taskId);
         System.out.println("Task name: " + task.getName());
         System.out.println("Task description: " + task.getDescription());
         System.out.println("Creation date: " + task.getCreationDate());

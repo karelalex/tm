@@ -32,6 +32,6 @@ public final class ProjectRemoveCommand extends AbstractCommand {
             return;
         }
         @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
-        projectEndpoint.removeProject(locator.getCurrentUser().getId(), projectId);
+        projectEndpoint.removeProject(locator.getCurrentSession(), projectId);
     }
 }

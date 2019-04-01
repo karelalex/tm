@@ -7,9 +7,10 @@ import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.entity.Session;
 import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.exception.WrongSessionException;
+import ru.karelin.tmserver.util.MD5Generator;
 import ru.karelin.tmserver.util.SignatureUtil;
 
-public class SessionService {
+public final class SessionService {
     @NotNull private SessionRepository sessionRepository;
     @NotNull private UserRepository userRepository;
     private static final String SALT = "keramic";
@@ -22,7 +23,7 @@ public class SessionService {
 
     @Nullable
     public Session getNewSession(final String login, final String password) {
-        @Nullable final  User user = userRepository.findOneByLoginAndPassword(login, password);
+        @Nullable final  User user = userRepository.findOneByLoginAndPassword(login, MD5Generator.generate(password));
         if (user!=null){
             Session session = new Session();
             session.setUserId(user.getId());

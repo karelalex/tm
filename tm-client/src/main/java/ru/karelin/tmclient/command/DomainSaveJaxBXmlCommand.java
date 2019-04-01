@@ -28,6 +28,6 @@ public class DomainSaveJaxBXmlCommand extends AbstractCommand {
     @Override
     public void execute(String... params) throws Exception {
         DomainEndpoint domainEndpoint = locator.getDomainEndpoint();
-        domainEndpoint.saveDomainToXmlByJaxB();
+        domainEndpoint.saveDomainToXmlByJaxB(locator.getCurrentSession());
     }
 }

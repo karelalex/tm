@@ -28,6 +28,6 @@ public class DomainSaveSerializationCommand extends AbstractCommand {
     @Override
     public void execute(String... params) throws Exception {
         DomainEndpoint domainEndpoint = locator.getDomainEndpoint();
-        domainEndpoint.saveDomainByJavaSerialization();
+        domainEndpoint.saveDomainByJavaSerialization(locator.getCurrentSession());
     }
 }

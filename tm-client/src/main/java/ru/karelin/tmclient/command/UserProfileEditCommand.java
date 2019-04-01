@@ -28,6 +28,6 @@ public final class UserProfileEditCommand extends AbstractCommand{
         System.out.println("Enter user name or just press enter if you do not want to change it");
         @NotNull final String userName = ts.readLn();
         @NotNull final UserEndpoint userEndpoint = locator.getUserEndpoint();
-        userEndpoint.editUser(locator.getCurrentUser().getId(), userName);
+        userEndpoint.editUser(locator.getCurrentSession(), userName);
     }
 }

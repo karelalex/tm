@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
+import ru.karelin.tmserver.endpoint.Session;
 import ru.karelin.tmserver.endpoint.Status;
 
 
@@ -40,10 +41,10 @@ public final class ProjectEditCommand extends AbstractCommand {
             return;
         }
         final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
-        final String currentUserId = locator.getCurrentUser().getId();
+        final Session currentSession = locator.getCurrentSession();
         final DateFormat dateFormat = locator.getDateFormat();
         final DateConverter dateConverter = locator.getDateConverter();
-        if (!projectEndpoint.checkProjectId(currentUserId, projectId)) {
+        if (!projectEndpoint.checkProjectId(currentSession, projectId)) {
             System.out.println("Wrong ID " + projectId);
             return;
         }
@@ -107,7 +108,7 @@ public final class ProjectEditCommand extends AbstractCommand {
                 }
             }
         }
-        projectEndpoint.editProject(currentUserId,
+        projectEndpoint.editProject(currentSession,
                 projectId,
                 projectName,
                 projectDescription,

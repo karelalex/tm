@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
+import ru.karelin.tmserver.endpoint.Session;
 import ru.karelin.tmserver.endpoint.Status;
 import ru.karelin.tmserver.endpoint.TaskEndpoint;
 
@@ -47,9 +48,9 @@ public final class TaskEditCommand extends AbstractCommand {
         @NotNull final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
         @NotNull final DateConverter dateConverter = locator.getDateConverter();
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
-        @Nullable final String currentUserId = locator.getCurrentUser().getId();
+        @Nullable final Session session = locator.getCurrentSession();
         @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
-        if (!taskEndpoint.checkTaskId(currentUserId, taskId)) {
+        if (!taskEndpoint.checkTaskId(session, taskId)) {
             System.out.println("Wrong ID!");
             return;
         }
@@ -110,12 +111,12 @@ public final class TaskEditCommand extends AbstractCommand {
         }
         System.out.println("Enter new project id for task or just press enter if you do not want to change it");
         @NotNull String projectId = ts.readLn();
-        while (!projectId.isEmpty() && !projectEndpoint.checkProjectId(currentUserId, projectId)) {
+        while (!projectId.isEmpty() && !projectEndpoint.checkProjectId(session, projectId)) {
             System.out.println("Wrong project id try again or leave it empty");
             projectId = ts.readLn();
         }
 
-        taskEndpoint.editTask(currentUserId, taskId, taskName, taskDescription, dateConverter.convert(taskStartDate), dateConverter.convert(taskFinishDate), projectId, taskStatus);
+        taskEndpoint.editTask(session, taskId, taskName, taskDescription, dateConverter.convert(taskStartDate), dateConverter.convert(taskFinishDate), projectId, taskStatus);
 
     }
 }

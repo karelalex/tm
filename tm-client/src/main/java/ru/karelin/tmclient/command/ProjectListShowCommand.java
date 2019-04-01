@@ -5,6 +5,7 @@ import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.Project;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
+import ru.karelin.tmserver.endpoint.Session;
 
 import java.text.DateFormat;
 import java.util.List;
@@ -34,7 +35,7 @@ public final class ProjectListShowCommand extends AbstractCommand {
         @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
         @NotNull final DateConverter dateConverter = locator.getDateConverter();
-        @NotNull final String currentUserId = locator.getCurrentUser().getId();
+        @NotNull final Session session = locator.getCurrentSession();
         boolean isSorted = false;
         @NotNull String sortField = "";
         boolean isStraight = true;
@@ -69,9 +70,9 @@ public final class ProjectListShowCommand extends AbstractCommand {
         }
 
         @NotNull final List<Project> projects;
-        if (isFind) projects = projectEndpoint.getProjectListByKeyword(currentUserId, searchItem);
-        else if (isSorted) projects= projectEndpoint.getProjectSortedList(locator.getCurrentUser().getId(), sortField, true);
-        else projects = projectEndpoint.getProjectList(locator.getCurrentUser().getId());
+        if (isFind) projects = projectEndpoint.getProjectListByKeyword(session, searchItem);
+        else if (isSorted) projects= projectEndpoint.getProjectSortedList(session, sortField, true);
+        else projects = projectEndpoint.getProjectList(session);
         for (Project p :projects) {
             System.out.println("Project ID: " + p.getId());
             System.out.println("Project name: " + p.getName() );

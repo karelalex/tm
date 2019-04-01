@@ -9,7 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 public class MD5Generator {
-    public String generate(String input){
+    public static String generate(String input){
         MessageDigest md5 = null;
         try {
             md5 = MessageDigest.getInstance("MD5");
@@ -22,7 +22,7 @@ public class MD5Generator {
         }
         return String.format("%032x", new BigInteger(1, byteOut));
     }
-    public String generate(char[] input){
+    public static String generate(char[] input){
         MessageDigest md5 = null;
         try {
             md5 = MessageDigest.getInstance("MD5");

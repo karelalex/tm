@@ -28,6 +28,6 @@ public class DomainSaveFasterJsonCommand extends AbstractCommand {
     @Override
     public void execute(String... params) throws Exception {
         DomainEndpoint domainEndpoint = locator.getDomainEndpoint();
-        domainEndpoint.saveDomainToJsonByFasterXml();
+        domainEndpoint.saveDomainToJsonByFasterXml(locator.getCurrentSession());
     }
 }

@@ -64,6 +64,6 @@ public final class ProjectCreateCommand extends AbstractCommand {
                 e.printStackTrace();
             }
         }
-        projectEndpoint.createProject(locator.getCurrentUser().getId(), projectName, projectDescription, dateConverter.convert(projectStartDate), dateConverter.convert(projectFinishDate));
+        projectEndpoint.createProject(locator.getCurrentSession(), projectName, projectDescription, dateConverter.convert(projectStartDate), dateConverter.convert(projectFinishDate));
     }
 }

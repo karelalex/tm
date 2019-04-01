@@ -27,6 +27,6 @@ public class DomainGetJaxBXmlCommand extends AbstractCommand {
     @Override
     public void execute(String... params) throws Exception {
         DomainEndpoint domainEndpoint = locator.getDomainEndpoint();
-        domainEndpoint.restoreDomainFromXmlByJaxB();
+        domainEndpoint.restoreDomainFromXmlByJaxB(locator.getCurrentSession());
     }
 }
