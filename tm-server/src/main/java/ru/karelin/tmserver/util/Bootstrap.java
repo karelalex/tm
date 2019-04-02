@@ -25,7 +25,6 @@ import java.text.SimpleDateFormat;
 
 public final class Bootstrap implements ServiceLocator {
 
-    private static final String QUIT = "exit";
     private static final String USER_ENDPOINT_URL = "http://localhost:8080/UserEndpoint?wsdl";
     private static final String PROJECT_ENDPOINT_URL = "http://localhost:8080/ProjectEndpoint?wsdl";
     private static final String TASK_ENDPOINT_URL = "http://localhost:8080/TaskEndpoint?wsdl";
@@ -106,8 +105,8 @@ public final class Bootstrap implements ServiceLocator {
 
 
         // create two users block
-        userService.registerNewUser("sk", "pp".toCharArray(), "alex", RoleType.ORDINARY_USER);
-        userService.registerNewUser("bb", "ee".toCharArray(), "boris", RoleType.ADMIN);
+        //userService.registerNewUser("sk", "pp".toCharArray(), "alex", RoleType.ORDINARY_USER);
+        //userService.registerNewUser("bb", "ee".toCharArray(), "boris", RoleType.ADMIN);
 
         // end of create two users block
 

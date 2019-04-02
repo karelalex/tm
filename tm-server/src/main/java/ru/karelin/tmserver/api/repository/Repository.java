@@ -10,5 +10,6 @@ public interface  Repository<T> {
     void merge(T t);
     boolean remove(T t);
     void removeAll(Collection<T> tCollection);
+    void removeAll();
 
 }

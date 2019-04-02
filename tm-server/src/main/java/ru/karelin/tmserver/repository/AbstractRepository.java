@@ -47,4 +47,9 @@ public class AbstractRepository<T extends AbstractEntity> implements Repository<
             items.remove(t.getId());
         }
     }
+
+    @Override
+    public void removeAll() {
+        items.clear();
+    }
 }
