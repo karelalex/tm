@@ -50,7 +50,7 @@ public final class ProjectShowCommand extends AbstractCommand{
         if (project == null) System.out.println("No projects with");
         System.out.println("Project name: " + project.getName() );
         System.out.println("Project description: " + project.getDescription());
-        System.out.println("Creation date: " + project.getCreationDate());
+        System.out.println("Creation date: " + dateFormat.format(dateConverter.convert(project.getCreationDate())));
         System.out.println("Start Date: " + dateFormat.format(dateConverter.convert(project.getStartDate())));
         System.out.println("End Date: " + dateFormat.format(dateConverter.convert(project.getFinishDate())));
         System.out.println("Status: " + project.getStatus().toString());

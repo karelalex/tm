@@ -8,12 +8,10 @@ import ru.karelin.tmserver.api.repository.TaskRepository;
 import ru.karelin.tmserver.entity.Project;
 import ru.karelin.tmserver.enumeration.Status;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class ProjectRepositoryJdbc implements ProjectRepository {
@@ -37,8 +35,8 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
     @SneakyThrows
     public void removeAll() {
         @NotNull final String query = "DELETE from `" + TABLE_NAME + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        statement.executeUpdate();
+        @NotNull final Statement statement = connection.createStatement();
+        statement.executeUpdate(query);
         statement.close();
     }
 
@@ -53,88 +51,97 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
         statement.setString(2, "%" + key + "%");
         statement.setString(3, "%" + key + "%");
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
     @SneakyThrows
     public List<Project> findAllOrderByStartDate() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + START_DATE_FIELD + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
     @SneakyThrows
     public List<Project> findAllOrderByStartDateDesc() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + START_DATE_FIELD + "` DESC";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
     @SneakyThrows
     public List<Project> findAllOrderByStatus() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + STATUS_FIELD + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
     @SneakyThrows
     public List<Project> findAllOrderByStatusDesc() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + STATUS_FIELD + "` DESC";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
     @SneakyThrows
     public List<Project> findAllOrderByFinishDate() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + FINISH_DATE_FIELD + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
     @SneakyThrows
     public List<Project> findAllOrderByFinishDateDesc() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + FINISH_DATE_FIELD + "` DESC";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
     @SneakyThrows
     public List<Project> findAllOrderByCreationDate() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + CREATION_DATE_FIELD + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
     @SneakyThrows
     public List<Project> findAllOrderByCreationDateDesc() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + CREATION_DATE_FIELD + "` DESC";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
@@ -144,8 +151,9 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
@@ -155,8 +163,9 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
@@ -166,8 +175,9 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
@@ -177,8 +187,9 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
@@ -188,8 +199,9 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
@@ -199,8 +211,9 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
@@ -210,8 +223,9 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
@@ -221,8 +235,9 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
@@ -232,8 +247,9 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
@@ -244,11 +260,12 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
         statement.setString(1, userId);
         statement.setString(2, id);
         @NotNull final ResultSet resultSet = statement.executeQuery();
-        statement.close();
+
         @Nullable Project task = null;
         if (resultSet.next()) {
             task = fetch(resultSet);
         }
+        statement.close();
         return task;
     }
 
@@ -256,10 +273,11 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
     @SneakyThrows
     public List<Project> findAll() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Project> projects = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return projects;
     }
 
     @Override
@@ -279,8 +297,8 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
 
     @Override
     @SneakyThrows
-    public void persist(Project task) {
-        if (task == null) return;
+    public void persist(Project project) {
+        if (project == null) return;
         @NotNull final String query = "INSERT INTO `" + TABLE_NAME + "` " +
                 "(`" + ID_FIELD + "`, `" +
                 NAME_FIELD + "`, `" +
@@ -291,14 +309,14 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
                 STATUS_FIELD + "`, `" +
                 USER_ID_FIELD + "`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, task.getId());
-        statement.setString(2, task.getName());
-        statement.setString(3, task.getDescription());
-        statement.setDate(4, new Date(task.getStartDate().getTime()));
-        statement.setDate(5, new Date(task.getFinishDate().getTime()));
-        statement.setDate(6, new Date(task.getCreationDate().getTime()));
-        statement.setString(7, task.getStatus().name());
-        statement.setString(8, task.getUserId());
+        statement.setString(1, project.getId());
+        statement.setString(2, project.getName());
+        statement.setString(3, project.getDescription());
+        statement.setDate(4, new Date(project.getStartDate().getTime()));
+        statement.setDate(5, new Date(project.getFinishDate().getTime()));
+        statement.setDate(6, new Date(project.getCreationDate().getTime()));
+        statement.setString(7, project.getStatus().name());
+        statement.setString(8, project.getUserId());
         statement.executeUpdate();
         statement.close();
 
@@ -306,10 +324,10 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
 
     @Override
     @SneakyThrows
-    public void merge(Project task) {
-        if (task == null) return;
-        if (findOne(task.getId()) == null) {
-            persist(task);
+    public void merge(Project project) {
+        if (project == null) return;
+        if (findOne(project.getId()) == null) {
+            persist(project);
         }
         else {
             @NotNull final String query = "UPDATE `" + TABLE_NAME + "` SET `" +
@@ -321,14 +339,14 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
                     STATUS_FIELD + "` = ?, `" +
                     USER_ID_FIELD + "` = ? WHERE `" + ID_FIELD + "` = ? `";
             @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(8, task.getId());
-            statement.setString(1, task.getName());
-            statement.setString(2, task.getDescription());
-            statement.setDate(3, new Date(task.getStartDate().getTime()));
-            statement.setDate(4, new Date(task.getFinishDate().getTime()));
-            statement.setDate(5, new Date(task.getCreationDate().getTime()));
-            statement.setString(6, task.getStatus().name());
-            statement.setString(7, task.getUserId());
+            statement.setString(8, project.getId());
+            statement.setString(1, project.getName());
+            statement.setString(2, project.getDescription());
+            statement.setDate(3, new Date(project.getStartDate().getTime()));
+            statement.setDate(4, new Date(project.getFinishDate().getTime()));
+            statement.setDate(5, new Date(project.getCreationDate().getTime()));
+            statement.setString(6, project.getStatus().name());
+            statement.setString(7, project.getUserId());
             statement.executeUpdate();
             statement.close(); 
         }
@@ -336,10 +354,10 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
 
     @Override
     @SneakyThrows
-    public boolean remove(Project task) {
+    public boolean remove(Project project) {
         @NotNull final String query = "DELETE FROM `" + TABLE_NAME + "` WHERE `" + ID_FIELD + "` = ?";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, task.getId());
+        statement.setString(1, project.getId());
         final int i = statement.executeUpdate();
         statement.close();
         return i > 0;
@@ -347,16 +365,15 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
 
     @Override
     @SneakyThrows
-    public void removeAll(Collection<Project> tasks) {
-        @NotNull final String query = "DELETE FROM `" + TABLE_NAME + "` WHERE `" + ID_FIELD + "` IN (?)";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        List<String> idList = new ArrayList<>();
-        for (Project task : tasks) {
-            idList.add(task.getId());
+    public void removeAll(Collection<Project> projects) {
+        StringBuilder insertions = new StringBuilder();
+        for (Project p : projects) {
+            insertions.append("'").append(p.getId()).append("'").append(", ");
         }
-        String[] ids = idList.toArray(new String[]{});
-        statement.setArray(1, connection.createArrayOf("CHAR", ids));
-        final int i = statement.executeUpdate();
+        @NotNull final String query = "DELETE FROM `" + TABLE_NAME + "` WHERE `" + ID_FIELD + "` IN (" + insertions.substring(0, insertions.length()-2) + ")";
+        System.out.println(query);
+        @NotNull final Statement statement = connection.createStatement();
+        final int i = statement.executeUpdate(query);
         statement.close();
     }
 
@@ -377,6 +394,7 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
 
     @SneakyThrows
     private List<Project> formList(ResultSet resultSet) {
+        if (resultSet==null) return Collections.emptyList();
         @NotNull final List<Project> projects = new ArrayList<>();
         while (resultSet.next()) {
             Project project = fetch(resultSet);

@@ -77,7 +77,7 @@ public final class ProjectListShowCommand extends AbstractCommand {
         for (Project p :projects) {
             System.out.println("Project ID: " + p.getId());
             System.out.println("Project name: " + p.getName() );
-            System.out.println("Creation date: " + p.getCreationDate());
+            System.out.println("Creation date: " + dateFormat.format(dateConverter.convert(p.getCreationDate())));
             System.out.println("Start Date: " + dateFormat.format(dateConverter.convert(p.getStartDate())));
             System.out.println("End Date: " + dateFormat.format(dateConverter.convert(p.getFinishDate())));
             System.out.println("Status: " + p.getStatus().toString());

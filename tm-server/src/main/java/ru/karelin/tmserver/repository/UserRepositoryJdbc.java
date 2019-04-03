@@ -10,6 +10,7 @@ import ru.karelin.tmserver.enumeration.RoleType;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -64,8 +65,8 @@ public class UserRepositoryJdbc implements UserRepository {
     @SneakyThrows
     public List<User> findAll() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
         @NotNull final List<User> users = new ArrayList<>();
         while (resultSet.next()) {
             User user = fetch(resultSet);
@@ -145,15 +146,14 @@ public class UserRepositoryJdbc implements UserRepository {
     @Override
     @SneakyThrows
     public void removeAll(Collection<User> users) {
-        @NotNull final String query = "DELETE from `" + TABLE_NAME + "` WHERE `" + ID_FIELD + "` IN (?)";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        List<String> idList = new ArrayList<>();
-        for (User u: users) {
-            idList.add(u.getId());
+        StringBuilder insertions = new StringBuilder();
+        for (User u : users) {
+            insertions.append("'").append(u.getId()).append("'").append(", ");
         }
-        String[] ids = idList.toArray(new String[]{});
-        statement.setArray(1, connection.createArrayOf("CHAR", ids));
-        final int i = statement.executeUpdate();
+        @NotNull final String query = "DELETE FROM `" + TABLE_NAME + "` WHERE `" + ID_FIELD + "` IN (" + insertions.substring(0, insertions.length()-2) + ")";
+        System.out.println(query);
+        @NotNull final Statement statement = connection.createStatement();
+        final int i = statement.executeUpdate(query);
         statement.close();
     }
 
@@ -161,8 +161,8 @@ public class UserRepositoryJdbc implements UserRepository {
     @SneakyThrows
     public void removeAll() {
         @NotNull final String query = "DELETE from `" + TABLE_NAME + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        statement.executeUpdate();
+        @NotNull final Statement statement = connection.createStatement();
+        statement.executeUpdate(query);
         statement.close();
     }
 

@@ -7,12 +7,10 @@ import ru.karelin.tmserver.api.repository.TaskRepository;
 import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.enumeration.Status;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class TaskRepositoryJdbc implements TaskRepository {
@@ -37,8 +35,8 @@ public class TaskRepositoryJdbc implements TaskRepository {
     @SneakyThrows
     public void removeAll() {
         @NotNull final String query = "DELETE from `" + TABLE_NAME + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        statement.executeUpdate();
+        @NotNull final Statement statement = connection.createStatement();
+        statement.executeUpdate(query);
         statement.close();
     }
 
@@ -49,8 +47,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, projectId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -61,8 +60,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         statement.setString(1, projectId);
         statement.setString(2, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -73,8 +73,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         statement.setString(1, projectId);
         statement.setString(2, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -85,8 +86,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         statement.setString(1, projectId);
         statement.setString(2, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -97,8 +99,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         statement.setString(1, projectId);
         statement.setString(2, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -109,8 +112,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         statement.setString(1, projectId);
         statement.setString(2, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -121,8 +125,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         statement.setString(1, projectId);
         statement.setString(2, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -133,8 +138,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         statement.setString(1, projectId);
         statement.setString(2, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -145,8 +151,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         statement.setString(1, projectId);
         statement.setString(2, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -157,8 +164,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         statement.setString(1, projectId);
         statement.setString(2, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -170,88 +178,97 @@ public class TaskRepositoryJdbc implements TaskRepository {
         statement.setString(2, "%" + key + "%");
         statement.setString(3, "%" + key + "%");
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
     @SneakyThrows
     public List<Task> findAllOrderByStartDate() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + START_DATE_FIELD + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
     @SneakyThrows
     public List<Task> findAllOrderByStartDateDesc() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + START_DATE_FIELD + "` DESC";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
     @SneakyThrows
     public List<Task> findAllOrderByStatus() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + STATUS_FIELD + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
     @SneakyThrows
     public List<Task> findAllOrderByStatusDesc() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + STATUS_FIELD + "` DESC";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
     @SneakyThrows
     public List<Task> findAllOrderByFinishDate() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + FINISH_DATE_FIELD + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
     @SneakyThrows
     public List<Task> findAllOrderByFinishDateDesc() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + FINISH_DATE_FIELD + "` DESC";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
     @SneakyThrows
     public List<Task> findAllOrderByCreationDate() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + CREATION_DATE_FIELD + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
     @SneakyThrows
     public List<Task> findAllOrderByCreationDateDesc() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + CREATION_DATE_FIELD + "` DESC";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -261,8 +278,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -272,8 +290,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -283,8 +302,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -294,8 +314,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -305,8 +326,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -316,8 +338,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+        final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -327,8 +350,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+         final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -338,8 +362,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+         final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -349,8 +374,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
+         final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -373,10 +399,11 @@ public class TaskRepositoryJdbc implements TaskRepository {
     @SneakyThrows
     public List<Task> findAll() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
+         final List<Task> tasks = formList(resultSet);
         statement.close();
-        return formList(resultSet);
+        return tasks;
     }
 
     @Override
@@ -469,15 +496,14 @@ public class TaskRepositoryJdbc implements TaskRepository {
     @Override
     @SneakyThrows
     public void removeAll(Collection<Task> tasks) {
-        @NotNull final String query = "DELETE FROM `" + TABLE_NAME + "` WHERE `" + ID_FIELD + "` IN (?)";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        List<String> idList = new ArrayList<>();
+        StringBuilder insertions = new StringBuilder();
         for (Task task : tasks) {
-            idList.add(task.getId());
+            insertions.append("'").append(task.getId()).append("'").append(", ");
         }
-        String[] ids = idList.toArray(new String[]{});
-        statement.setArray(1, connection.createArrayOf("CHAR", ids));
-        final int i = statement.executeUpdate();
+        @NotNull final String query = "DELETE FROM `" + TABLE_NAME + "` WHERE `" + ID_FIELD + "` IN (" + insertions.substring(0, insertions.length()-2) + ")";
+        System.out.println(query);
+        @NotNull final Statement statement = connection.createStatement();
+        final int i = statement.executeUpdate(query);
         statement.close();
     }
 
@@ -499,6 +525,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @SneakyThrows
     private List<Task> formList(ResultSet resultSet) {
+        if (resultSet==null) return Collections.emptyList();
         @NotNull final List<Task> tasks = new ArrayList<>();
         while (resultSet.next()) {
             Task task = fetch(resultSet);

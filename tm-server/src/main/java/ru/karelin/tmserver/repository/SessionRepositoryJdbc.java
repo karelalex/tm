@@ -6,10 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.api.repository.SessionRepository;
 import ru.karelin.tmserver.entity.Session;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,8 +28,8 @@ public class SessionRepositoryJdbc implements SessionRepository {
     @SneakyThrows
     public List<Session> findAll() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final Statement statement = connection.createStatement();
+        @NotNull final ResultSet resultSet = statement.executeQuery(query);
         @NotNull final List<Session> users = new ArrayList<>();
         while (resultSet.next()) {
             Session user = fetch(resultSet);
@@ -111,15 +108,14 @@ public class SessionRepositoryJdbc implements SessionRepository {
     @Override
     @SneakyThrows
     public void removeAll(Collection<Session> sessions) {
-        @NotNull final String query = "DELETE from `" + TABLE_NAME + "` WHERE `" + ID_FIELD + "` IN (?)";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        List<String> idList = new ArrayList<>();
-        for (Session u: sessions) {
-            idList.add(u.getId());
+        StringBuilder insertions = new StringBuilder();
+        for (Session s : sessions) {
+            insertions.append("'").append(s.getId()).append("'").append(", ");
         }
-        String[] ids = idList.toArray(new String[]{});
-        statement.setArray(1, connection.createArrayOf("CHAR", ids));
-        final int i = statement.executeUpdate();
+        @NotNull final String query = "DELETE FROM `" + TABLE_NAME + "` WHERE `" + ID_FIELD + "` IN (" + insertions.substring(0, insertions.length()-2) + ")";
+        System.out.println(query);
+        @NotNull final Statement statement = connection.createStatement();
+        final int i = statement.executeUpdate(query);
         statement.close();
     }
 
@@ -127,8 +123,8 @@ public class SessionRepositoryJdbc implements SessionRepository {
     @SneakyThrows
     public void removeAll() {
         @NotNull final String query = "DELETE from `" + TABLE_NAME + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        statement.executeUpdate();
+        @NotNull final Statement statement = connection.createStatement();
+        statement.executeUpdate(query);
         statement.close();
     }
 
