@@ -2,12 +2,14 @@ package ru.karelin.tmserver.repository;
 
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.api.repository.SessionRepository;
 import ru.karelin.tmserver.entity.Session;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,7 +20,7 @@ public class SessionRepositoryJdbc implements SessionRepository {
 
     private static final String ID_FIELD = "id";
     private static final String SIGNATURE_FIELD = "signature";
-    private static final String CREATION_DATE_FIELD = "creation_date";
+    private static final String CREATION_TIME_FIELD = "creation_time";
     private static final String USER_ID_FIELD = "user_id";
 
     public SessionRepositoryJdbc(Connection connection) {
@@ -41,18 +43,58 @@ public class SessionRepositoryJdbc implements SessionRepository {
     }
 
     @Override
+    @SneakyThrows
     public Session findOne(String id) {
-        return null;
+        @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + ID_FIELD + "` = ?";
+        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, id);
+        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @Nullable Session session = null;
+        if (resultSet.next()) {
+            session = fetch(resultSet);
+        }
+        statement.close();
+        return session;
     }
 
     @Override
+    @SneakyThrows
     public void persist(Session session) {
+        if (session==null) return;
+        @NotNull final String query = "INSERT INTO `" + TABLE_NAME + "` " +
+                "(`" + ID_FIELD + "`, `" + SIGNATURE_FIELD + "`, `" + CREATION_TIME_FIELD + "`, `" + USER_ID_FIELD + "`)" +
+                "VALUES (?, ?, ?, ?)";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, session.getId());
+        statement.setString(2, session.getSignature());
+        statement.setTimestamp(3, new Timestamp(session.getCreationDate().getTime()));
+        statement.setString(4, session.getUserId());
+        statement.executeUpdate();
+        statement.close();
 
     }
 
     @Override
+    @SneakyThrows
     public void merge(Session session) {
-
+        if(session==null) return;
+        if(findOne(session.getId())==null){
+            persist(session);
+        }
+        else {
+            @NotNull final String query = "UPDATE `" + TABLE_NAME + "` SET `" +
+                    SIGNATURE_FIELD + "` = ?, `" +
+                    CREATION_TIME_FIELD + "` = ?, `" +
+                    USER_ID_FIELD + "` = ? " +
+                    "WHERE `" + ID_FIELD + "` = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(4, session.getId());
+            statement.setString(1, session.getSignature());
+            statement.setTimestamp(2, new Timestamp(session.getCreationDate().getTime()));
+            statement.setString(3, session.getUserId());
+            statement.executeUpdate();
+            statement.close();
+        }
     }
 
     @Override
@@ -97,7 +139,7 @@ public class SessionRepositoryJdbc implements SessionRepository {
         session.setId(resultSet.getString(ID_FIELD));
         session.setUserId(resultSet.getString(USER_ID_FIELD));
         session.setSignature(resultSet.getString(SIGNATURE_FIELD));
-        session.setCreationDate(resultSet.getDate(CREATION_DATE_FIELD));
+        session.setCreationDate(resultSet.getTimestamp(CREATION_TIME_FIELD));
         return session;
     }
 }
