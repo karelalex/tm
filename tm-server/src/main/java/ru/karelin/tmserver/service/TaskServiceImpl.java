@@ -14,9 +14,11 @@ import java.util.List;
 
 
 public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> implements TaskService {
-    private final static String SERIALIZE_FILE_NAME = "tasks.ser";
-    private final static String JAX_XLM_FILE_NAME = "tasksJax.xml";
-    private static final String JAX_JSON_FILE_NAME = "tasksJax.json";
+
+    private static final String CREATION_DATE_SORT_STRING = "cre";
+    private static final String FINISH_DATE_SORT_STRING = "fin";
+    private static final String START_DATE_SORT_STRING = "start";
+    private static final String STATUS_SORT_STRING = "stat";
 
     public TaskServiceImpl(final TaskRepository taskRepository) {
         super(taskRepository);
@@ -67,12 +69,74 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
 
     @Override
     public List<Task> getSortedListByProjectId(String userId, String projectId, String sortField, boolean isStraight) {
-        return Collections.emptyList(); // todo ((TaskRepository)entityRepository).findAllByProjectIdAndUserId(projectId, userId, sortField, isStraight);
+        switch (sortField){
+            case START_DATE_SORT_STRING:
+                if(isStraight) {
+                    return ((TaskRepository)entityRepository).findAllByUserIdAndProjectIdOrderByStartDate(userId, projectId);
+                }
+                else {
+                    return ((TaskRepository)entityRepository).findAllByUserIdAndProjectIdOrderByStartDateDesc(userId, projectId);
+                }
+            case FINISH_DATE_SORT_STRING:
+                if (isStraight){
+                    return ((TaskRepository)entityRepository).findAllByUserIdAndProjectIdOrderByFinishDate(userId, projectId);
+                }
+                else {
+                    return ((TaskRepository)entityRepository).findAllByUserIdAndProjectIdOrderByFinishDateDesc(userId,projectId);
+                }
+            case CREATION_DATE_SORT_STRING:
+                if (isStraight) {
+                    return ((TaskRepository)entityRepository).findAllByUserIdAndProjectIdOrderByCreationDate(userId,projectId);
+                }
+                else {
+                    return ((TaskRepository)entityRepository).findAllByUserIdAndProjectIdOrderByCreationDateDesc(userId,projectId);
+                }
+            case STATUS_SORT_STRING:
+                if(isStraight) {
+                    return ((TaskRepository)entityRepository).findAllByUserIdAndProjectIdOrderByStatus(userId, projectId);
+                }
+                else {
+                    return ((TaskRepository)entityRepository).findAllByUserIdAndProjectIdOrderByStatusDesc(userId, projectId);
+                }
+            default:
+                return getList(userId);
+        }
     }
 
     @Override
     public List<Task> getSortedList(String userId, String sortField, boolean isStraight) {
-        return Collections.emptyList(); // todo ((TaskRepository)entityRepository).findAllByUserId(userId, sortField, isStraight);
+        switch (sortField){
+            case START_DATE_SORT_STRING:
+                if(isStraight) {
+                    return entityRepository.findAllByUserIdOrderByStartDate(userId);
+                }
+                else {
+                    return entityRepository.findAllByUserIdOrderByStartDateDesc(userId);
+                }
+            case FINISH_DATE_SORT_STRING:
+                if (isStraight){
+                    return entityRepository.findAllByUserIdOrderByFinishDate(userId);
+                }
+                else {
+                    return entityRepository.findAllByUserIdOrderByFinishDateDesc(userId);
+                }
+            case CREATION_DATE_SORT_STRING:
+                if (isStraight) {
+                    return entityRepository.findAllByUserIdOrderByCreationDate(userId);
+                }
+                else {
+                    return entityRepository.findAllByUserIdOrderByCreationDateDesc(userId);
+                }
+            case STATUS_SORT_STRING:
+                if(isStraight) {
+                    return entityRepository.findAllByUserIdOrderByStatus(userId);
+                }
+                else {
+                    return entityRepository.findAllByUserIdOrderByStatusDesc(userId);
+                }
+            default:
+                return getList(userId);
+        }
     }
 
     @Override

@@ -466,7 +466,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
                     CREATION_DATE_FIELD + "` = ?, `" +
                     STATUS_FIELD + "` = ?, `" +
                     USER_ID_FIELD + "` = ?, `" +
-                    PROJECT_ID_FIELD + "` = ? WHERE `" + ID_FIELD + "` = ? `";
+                    PROJECT_ID_FIELD + "` = ? WHERE `" + ID_FIELD + "` = ? ";
             @NotNull final PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(9, task.getId());
             statement.setString(1, task.getName());

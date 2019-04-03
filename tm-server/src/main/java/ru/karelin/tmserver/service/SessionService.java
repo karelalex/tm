@@ -10,6 +10,8 @@ import ru.karelin.tmserver.exception.WrongSessionException;
 import ru.karelin.tmserver.util.MD5Generator;
 import ru.karelin.tmserver.util.SignatureUtil;
 
+import java.util.Date;
+
 public final class SessionService {
     @NotNull private SessionRepository sessionRepository;
     @NotNull private UserRepository userRepository;
@@ -34,6 +36,11 @@ public final class SessionService {
         return null;
     }
 
+    public void removeOldSessions(int minutes){
+        Date date = new Date();
+        date.setTime(date.getTime() - (minutes * 60L * 1000L));
+        sessionRepository.removeOlder(date);
+    }
     public void removeSession(@Nullable String sessionId) throws WrongSessionException {
         final Session session = sessionRepository.findOne(sessionId);
         if(session!=null) {

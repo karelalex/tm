@@ -89,7 +89,7 @@ public final class Bootstrap implements ServiceLocator {
         domainService = new DomainServiceImpl(userRepository, taskRepository, projectRepository);
         @NotNull SessionRepository sessionRepository = new SessionRepositoryJdbc(connection);
         sessionService = new SessionService(sessionRepository, userRepository);
-
+        sessionService.removeOldSessions(15); // clears old sessions from DB
 
         Endpoint.publish(USER_ENDPOINT_URL, new UserEndpoint(userService,sessionService));
         System.out.println("Endpoint with url " + USER_ENDPOINT_URL + " started.");

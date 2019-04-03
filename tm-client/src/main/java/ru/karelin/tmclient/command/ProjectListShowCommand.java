@@ -72,7 +72,7 @@ public final class ProjectListShowCommand extends AbstractCommand {
 
         @NotNull final List<Project> projects;
         if (isFind) projects = projectEndpoint.getProjectListByKeyword(session, searchItem);
-        else if (isSorted) projects= projectEndpoint.getProjectSortedList(session, sortField, true);
+        else if (isSorted) projects= projectEndpoint.getProjectSortedList(session, sortField, isStraight);
         else projects = projectEndpoint.getProjectList(session);
         for (Project p :projects) {
             System.out.println("Project ID: " + p.getId());

@@ -9,6 +9,7 @@ import ru.karelin.tmserver.entity.Session;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 public class SessionRepositoryJdbc implements SessionRepository {
@@ -125,6 +126,16 @@ public class SessionRepositoryJdbc implements SessionRepository {
         @NotNull final String query = "DELETE from `" + TABLE_NAME + "`";
         @NotNull final Statement statement = connection.createStatement();
         statement.executeUpdate(query);
+        statement.close();
+    }
+
+    @Override
+    @SneakyThrows
+    public void removeOlder(Date date) {
+        @NotNull final String qurey = "DELETE from `" + TABLE_NAME +"` WHERE `" + CREATION_TIME_FIELD + "` < ? ";
+        @NotNull final PreparedStatement statement = connection.prepareStatement(qurey);
+        statement.setTimestamp(1, new Timestamp(date.getTime()));
+        statement.executeUpdate();
         statement.close();
     }
 

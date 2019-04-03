@@ -19,6 +19,11 @@ public final class ProjectServiceImpl extends AbstractSecuredEntityService<Proje
 
     final private TaskRepository taskRepository;
 
+    private static final String CREATION_DATE_SORT_STRING = "cre";
+    private static final String FINISH_DATE_SORT_STRING = "fin";
+    private static final String START_DATE_SORT_STRING = "start";
+    private static final String STATUS_SORT_STRING = "stat";
+
     public ProjectServiceImpl(@NotNull final ProjectRepository projectRepository, @NotNull final TaskRepository taskRepository) {
         super(projectRepository);
         this.taskRepository = taskRepository;
@@ -52,7 +57,39 @@ public final class ProjectServiceImpl extends AbstractSecuredEntityService<Proje
 
     @Override
     public List<Project> getSortedList(String userId, String sortField, boolean isStraight) {
-        return Collections.emptyList(); // todo entityRepository.findAllByUserId(userId, sortField, isStraight);
+        switch (sortField){
+            case START_DATE_SORT_STRING:
+                if(isStraight) {
+                    return entityRepository.findAllByUserIdOrderByStartDate(userId);
+                }
+                else {
+                    return entityRepository.findAllByUserIdOrderByStartDateDesc(userId);
+                }
+            case FINISH_DATE_SORT_STRING:
+                if (isStraight){
+                    return entityRepository.findAllByUserIdOrderByFinishDate(userId);
+                }
+                else {
+                    return entityRepository.findAllByUserIdOrderByFinishDateDesc(userId);
+                }
+            case CREATION_DATE_SORT_STRING:
+                if (isStraight) {
+                    return entityRepository.findAllByUserIdOrderByCreationDate(userId);
+                }
+                else {
+                    return entityRepository.findAllByUserIdOrderByCreationDateDesc(userId);
+                }
+            case STATUS_SORT_STRING:
+                if(isStraight) {
+                    return entityRepository.findAllByUserIdOrderByStatus(userId);
+                }
+                else {
+                    return entityRepository.findAllByUserIdOrderByStatusDesc(userId);
+                }
+                default:
+                    return getList(userId);
+        }
+
     }
 
     @Override

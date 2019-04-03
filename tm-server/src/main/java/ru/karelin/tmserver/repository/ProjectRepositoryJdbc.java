@@ -337,7 +337,7 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
                     FINISH_DATE_FIELD + "` = ?, `" +
                     CREATION_DATE_FIELD + "` = ?, `" +
                     STATUS_FIELD + "` = ?, `" +
-                    USER_ID_FIELD + "` = ? WHERE `" + ID_FIELD + "` = ? `";
+                    USER_ID_FIELD + "` = ? WHERE `" + ID_FIELD + "` = ? ";
             @NotNull final PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(8, project.getId());
             statement.setString(1, project.getName());
