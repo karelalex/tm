@@ -10,6 +10,7 @@ import ru.karelin.tmserver.entity.Project;
 import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.enumeration.Status;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public final class ProjectServiceImpl extends AbstractSecuredEntityService<Proje
 
     @Override
     public List<Project> getSortedList(String userId, String sortField, boolean isStraight) {
-        return entityRepository.findAllByUserId(userId, sortField, isStraight);
+        return Collections.emptyList(); // todo entityRepository.findAllByUserId(userId, sortField, isStraight);
     }
 
     @Override

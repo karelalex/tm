@@ -3,8 +3,9 @@ package ru.karelin.tmserver.repository;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.karelin.tmserver.api.repository.ProjectRepository;
 import ru.karelin.tmserver.api.repository.TaskRepository;
-import ru.karelin.tmserver.entity.Task;
+import ru.karelin.tmserver.entity.Project;
 import ru.karelin.tmserver.enumeration.Status;
 
 import java.sql.Connection;
@@ -15,10 +16,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class TaskRepositoryJdbc implements TaskRepository {
+public class ProjectRepositoryJdbc implements ProjectRepository {
 
     private Connection connection;
-    private static final String TABLE_NAME = "task";
+    private static final String TABLE_NAME = "project";
     private static final String ID_FIELD = "id";
     private static final String NAME_FIELD = "name";
     private static final String DESCRIPTION_FIELD = "description";
@@ -27,9 +28,8 @@ public class TaskRepositoryJdbc implements TaskRepository {
     private static final String FINISH_DATE_FIELD = "finish_date";
     private static final String STATUS_FIELD = "status";
     private static final String USER_ID_FIELD = "user_id";
-    private static final String PROJECT_ID_FIELD = "project_id";
 
-    public TaskRepositoryJdbc(Connection connection) {
+    public ProjectRepositoryJdbc(Connection connection) {
         this.connection = connection;
     }
 
@@ -42,128 +42,11 @@ public class TaskRepositoryJdbc implements TaskRepository {
         statement.close();
     }
 
-    @Override
-    @SneakyThrows
-    public List<Task> findAllByProjectId(String projectId) {
-        @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + PROJECT_ID_FIELD + "` = ?";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, projectId);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
-        statement.close();
-        return formList(resultSet);
-    }
+
 
     @Override
     @SneakyThrows
-    public List<Task> findAllByProjectIdAndUserId(String projectId, String userId) {
-        @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + PROJECT_ID_FIELD + "` = ? AND `" + USER_ID_FIELD + "` = ?";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, projectId);
-        statement.setString(2, userId);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
-        statement.close();
-        return formList(resultSet);
-    }
-
-    @Override
-    @SneakyThrows
-    public List<Task> findAllByUserIdAndProjectIdOrderByStartDate(String userId, String projectId) {
-        @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + PROJECT_ID_FIELD + "` = ? AND `" + USER_ID_FIELD + "` = ? ORDER BY `" + START_DATE_FIELD + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, projectId);
-        statement.setString(2, userId);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
-        statement.close();
-        return formList(resultSet);
-    }
-
-    @Override
-    @SneakyThrows
-    public List<Task> findAllByUserIdAndProjectIdOrderByStartDateDesc(String userId, String projectId) {
-        @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + PROJECT_ID_FIELD + "` = ? AND `" + USER_ID_FIELD + "` = ? ORDER BY `" + START_DATE_FIELD + "` DESC";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, projectId);
-        statement.setString(2, userId);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
-        statement.close();
-        return formList(resultSet);
-    }
-
-    @Override
-    @SneakyThrows
-    public List<Task> findAllByUserIdAndProjectIdOrderByStatus(String userId, String projectId) {
-        @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + PROJECT_ID_FIELD + "` = ? AND `" + USER_ID_FIELD + "` = ? ORDER BY `" + STATUS_FIELD + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, projectId);
-        statement.setString(2, userId);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
-        statement.close();
-        return formList(resultSet);
-    }
-
-    @Override
-    @SneakyThrows
-    public List<Task> findAllByUserIdAndProjectIdOrderByStatusDesc(String userId, String projectId) {
-        @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + PROJECT_ID_FIELD + "` = ? AND `" + USER_ID_FIELD + "` = ? ORDER BY `" + STATUS_FIELD + "` DESC";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, projectId);
-        statement.setString(2, userId);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
-        statement.close();
-        return formList(resultSet);
-    }
-
-    @Override
-    @SneakyThrows
-    public List<Task> findAllByUserIdAndProjectIdOrderByFinishDate(String userId, String projectId) {
-        @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + PROJECT_ID_FIELD + "` = ? AND `" + USER_ID_FIELD + "` = ? ORDER BY `" + FINISH_DATE_FIELD + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, projectId);
-        statement.setString(2, userId);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
-        statement.close();
-        return formList(resultSet);
-    }
-
-    @Override
-    @SneakyThrows
-    public List<Task> findAllByUserIdAndProjectIdOrderByFinishDateDesc(String userId, String projectId) {
-        @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + PROJECT_ID_FIELD + "` = ? AND `" + USER_ID_FIELD + "` = ? ORDER BY `" + FINISH_DATE_FIELD + "` DESC";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, projectId);
-        statement.setString(2, userId);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
-        statement.close();
-        return formList(resultSet);
-    }
-
-    @Override
-    @SneakyThrows
-    public List<Task> findAllByUserIdAndProjectIdOrderByCreationDate(String userId, String projectId) {
-        @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + PROJECT_ID_FIELD + "` = ? AND `" + USER_ID_FIELD + "` = ? ORDER BY `" + FINISH_DATE_FIELD + "`";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, projectId);
-        statement.setString(2, userId);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
-        statement.close();
-        return formList(resultSet);
-    }
-
-    @Override
-    @SneakyThrows
-    public List<Task> findAllByUserIdAndProjectIdOrderByCreationDateDesc(String userId, String projectId) {
-        @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + PROJECT_ID_FIELD + "` = ? AND `" + USER_ID_FIELD + "` = ? ORDER BY `" + FINISH_DATE_FIELD + "` DESC";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, projectId);
-        statement.setString(2, userId);
-        @NotNull final ResultSet resultSet = statement.executeQuery();
-        statement.close();
-        return formList(resultSet);
-    }
-
-    @Override
-    @SneakyThrows
-    public List<Task> findAllByUserIdAndKeyword(String userId, String key) {
+    public List<Project> findAllByUserIdAndKeyword(String userId, String key) {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + USER_ID_FIELD + "` = ? AND (`" + NAME_FIELD + "` LIKE ? OR `" + DESCRIPTION_FIELD + "` LIKE ?)";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
@@ -176,7 +59,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllOrderByStartDate() {
+    public List<Project> findAllOrderByStartDate() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + START_DATE_FIELD + "`";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         @NotNull final ResultSet resultSet = statement.executeQuery();
@@ -186,7 +69,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllOrderByStartDateDesc() {
+    public List<Project> findAllOrderByStartDateDesc() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + START_DATE_FIELD + "` DESC";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         @NotNull final ResultSet resultSet = statement.executeQuery();
@@ -196,7 +79,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllOrderByStatus() {
+    public List<Project> findAllOrderByStatus() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + STATUS_FIELD + "`";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         @NotNull final ResultSet resultSet = statement.executeQuery();
@@ -206,7 +89,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllOrderByStatusDesc() {
+    public List<Project> findAllOrderByStatusDesc() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + STATUS_FIELD + "` DESC";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         @NotNull final ResultSet resultSet = statement.executeQuery();
@@ -216,7 +99,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllOrderByFinishDate() {
+    public List<Project> findAllOrderByFinishDate() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + FINISH_DATE_FIELD + "`";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         @NotNull final ResultSet resultSet = statement.executeQuery();
@@ -226,7 +109,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllOrderByFinishDateDesc() {
+    public List<Project> findAllOrderByFinishDateDesc() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + FINISH_DATE_FIELD + "` DESC";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         @NotNull final ResultSet resultSet = statement.executeQuery();
@@ -236,7 +119,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllOrderByCreationDate() {
+    public List<Project> findAllOrderByCreationDate() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + CREATION_DATE_FIELD + "`";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         @NotNull final ResultSet resultSet = statement.executeQuery();
@@ -246,7 +129,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllOrderByCreationDateDesc() {
+    public List<Project> findAllOrderByCreationDateDesc() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` ORDER BY `" + CREATION_DATE_FIELD + "` DESC";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         @NotNull final ResultSet resultSet = statement.executeQuery();
@@ -256,7 +139,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllByUserIdOrderByStartDate(String userId) {
+    public List<Project> findAllByUserIdOrderByStartDate(String userId) {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + USER_ID_FIELD + "` = ? ORDER BY `" + START_DATE_FIELD + "`";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
@@ -267,7 +150,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllByUserIdOrderByStartDateDesc(String userId) {
+    public List<Project> findAllByUserIdOrderByStartDateDesc(String userId) {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + USER_ID_FIELD + "` = ? ORDER BY `" + START_DATE_FIELD + "` DESC";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
@@ -278,7 +161,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllByUserIdOrderByStatus(String userId) {
+    public List<Project> findAllByUserIdOrderByStatus(String userId) {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + USER_ID_FIELD + "` = ? ORDER BY `" + STATUS_FIELD + "`";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
@@ -289,7 +172,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllByUserIdOrderByStatusDesc(String userId) {
+    public List<Project> findAllByUserIdOrderByStatusDesc(String userId) {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + USER_ID_FIELD + "` = ? ORDER BY `" + STATUS_FIELD + "` DESC";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
@@ -300,7 +183,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllByUserIdOrderByFinishDate(String userId) {
+    public List<Project> findAllByUserIdOrderByFinishDate(String userId) {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + USER_ID_FIELD + "` = ? ORDER BY `" + FINISH_DATE_FIELD + "`";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
@@ -311,7 +194,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllByUserIdOrderByFinishDateDesc(String userId) {
+    public List<Project> findAllByUserIdOrderByFinishDateDesc(String userId) {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + USER_ID_FIELD + "` = ? ORDER BY `" + FINISH_DATE_FIELD + "` DESC";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
@@ -322,7 +205,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllByUserIdOrderByCreationDate(String userId) {
+    public List<Project> findAllByUserIdOrderByCreationDate(String userId) {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + USER_ID_FIELD + "` = ? ORDER BY `" + CREATION_DATE_FIELD + "`";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
@@ -333,7 +216,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllByUserIdOrderByCreationDateDesc(String userId) {
+    public List<Project> findAllByUserIdOrderByCreationDateDesc(String userId) {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + USER_ID_FIELD + "` = ? ORDER BY `" + CREATION_DATE_FIELD + "` DESC";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
@@ -344,7 +227,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAllByUserId(String userId) {
+    public List<Project> findAllByUserId(String userId) {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + USER_ID_FIELD + "` = ?";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
@@ -355,14 +238,14 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public Task findOneByIdAndUserId(String id, String userId) {
+    public Project findOneByIdAndUserId(String id, String userId) {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + USER_ID_FIELD + "` = ? AND `" + ID_FIELD + "` = ?";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, userId);
         statement.setString(2, id);
         @NotNull final ResultSet resultSet = statement.executeQuery();
         statement.close();
-        @Nullable Task task = null;
+        @Nullable Project task = null;
         if (resultSet.next()) {
             task = fetch(resultSet);
         }
@@ -371,7 +254,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public List<Task> findAll() {
+    public List<Project> findAll() {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "`";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         @NotNull final ResultSet resultSet = statement.executeQuery();
@@ -381,22 +264,22 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public Task findOne(String id) {
+    public Project findOne(String id) {
         @NotNull final String query = "SELECT * FROM `" + TABLE_NAME + "` WHERE `" + ID_FIELD + "` = ?";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, id);
         @NotNull final ResultSet resultSet = statement.executeQuery();
-        @Nullable Task task = null;
+        @Nullable Project project = null;
         if (resultSet.next()) {
-            task = fetch(resultSet);
+            project = fetch(resultSet);
         }
         statement.close();
-        return task;
+        return project;
     }
 
     @Override
     @SneakyThrows
-    public void persist(Task task) {
+    public void persist(Project task) {
         if (task == null) return;
         @NotNull final String query = "INSERT INTO `" + TABLE_NAME + "` " +
                 "(`" + ID_FIELD + "`, `" +
@@ -406,8 +289,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
                 FINISH_DATE_FIELD + "`, `" +
                 CREATION_DATE_FIELD + "`, `" +
                 STATUS_FIELD + "`, `" +
-                USER_ID_FIELD + "`, `" +
-                PROJECT_ID_FIELD + "`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                USER_ID_FIELD + "`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, task.getId());
         statement.setString(2, task.getName());
@@ -417,7 +299,6 @@ public class TaskRepositoryJdbc implements TaskRepository {
         statement.setDate(6, new Date(task.getCreationDate().getTime()));
         statement.setString(7, task.getStatus().name());
         statement.setString(8, task.getUserId());
-        statement.setString(9, task.getProjectID());
         statement.executeUpdate();
         statement.close();
 
@@ -425,7 +306,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public void merge(Task task) {
+    public void merge(Project task) {
         if (task == null) return;
         if (findOne(task.getId()) == null) {
             persist(task);
@@ -438,10 +319,9 @@ public class TaskRepositoryJdbc implements TaskRepository {
                     FINISH_DATE_FIELD + "` = ?, `" +
                     CREATION_DATE_FIELD + "` = ?, `" +
                     STATUS_FIELD + "` = ?, `" +
-                    USER_ID_FIELD + "` = ?, `" +
-                    PROJECT_ID_FIELD + "` = ? WHERE `" + ID_FIELD + "` = ? `";
+                    USER_ID_FIELD + "` = ? WHERE `" + ID_FIELD + "` = ? `";
             @NotNull final PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(9, task.getId());
+            statement.setString(8, task.getId());
             statement.setString(1, task.getName());
             statement.setString(2, task.getDescription());
             statement.setDate(3, new Date(task.getStartDate().getTime()));
@@ -449,15 +329,14 @@ public class TaskRepositoryJdbc implements TaskRepository {
             statement.setDate(5, new Date(task.getCreationDate().getTime()));
             statement.setString(6, task.getStatus().name());
             statement.setString(7, task.getUserId());
-            statement.setString(8, task.getProjectID());
             statement.executeUpdate();
-            statement.close();
+            statement.close(); 
         }
     }
 
     @Override
     @SneakyThrows
-    public boolean remove(Task task) {
+    public boolean remove(Project task) {
         @NotNull final String query = "DELETE FROM `" + TABLE_NAME + "` WHERE `" + ID_FIELD + "` = ?";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, task.getId());
@@ -468,11 +347,11 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public void removeAll(Collection<Task> tasks) {
+    public void removeAll(Collection<Project> tasks) {
         @NotNull final String query = "DELETE FROM `" + TABLE_NAME + "` WHERE `" + ID_FIELD + "` IN (?)";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         List<String> idList = new ArrayList<>();
-        for (Task task : tasks) {
+        for (Project task : tasks) {
             idList.add(task.getId());
         }
         String[] ids = idList.toArray(new String[]{});
@@ -482,28 +361,27 @@ public class TaskRepositoryJdbc implements TaskRepository {
     }
 
     @SneakyThrows
-    private Task fetch(ResultSet resultSet) {
+    private Project fetch(ResultSet resultSet) {
         if (resultSet == null) return null;
-        Task task = new Task();
-        task.setId(resultSet.getString(ID_FIELD));
-        task.setName(resultSet.getString(NAME_FIELD));
-        task.setDescription(resultSet.getString(DESCRIPTION_FIELD));
-        task.setProjectID(resultSet.getString(PROJECT_ID_FIELD));
-        task.setStartDate(resultSet.getDate(START_DATE_FIELD));
-        task.setFinishDate(resultSet.getDate(FINISH_DATE_FIELD));
-        task.setCreationDate(resultSet.getDate(CREATION_DATE_FIELD));
-        task.setStatus(Status.valueOf(resultSet.getString(STATUS_FIELD)));
-        task.setUserId(resultSet.getString(USER_ID_FIELD));
-        return task;
+        Project project = new Project();
+        project.setId(resultSet.getString(ID_FIELD));
+        project.setName(resultSet.getString(NAME_FIELD));
+        project.setDescription(resultSet.getString(DESCRIPTION_FIELD));
+        project.setStartDate(resultSet.getDate(START_DATE_FIELD));
+        project.setFinishDate(resultSet.getDate(FINISH_DATE_FIELD));
+        project.setCreationDate(resultSet.getDate(CREATION_DATE_FIELD));
+        project.setStatus(Status.valueOf(resultSet.getString(STATUS_FIELD)));
+        project.setUserId(resultSet.getString(USER_ID_FIELD));
+        return project;
     }
 
     @SneakyThrows
-    private List<Task> formList(ResultSet resultSet) {
-        @NotNull final List<Task> tasks = new ArrayList<>();
+    private List<Project> formList(ResultSet resultSet) {
+        @NotNull final List<Project> projects = new ArrayList<>();
         while (resultSet.next()) {
-            Task task = fetch(resultSet);
-            tasks.add(task);
+            Project project = fetch(resultSet);
+            projects.add(project);
         }
-        return tasks;
+        return projects;
     }
 }

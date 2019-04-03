@@ -8,6 +8,7 @@ import ru.karelin.tmserver.api.service.TaskService;
 import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.enumeration.Status;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -59,19 +60,19 @@ public final class TaskServiceImpl extends AbstractSecuredEntityService<Task> im
 
     @Override
     public void remove(final String userId, final String id) {
-       @Nullable final Task task = ((TaskRepository)entityRepository).findOneByIdAndUserId(id, userId);
+       @Nullable final Task task = (entityRepository).findOneByIdAndUserId(id, userId);
         if (task != null)
-            ((TaskRepository)entityRepository).remove(task);
+            (entityRepository).remove(task);
     }
 
     @Override
     public List<Task> getSortedListByProjectId(String userId, String projectId, String sortField, boolean isStraight) {
-        return ((TaskRepository)entityRepository).findAllByProjectIdAndUserId(projectId, userId, sortField, isStraight);
+        return Collections.emptyList(); // todo ((TaskRepository)entityRepository).findAllByProjectIdAndUserId(projectId, userId, sortField, isStraight);
     }
 
     @Override
     public List<Task> getSortedList(String userId, String sortField, boolean isStraight) {
-        return ((TaskRepository)entityRepository).findAllByUserId(userId, sortField, isStraight);
+        return Collections.emptyList(); // todo ((TaskRepository)entityRepository).findAllByUserId(userId, sortField, isStraight);
     }
 
     @Override

@@ -93,6 +93,7 @@ public class UserRepositoryJdbc implements UserRepository {
     @Override
     @SneakyThrows
     public void persist(User user) {
+        if (user==null) return;
         @NotNull final String query = "INSERT INTO `" + TABLE_NAME + "` " +
                 "(`" + ID_FIELD + "`, `" + LOGIN_FIELD + "`, `" + PASS_HASH_FIELD + "`, `" + USER_NAME_FIELD + "`, `" + ROLE_FIELD + "`) " +
                 "VALUES (?, ?, ?, ?, ?)";
@@ -109,6 +110,7 @@ public class UserRepositoryJdbc implements UserRepository {
     @Override
     @SneakyThrows
     public void merge(User user) {
+        if(user==null) return;
         if (findOne(user.getId()) == null) {
             persist(user);
         } else {

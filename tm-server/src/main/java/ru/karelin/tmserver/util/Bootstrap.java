@@ -79,16 +79,15 @@ public final class Bootstrap implements ServiceLocator {
     @Override
     public void init() throws SQLException, IOException, ClassNotFoundException {
         Connection connection = DbConnector.init();
-        @NotNull final ProjectRepository projectRepository = new ProjectRepositoryImpl();
-        @NotNull final TaskRepository taskRepository = new TaskRepositoryImpl();
+        @NotNull final ProjectRepository projectRepository = new ProjectRepositoryJdbc(connection);
+        @NotNull final TaskRepository taskRepository = new TaskRepositoryJdbc(connection);
         projectService = new ProjectServiceImpl(projectRepository, taskRepository);
         taskService = new TaskServiceImpl(taskRepository);
         @NotNull final MD5Generator md5Generator = new MD5Generator();
-        //@NotNull final UserRepository userRepository = new UserRepositoryImpl();
         @NotNull final UserRepository userRepository = new UserRepositoryJdbc(connection);
         userService = new UserServiceImpl(md5Generator, userRepository);
         domainService = new DomainServiceImpl(userRepository, taskRepository, projectRepository);
-        @NotNull SessionRepository sessionRepository = new SessionRepositoryImpl();
+        @NotNull SessionRepository sessionRepository = new SessionRepositoryJdbc(connection);
         sessionService = new SessionService(sessionRepository, userRepository);
 
 
