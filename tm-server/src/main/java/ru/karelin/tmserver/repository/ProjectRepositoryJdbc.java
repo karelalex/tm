@@ -365,7 +365,7 @@ public class ProjectRepositoryJdbc implements ProjectRepository {
 
     @Override
     @SneakyThrows
-    public void removeAll(Collection<Project> projects) {
+    public void removeAllInList(Collection<Project> projects) {
         StringBuilder insertions = new StringBuilder();
         for (Project p : projects) {
             insertions.append("'").append(p.getId()).append("'").append(", ");

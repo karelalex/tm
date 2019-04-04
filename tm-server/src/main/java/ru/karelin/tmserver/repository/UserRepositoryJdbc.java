@@ -145,7 +145,7 @@ public class UserRepositoryJdbc implements UserRepository {
 
     @Override
     @SneakyThrows
-    public void removeAll(Collection<User> users) {
+    public void removeAllInList(Collection<User> users) {
         StringBuilder insertions = new StringBuilder();
         for (User u : users) {
             insertions.append("'").append(u.getId()).append("'").append(", ");

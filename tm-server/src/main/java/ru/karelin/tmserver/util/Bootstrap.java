@@ -1,5 +1,6 @@
 package ru.karelin.tmserver.util;
 
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmserver.api.repository.ProjectRepository;
 import ru.karelin.tmserver.api.repository.SessionRepository;
@@ -11,8 +12,10 @@ import ru.karelin.tmserver.api.service.TaskService;
 import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.*;
-import ru.karelin.tmserver.enumeration.RoleType;
-import ru.karelin.tmserver.repository.*;
+import ru.karelin.tmserver.repository.ProjectRepositoryJdbc;
+import ru.karelin.tmserver.repository.SessionRepositoryJdbc;
+import ru.karelin.tmserver.repository.TaskRepositoryJdbc;
+import ru.karelin.tmserver.repository.UserRepositoryJdbc;
 import ru.karelin.tmserver.service.*;
 
 import javax.xml.ws.Endpoint;
@@ -79,9 +82,10 @@ public final class Bootstrap implements ServiceLocator {
     @Override
     public void init() throws SQLException, IOException, ClassNotFoundException {
         Connection connection = DbConnector.init();
-        @NotNull final ProjectRepository projectRepository = new ProjectRepositoryJdbc(connection);
+        SqlSessionFactory sqlSessionFactory = BatisInit.getSqlSessionFactory();
         @NotNull final TaskRepository taskRepository = new TaskRepositoryJdbc(connection);
-        projectService = new ProjectServiceImpl(projectRepository, taskRepository);
+        @NotNull final ProjectRepository projectRepository = new ProjectRepositoryJdbc(connection);
+        projectService = new ProjectServiceImpl(sqlSessionFactory, taskRepository);
         taskService = new TaskServiceImpl(taskRepository);
         @NotNull final MD5Generator md5Generator = new MD5Generator();
         @NotNull final UserRepository userRepository = new UserRepositoryJdbc(connection);
@@ -90,6 +94,8 @@ public final class Bootstrap implements ServiceLocator {
         @NotNull SessionRepository sessionRepository = new SessionRepositoryJdbc(connection);
         sessionService = new SessionService(sessionRepository, userRepository);
         sessionService.removeOldSessions(15); // clears old sessions from DB
+
+
 
         Endpoint.publish(USER_ENDPOINT_URL, new UserEndpoint(userService,sessionService));
         System.out.println("Endpoint with url " + USER_ENDPOINT_URL + " started.");

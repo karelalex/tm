@@ -495,7 +495,7 @@ public class TaskRepositoryJdbc implements TaskRepository {
 
     @Override
     @SneakyThrows
-    public void removeAll(Collection<Task> tasks) {
+    public void removeAllInList(Collection<Task> tasks) {
         StringBuilder insertions = new StringBuilder();
         for (Task task : tasks) {
             insertions.append("'").append(task.getId()).append("'").append(", ");

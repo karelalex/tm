@@ -108,7 +108,7 @@ public class SessionRepositoryJdbc implements SessionRepository {
 
     @Override
     @SneakyThrows
-    public void removeAll(Collection<Session> sessions) {
+    public void removeAllInList(Collection<Session> sessions) {
         StringBuilder insertions = new StringBuilder();
         for (Session s : sessions) {
             insertions.append("'").append(s.getId()).append("'").append(", ");

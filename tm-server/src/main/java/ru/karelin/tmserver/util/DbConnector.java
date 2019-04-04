@@ -10,11 +10,9 @@ public class DbConnector {
     public static Connection init() throws ClassNotFoundException, SQLException, IOException {
         Properties properties = new Properties();
         properties.load(DbConnector.class.getResourceAsStream("/db.properties"));
-        String host = properties.getProperty("host");
-        String port = properties.getProperty("port");
-        String bd = properties.getProperty("database");
+        String url = properties.getProperty("url");
         Class.forName("com.mysql.jdbc.Driver");
-        return DriverManager.getConnection("jdbc:mysql://"+host+":"+port+"/"+bd, properties);
+        return DriverManager.getConnection(url, properties);
     }
 
 }

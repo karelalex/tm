@@ -9,7 +9,7 @@ public interface  Repository<T> {
     void persist(T t);
     void merge(T t);
     boolean remove(T t);
-    void removeAll(Collection<T> tCollection);
+    void removeAllInList(Collection<T> tCollection);
     void removeAll();
 
 }
