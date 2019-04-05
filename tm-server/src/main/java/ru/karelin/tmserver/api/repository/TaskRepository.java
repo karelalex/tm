@@ -2,9 +2,13 @@ package ru.karelin.tmserver.api.repository;
 
 import ru.karelin.tmserver.entity.Task;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface TaskRepository extends SortableEntityRepository<Task> {
+
+    void removeAllInList(Collection<Task> tCollection);
+
     List<Task> findAllByProjectId(String projectId);
 
     List<Task> findAllByProjectIdAndUserId(String projectId, String userId);

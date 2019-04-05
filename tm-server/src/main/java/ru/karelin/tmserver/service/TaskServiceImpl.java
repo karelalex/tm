@@ -65,7 +65,7 @@ public final class TaskServiceImpl implements TaskService {
         task.setFinishDate(finishDate);
         task.setUserId(userId);
         task.setStatus(Status.PLANNED);
-        if (!projectId.isEmpty()) task.setProjectID(projectId);
+        if (!projectId.isEmpty()) task.setProjectId(projectId);
         SqlSession session = factory.openSession();
         try {
             TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
@@ -89,7 +89,7 @@ public final class TaskServiceImpl implements TaskService {
                 if (!description.isEmpty()) task.setDescription(description);
                 if (startDate != null) task.setStartDate(startDate);
                 if (finishDate != null) task.setFinishDate(finishDate);
-                if (!projectId.isEmpty()) task.setProjectID(projectId);
+                if (!projectId.isEmpty()) task.setProjectId(projectId);
                 if (status != null) task.setStatus(status);
                 taskRepository.merge(task);
                 session.commit();

@@ -14,5 +14,5 @@ public class Task extends AbstractSortableEntity implements Serializable {
     private static final long serialVersionUID = 3636812355087287545L;
     private String name;
     private String description;
-    private String projectID;
+    private String projectId;
 }

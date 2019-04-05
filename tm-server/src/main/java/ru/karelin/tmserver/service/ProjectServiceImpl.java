@@ -30,7 +30,7 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
     private static final String START_DATE_SORT_STRING = "start";
     private static final String STATUS_SORT_STRING = "stat";
 
-    public ProjectServiceImpl(@NotNull final SqlSessionFactory factory, @NotNull final TaskRepository taskRepository) {
+    public ProjectServiceImpl(@NotNull final SqlSessionFactory factory) {
         this.factory = factory;
     }
 
@@ -147,6 +147,7 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
         try {
             final List<Task> taskList = taskRepository.findAllByProjectId(id);
             taskRepository.removeAllInList(taskList);
+            session.commit();
             Project p = projectRepository.findOneByIdAndUserId(id, userId);
             projectRepository.remove(p);
             session.commit();

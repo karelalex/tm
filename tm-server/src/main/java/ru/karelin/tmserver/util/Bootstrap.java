@@ -2,9 +2,7 @@ package ru.karelin.tmserver.util;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.jetbrains.annotations.NotNull;
-import ru.karelin.tmserver.api.repository.ProjectRepository;
 import ru.karelin.tmserver.api.repository.SessionRepository;
-import ru.karelin.tmserver.api.repository.TaskRepository;
 import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.api.service.DomainService;
 import ru.karelin.tmserver.api.service.ProjectService;
@@ -12,9 +10,7 @@ import ru.karelin.tmserver.api.service.TaskService;
 import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.*;
-import ru.karelin.tmserver.repository.ProjectRepositoryJdbc;
 import ru.karelin.tmserver.repository.SessionRepositoryJdbc;
-import ru.karelin.tmserver.repository.TaskRepositoryJdbc;
 import ru.karelin.tmserver.repository.UserRepositoryJdbc;
 import ru.karelin.tmserver.service.*;
 
@@ -83,16 +79,15 @@ public final class Bootstrap implements ServiceLocator {
     public void init() throws SQLException, IOException, ClassNotFoundException {
         Connection connection = DbConnector.init();
         SqlSessionFactory sqlSessionFactory = BatisInit.getSqlSessionFactory();
-        @NotNull final TaskRepository taskRepository = new TaskRepositoryJdbc(connection);
-        @NotNull final ProjectRepository projectRepository = new ProjectRepositoryJdbc(connection);
-        projectService = new ProjectServiceImpl(sqlSessionFactory, taskRepository);
-        taskService = new TaskServiceImpl(taskRepository);
+        projectService = new ProjectServiceImpl(sqlSessionFactory);
+        taskService = new TaskServiceImpl(sqlSessionFactory);
         @NotNull final MD5Generator md5Generator = new MD5Generator();
         @NotNull final UserRepository userRepository = new UserRepositoryJdbc(connection);
-        userService = new UserServiceImpl(md5Generator, userRepository);
-        domainService = new DomainServiceImpl(userRepository, taskRepository, projectRepository);
+        userService = new UserServiceImpl(sqlSessionFactory);
+        domainService = new DomainServiceImpl(sqlSessionFactory);
         @NotNull SessionRepository sessionRepository = new SessionRepositoryJdbc(connection);
         sessionService = new SessionService(sessionRepository, userRepository);
+
         sessionService.removeOldSessions(15); // clears old sessions from DB
 
 

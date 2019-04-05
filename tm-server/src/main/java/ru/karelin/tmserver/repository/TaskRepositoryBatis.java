@@ -208,12 +208,12 @@ public interface TaskRepositoryBatis extends TaskRepository {
 
     @Override
     @Delete("<script>" +
-            "DELETE FROM `project` WHERE   `id` IN " +
+            "DELETE FROM `" + TABLE_NAME+ "` WHERE   `id` IN " +
             "<foreach item='item' index = 'index' collection='tasks' open='(' separator=',' close = ')'>" +
             "#{item.id}" +
             "</foreach>" +
             "</script>")
-    void removeAllInList(Collection<Task> tasks);
+    void removeAllInList(@Param("tasks") Collection<Task> tasks);
 
     @Override
     @Delete("DELETE from `" + TABLE_NAME + "`")

@@ -9,6 +9,9 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.eclipse.persistence.jaxb.JAXBContextFactory;
 import org.eclipse.persistence.jaxb.JAXBContextProperties;
 import org.eclipse.persistence.jaxb.MarshallerProperties;
@@ -23,6 +26,9 @@ import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.enumeration.RoleType;
 import ru.karelin.tmserver.exception.PermissionException;
+import ru.karelin.tmserver.repository.ProjectRepositoryBatis;
+import ru.karelin.tmserver.repository.TaskRepositoryBatis;
+import ru.karelin.tmserver.repository.UserRepositoryBatis;
 import sun.security.pkcs.ParsingException;
 
 import javax.ws.rs.core.MediaType;
@@ -49,131 +55,216 @@ public class DomainServiceImpl implements DomainService {
     private final static String FASTER_JSON_FILE_NAME = "domainFASTER.json";
 
     @NotNull
-    private final UserRepository userRepository;
-    @NotNull
-    private final TaskRepository taskRepository;
-    @NotNull
-    private final ProjectRepository projectRepository;
+    private final SqlSessionFactory factory;
 
 
-    public DomainServiceImpl(@NotNull UserRepository userRepository, @NotNull TaskRepository taskRepository, @NotNull ProjectRepository projectRepository) {
-        this.userRepository = userRepository;
-        this.taskRepository = taskRepository;
-        this.projectRepository = projectRepository;
+    public DomainServiceImpl(@NotNull SqlSessionFactory factory) {
+        this.factory = factory;
     }
 
     @Override
     public void saveSerialize(String userId) throws IOException, PermissionException {
-        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
         File f = new File(SERIALIZE_FILE_NAME);
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(f));
-        List<AbstractEntity> list = new ArrayList<AbstractEntity>(userRepository.findAll());
-        list.addAll(taskRepository.findAll());
-        list.addAll(projectRepository.findAll());
-        for (AbstractEntity t : list) {
-            objectOutputStream.writeObject(t);
+        try (SqlSession session = factory.openSession(); ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(f));) {
+            UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
+            ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
+            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
+            if (userRepository.findOne(userId).getRole() != RoleType.ADMIN)
+                throw new PermissionException("You must be an admin to perform this action");
+            List<AbstractEntity> list = new ArrayList<AbstractEntity>(userRepository.findAll());
+            list.addAll(taskRepository.findAll());
+            list.addAll(projectRepository.findAll());
+            for (AbstractEntity t : list) {
+                objectOutputStream.writeObject(t);
+            }
         }
-        objectOutputStream.close();
+
     }
 
     @Override
     public void getSerialize(String userId) throws IOException, ClassNotFoundException, PermissionException {
-        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
         File f = new File(SERIALIZE_FILE_NAME);
         Object o;
+        SqlSession session = factory.openSession();
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));) {
+            UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
+            ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
+            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
+            if (userRepository.findOne(userId).getRole() != RoleType.ADMIN)
+                throw new PermissionException("You must be an admin to perform this action");
             while ((o = objectInputStream.readObject()) != null) {
                 if (o instanceof Task) {
-                    taskRepository.merge((Task) o);
+                    taskRepository.persist((Task) o);
                 }
                 if (o instanceof User) {
-                    userRepository.merge((User) o);
+                    userRepository.persist((User) o);
                 }
                 if (o instanceof Project) {
-                    projectRepository.merge((Project) o);
+                    projectRepository.persist((Project) o);
                 }
             }
+            session.commit();
         } catch (EOFException e) {
             e.printStackTrace();
+        } catch (PersistenceException e) {
+            session.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
+
     }
 
     @Override
     public void saveJaxXML(String userId) throws JAXBException, PermissionException {
-        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
-        final JAXBContext jaxbContext = JAXBContext.newInstance(Holder.class, User.class, Project.class, Task.class);
-        final Marshaller marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(createHolder(), new File(JAX_XLM_FILE_NAME));
+        try (SqlSession session = factory.openSession()) {
+            UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
+            ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
+            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
+
+            if (userRepository.findOne(userId).getRole() != RoleType.ADMIN)
+                throw new PermissionException("You must be an admin to perform this action");
+            final JAXBContext jaxbContext = JAXBContext.newInstance(Holder.class, User.class, Project.class, Task.class);
+            final Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.marshal(createHolder(taskRepository, projectRepository, userRepository), new File(JAX_XLM_FILE_NAME));
+        }
     }
 
     @Override
     public void getJaxXML(String userId) throws JAXBException, PermissionException {
-        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
-        final JAXBContext jaxbContext = JAXBContext.newInstance(Holder.class, User.class, Project.class, Task.class);
-        final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        extractHolder((Holder) unmarshaller.unmarshal(new File(JAX_XLM_FILE_NAME)));
-
+        SqlSession session = factory.openSession();
+        try  {
+            UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
+            ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
+            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
+            if (userRepository.findOne(userId).getRole() != RoleType.ADMIN)
+                throw new PermissionException("You must be an admin to perform this action");
+            final JAXBContext jaxbContext = JAXBContext.newInstance(Holder.class, User.class, Project.class, Task.class);
+            final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            extractHolder((Holder) unmarshaller.unmarshal(new File(JAX_XLM_FILE_NAME)), taskRepository, projectRepository, userRepository);
+            session.commit();
+        } catch (PersistenceException e) {
+            session.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
     }
 
     @Override
     public void saveJaxJSON(String userId) throws JAXBException, PermissionException {
-        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
-        Map<String, Object> properties = new HashMap<>();
-        properties.put(JAXBContextProperties.MEDIA_TYPE, "application/json");
-        properties.put(JAXBContextProperties.JSON_INCLUDE_ROOT, false);
-        final JAXBContext jaxbContext = (JAXBContext) JAXBContextFactory.createContext(new Class[]{Holder.class, User.class, Task.class, Project.class}, properties);
-        final Marshaller marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.setProperty(MarshallerProperties.MEDIA_TYPE, MediaType.APPLICATION_JSON);
-        marshaller.marshal(createHolder(), new File(JAX_JSON_FILE_NAME));
+        try (SqlSession session = factory.openSession();) {
+            UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
+            ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
+            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
+            if (userRepository.findOne(userId).getRole() != RoleType.ADMIN)
+                throw new PermissionException("You must be an admin to perform this action");
+            Map<String, Object> properties = new HashMap<>();
+            properties.put(JAXBContextProperties.MEDIA_TYPE, "application/json");
+            properties.put(JAXBContextProperties.JSON_INCLUDE_ROOT, false);
+            final JAXBContext jaxbContext = (JAXBContext) JAXBContextFactory.createContext(new Class[]{Holder.class, User.class, Task.class, Project.class}, properties);
+            final Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.setProperty(MarshallerProperties.MEDIA_TYPE, MediaType.APPLICATION_JSON);
+            marshaller.marshal(createHolder(taskRepository, projectRepository, userRepository), new File(JAX_JSON_FILE_NAME));
+        }
     }
 
     @Override
     public void getJaxJSON(String userId) throws JAXBException, PermissionException {
-        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
-        Map<String, Object> properties = new HashMap<>();
-        properties.put(JAXBContextProperties.MEDIA_TYPE, "application/json");
-        properties.put(JAXBContextProperties.JSON_INCLUDE_ROOT, false);
-        final JAXBContext jaxbContext = (JAXBContext) JAXBContextFactory.createContext(new Class[]{Holder.class, User.class, Task.class, Project.class}, properties);
-        final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        extractHolder(unmarshaller.unmarshal(new StreamSource(JAX_JSON_FILE_NAME), Holder.class).getValue());
+        SqlSession session = factory.openSession();
+        try  {
+            UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
+            ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
+            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
+            if (userRepository.findOne(userId).getRole() != RoleType.ADMIN)
+                throw new PermissionException("You must be an admin to perform this action");
+            Map<String, Object> properties = new HashMap<>();
+            properties.put(JAXBContextProperties.MEDIA_TYPE, "application/json");
+            properties.put(JAXBContextProperties.JSON_INCLUDE_ROOT, false);
+            final JAXBContext jaxbContext = (JAXBContext) JAXBContextFactory.createContext(new Class[]{Holder.class, User.class, Task.class, Project.class}, properties);
+            final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            extractHolder(unmarshaller.unmarshal(new StreamSource(JAX_JSON_FILE_NAME), Holder.class).getValue(), taskRepository, projectRepository, userRepository);
+        } catch (PersistenceException e) {
+            session.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
     }
 
     @Override
     public void saveFasterXML(String userId) throws IOException, PermissionException {
-        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
-        XmlMapper xmlMapper = new XmlMapper();
-        xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        xmlMapper.writeValue(new File(FASTER_XML_FILE_NAME), createHolder());
+        try (SqlSession session = factory.openSession()) {
+            UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
+            ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
+            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
+            if (userRepository.findOne(userId).getRole() != RoleType.ADMIN)
+                throw new PermissionException("You must be an admin to perform this action");
+            XmlMapper xmlMapper = new XmlMapper();
+            xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
+            xmlMapper.writeValue(new File(FASTER_XML_FILE_NAME), createHolder(taskRepository, projectRepository, userRepository));
+        }
 
     }
 
     @Override
     public void getFasterXML(String userId) throws IOException, PermissionException {
-        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
-        XmlMapper mapper = new XmlMapper();
-        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        extractHolder(mapper.readValue(new File(FASTER_XML_FILE_NAME), Holder.class));
+        SqlSession session = factory.openSession();
+        File f = new File(FASTER_XML_FILE_NAME);
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));) {
+            UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
+            ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
+            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
+            if (userRepository.findOne(userId).getRole() != RoleType.ADMIN)
+                throw new PermissionException("You must be an admin to perform this action");
+            XmlMapper mapper = new XmlMapper();
+            mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+            extractHolder(mapper.readValue(new File(FASTER_XML_FILE_NAME), Holder.class), taskRepository, projectRepository, userRepository);
+        } catch (PersistenceException e) {
+            session.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
     }
 
     @Override
     public void saveFasterJSON(String userId) throws IOException, PermissionException {
-        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        mapper.writeValue(new File(FASTER_JSON_FILE_NAME), createHolder());
+        try (SqlSession session = factory.openSession()) {
+            UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
+            ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
+            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
+            if (userRepository.findOne(userId).getRole() != RoleType.ADMIN)
+                throw new PermissionException("You must be an admin to perform this action");
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
+            mapper.writeValue(new File(FASTER_JSON_FILE_NAME), createHolder(taskRepository, projectRepository, userRepository));
+        }
     }
 
     @Override
     public void getFasterJSON(String userId) throws IOException, PermissionException {
-        if(userRepository.findOne(userId).getRole()!= RoleType.ADMIN) throw new PermissionException("You must be an admin to perform this action");
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        extractHolder(mapper.readValue(new File(FASTER_JSON_FILE_NAME), Holder.class));
+        SqlSession session = factory.openSession();
+        try  {
+            UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
+            ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
+            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
+            if (userRepository.findOne(userId).getRole() != RoleType.ADMIN)
+                throw new PermissionException("You must be an admin to perform this action");
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+            extractHolder(mapper.readValue(new File(FASTER_JSON_FILE_NAME), Holder.class), taskRepository, projectRepository, userRepository);
+        } catch (PersistenceException e) {
+            session.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
     }
 
-    private Holder createHolder() {
+    private Holder createHolder(TaskRepository taskRepository, ProjectRepository projectRepository, UserRepository userRepository) {
         final Holder holder = new Holder();
         holder.projectList = projectRepository.findAll();
         holder.taskList = taskRepository.findAll();
@@ -181,15 +272,15 @@ public class DomainServiceImpl implements DomainService {
         return holder;
     }
 
-    private void extractHolder(Holder holder) {
+    private void extractHolder(Holder holder, TaskRepository taskRepository, ProjectRepository projectRepository, UserRepository userRepository) {
         for (Task t : holder.taskList) {
-            taskRepository.merge(t);
+            taskRepository.persist(t);
         }
         for (Project p : holder.projectList) {
-            projectRepository.merge(p);
+            projectRepository.persist(p);
         }
         for (User u : holder.userList) {
-            userRepository.merge(u);
+            userRepository.persist(u);
         }
     }
 

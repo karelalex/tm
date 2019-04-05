@@ -108,20 +108,6 @@ public class SessionRepositoryJdbc implements SessionRepository {
 
     @Override
     @SneakyThrows
-    public void removeAllInList(Collection<Session> sessions) {
-        StringBuilder insertions = new StringBuilder();
-        for (Session s : sessions) {
-            insertions.append("'").append(s.getId()).append("'").append(", ");
-        }
-        @NotNull final String query = "DELETE FROM `" + TABLE_NAME + "` WHERE `" + ID_FIELD + "` IN (" + insertions.substring(0, insertions.length()-2) + ")";
-        System.out.println(query);
-        @NotNull final Statement statement = connection.createStatement();
-        final int i = statement.executeUpdate(query);
-        statement.close();
-    }
-
-    @Override
-    @SneakyThrows
     public void removeAll() {
         @NotNull final String query = "DELETE from `" + TABLE_NAME + "`";
         @NotNull final Statement statement = connection.createStatement();

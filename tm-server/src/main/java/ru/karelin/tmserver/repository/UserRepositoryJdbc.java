@@ -143,7 +143,7 @@ public class UserRepositoryJdbc implements UserRepository {
         return i>0;
     }
 
-    @Override
+
     @SneakyThrows
     public void removeAllInList(Collection<User> users) {
         StringBuilder insertions = new StringBuilder();

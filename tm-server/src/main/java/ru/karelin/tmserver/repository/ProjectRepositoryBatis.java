@@ -4,7 +4,6 @@ import org.apache.ibatis.annotations.*;
 import ru.karelin.tmserver.api.repository.ProjectRepository;
 import ru.karelin.tmserver.entity.Project;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface ProjectRepositoryBatis extends ProjectRepository {
@@ -153,14 +152,6 @@ public interface ProjectRepositoryBatis extends ProjectRepository {
     @Delete("Delete from `project` where id = #{id}")
     boolean remove(Project project);
 
-    @Override
-    @Delete("<script>" +
-            "DELETE FROM `project` WHERE   `id` IN " +
-            "<foreach item='item' index = 'index' collection='projects' open='(' separator=',' close = ')'>" +
-            "#{item.id}" +
-            "</foreach>" +
-            "</script>")
-    void removeAllInList(Collection<Project> projects);
 
     @Override
     @Delete("DELETE from `" + TABLE_NAME + "`")

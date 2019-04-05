@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence&gt;
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="projectID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="projectId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/extension&gt;
  *   &lt;/complexContent&gt;
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "task", propOrder = {
     "description",
     "name",
-    "projectID"
+    "projectId"
 })
 public class Task
     extends AbstractSortableEntity
@@ -90,7 +90,7 @@ public class Task
     }
 
     /**
-     * Gets the value of the projectID property.
+     * Gets the value of the projectId property.
      * 
      * @return
      *     possible object is
@@ -102,7 +102,7 @@ public class Task
     }
 
     /**
-     * Sets the value of the projectID property.
+     * Sets the value of the projectId property.
      * 
      * @param value
      *     allowed object is
