@@ -13,6 +13,7 @@ import ru.karelin.tmserver.entity.Project;
 import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.enumeration.Status;
 import ru.karelin.tmserver.repository.ProjectRepositoryBatis;
+import ru.karelin.tmserver.repository.TaskRepositoryBatis;
 
 import java.util.Collections;
 import java.util.Date;
@@ -21,7 +22,7 @@ import java.util.List;
 
 public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Project>*/ implements ProjectService {
 
-    final private TaskRepository taskRepository;
+
     final private SqlSessionFactory factory;
 
     private static final String CREATION_DATE_SORT_STRING = "cre";
@@ -30,14 +31,8 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
     private static final String STATUS_SORT_STRING = "stat";
 
     public ProjectServiceImpl(@NotNull final SqlSessionFactory factory, @NotNull final TaskRepository taskRepository) {
-        //super(projectRepository);
         this.factory = factory;
-        this.taskRepository = taskRepository;
-
     }
-
-    //from abstract class
-
 
     @Override
     public List<Project> getList(String userId) {
@@ -63,20 +58,18 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
         return p;
     }
 
-    // end of from abstract class
-
     @Override
     public void create(@NotNull final String userId, final String name, final String description, final Date startDate, final Date finishDate) {
         SqlSession session = factory.openSession();
-        ProjectRepository entityRepository = session.getMapper(ProjectRepositoryBatis.class);
-        @NotNull final Project project = new Project();
-        project.setName(name);
-        project.setDescription(description);
-        project.setStartDate(startDate);
-        project.setFinishDate(finishDate);
-        project.setUserId(userId);
-        project.setStatus(Status.PLANNED);
         try {
+            ProjectRepository entityRepository = session.getMapper(ProjectRepositoryBatis.class);
+            @NotNull final Project project = new Project();
+            project.setName(name);
+            project.setDescription(description);
+            project.setStartDate(startDate);
+            project.setFinishDate(finishDate);
+            project.setUserId(userId);
+            project.setStatus(Status.PLANNED);
             entityRepository.persist(project);
             session.commit();
         } catch (PersistenceException e) {
@@ -84,7 +77,6 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
         } finally {
             session.close();
         }
-
     }
 
     @Override
@@ -100,59 +92,58 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
                 if (finishDate != null) project.setFinishDate(finishDate);
                 if (status != null) project.setStatus(status);
                 projectRepository.merge(project);
+                session.commit();
             }
         } catch (PersistenceException e) {
             session.rollback();
         } finally {
-            session.commit();
+            session.close();
         }
-
     }
 
     @Override
     public List<Project> getSortedList(String userId, String sortField, boolean isStraight) {
-        SqlSession session = factory.openSession();
-        ProjectRepository entityRepository = session.getMapper(ProjectRepositoryBatis.class);
-        @NotNull List<Project> list = Collections.emptyList();
-        try {
+        try (SqlSession session = factory.openSession()) {
+            ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
             switch (sortField) {
                 case START_DATE_SORT_STRING:
                     if (isStraight) {
-                        list = entityRepository.findAllByUserIdOrderByStartDate(userId);
+                        return projectRepository.findAllByUserIdOrderByStartDate(userId);
                     } else {
-                        list = entityRepository.findAllByUserIdOrderByStartDateDesc(userId);
+                        return projectRepository.findAllByUserIdOrderByStartDateDesc(userId);
                     }
                 case FINISH_DATE_SORT_STRING:
                     if (isStraight) {
-                        list = entityRepository.findAllByUserIdOrderByFinishDate(userId);
+                        return projectRepository.findAllByUserIdOrderByFinishDate(userId);
                     } else {
-                        list = entityRepository.findAllByUserIdOrderByFinishDateDesc(userId);
+                        return projectRepository.findAllByUserIdOrderByFinishDateDesc(userId);
                     }
                 case CREATION_DATE_SORT_STRING:
                     if (isStraight) {
-                        list = entityRepository.findAllByUserIdOrderByCreationDate(userId);
+                        return projectRepository.findAllByUserIdOrderByCreationDate(userId);
                     } else {
-                        list = entityRepository.findAllByUserIdOrderByCreationDateDesc(userId);
+                        return projectRepository.findAllByUserIdOrderByCreationDateDesc(userId);
                     }
                 case STATUS_SORT_STRING:
                     if (isStraight) {
-                        list = entityRepository.findAllByUserIdOrderByStatus(userId);
+                        return projectRepository.findAllByUserIdOrderByStatus(userId);
                     } else {
-                        list = entityRepository.findAllByUserIdOrderByStatusDesc(userId);
+                        return projectRepository.findAllByUserIdOrderByStatusDesc(userId);
                     }
                 default:
-                    list = getList(userId);
+                    return getList(userId);
             }
-        } finally {
-            session.close();
+        } catch (PersistenceException e) {
+            e.printStackTrace();
         }
-        return list;
+        return Collections.emptyList();
     }
 
     @Override
     public void remove(final String userId, final String id) {
         SqlSession session = factory.openSession();
         ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
+        TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
         try {
             final List<Task> taskList = taskRepository.findAllByProjectId(id);
             taskRepository.removeAllInList(taskList);
@@ -170,11 +161,12 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
 
     @Override
     public List<Project> getListByKeyword(String userId, String keyword) {
-        SqlSession session = factory.openSession();
-        ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
-        final List<Project> list = projectRepository.findAllByUserIdAndKeyword(userId, keyword);
-        session.close();
-        return list;
+        try (SqlSession session = factory.openSession()) {
+            ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
+            return projectRepository.findAllByUserIdAndKeyword(userId, keyword);
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
     }
-
 }
