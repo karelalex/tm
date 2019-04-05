@@ -9,7 +9,9 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
+import ru.karelin.tmserver.api.repository.SessionRepository;
 import ru.karelin.tmserver.repository.ProjectRepositoryBatis;
+import ru.karelin.tmserver.repository.SessionRepositoryBatis;
 import ru.karelin.tmserver.repository.TaskRepositoryBatis;
 import ru.karelin.tmserver.repository.UserRepositoryBatis;
 
@@ -33,6 +35,7 @@ public class BatisInit {
         configuration.addMapper(ProjectRepositoryBatis.class);
         configuration.addMapper(TaskRepositoryBatis.class);
         configuration.addMapper(UserRepositoryBatis.class);
+        configuration.addMapper(SessionRepositoryBatis.class);
         return new SqlSessionFactoryBuilder().build(configuration);
 
     }

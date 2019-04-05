@@ -77,22 +77,17 @@ public final class Bootstrap implements ServiceLocator {
 
     @Override
     public void init() throws SQLException, IOException, ClassNotFoundException {
-        Connection connection = DbConnector.init();
         SqlSessionFactory sqlSessionFactory = BatisInit.getSqlSessionFactory();
         projectService = new ProjectServiceImpl(sqlSessionFactory);
         taskService = new TaskServiceImpl(sqlSessionFactory);
-        @NotNull final MD5Generator md5Generator = new MD5Generator();
-        @NotNull final UserRepository userRepository = new UserRepositoryJdbc(connection);
         userService = new UserServiceImpl(sqlSessionFactory);
         domainService = new DomainServiceImpl(sqlSessionFactory);
-        @NotNull SessionRepository sessionRepository = new SessionRepositoryJdbc(connection);
-        sessionService = new SessionService(sessionRepository, userRepository);
+        sessionService = new SessionService(sqlSessionFactory);
 
         sessionService.removeOldSessions(15); // clears old sessions from DB
 
 
-
-        Endpoint.publish(USER_ENDPOINT_URL, new UserEndpoint(userService,sessionService));
+        Endpoint.publish(USER_ENDPOINT_URL, new UserEndpoint(userService, sessionService));
         System.out.println("Endpoint with url " + USER_ENDPOINT_URL + " started.");
         Endpoint.publish(PROJECT_ENDPOINT_URL, new ProjectEndpoint(projectService, sessionService));
         System.out.println("Endpoint with url " + PROJECT_ENDPOINT_URL + " started.");

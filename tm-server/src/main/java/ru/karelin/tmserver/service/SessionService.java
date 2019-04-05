@@ -1,5 +1,6 @@
 package ru.karelin.tmserver.service;
 
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.api.repository.SessionRepository;
@@ -13,14 +14,12 @@ import ru.karelin.tmserver.util.SignatureUtil;
 import java.util.Date;
 
 public final class SessionService {
-    @NotNull private SessionRepository sessionRepository;
-    @NotNull private UserRepository userRepository;
+    @NotNull private SqlSessionFactory factory;
     private static final String SALT = "keramic";
     private static final int CIRCLE = 251;
 
-    public SessionService(@NotNull SessionRepository sessionRepository, @NotNull UserRepository userRepository) {
-        this.sessionRepository = sessionRepository;
-        this.userRepository = userRepository;
+    public SessionService(@NotNull SqlSessionFactory factory) {
+        this.factory = factory;
     }
 
     @Nullable
