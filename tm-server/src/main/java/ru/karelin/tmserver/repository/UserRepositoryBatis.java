@@ -18,7 +18,7 @@ public interface UserRepositoryBatis extends UserRepository {
     @Override
     @ResultMap("UserMap")
     @Select("SELECT * FROM `" + TABLE_NAME + "` WHERE `" + LOGIN_FIELD + "` = #{login} AND `" + PASS_HASH_FIELD + "` = #{pass}")
-    User findOneByLoginAndPassword(@Param("logon") String login, @Param("pass") String passHash);
+    User findOneByLoginAndPassword(@Param("login") String login, @Param("pass") String passHash);
 
     @Override
     @ResultMap("UserMap")
