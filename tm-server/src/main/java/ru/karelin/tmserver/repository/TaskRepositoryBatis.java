@@ -187,7 +187,7 @@ public interface TaskRepositoryBatis extends TaskRepository {
             CREATION_DATE_FIELD + "`, `" +
             STATUS_FIELD + "`, `" +
             USER_ID_FIELD + "`, `" +
-            PROJECT_ID_FIELD  + "`) VALUES (#{id}, #{name}, #{description}, #{startDate}, #{finishDate}, #{creationDate}, #{status}, #{userId}, #{projectId)")
+            PROJECT_ID_FIELD  + "`) VALUES (#{id}, #{name}, #{description}, #{startDate}, #{finishDate}, #{creationDate}, #{status}, #{userId}, #{projectId})")
     void persist(Task task);
 
     @Override

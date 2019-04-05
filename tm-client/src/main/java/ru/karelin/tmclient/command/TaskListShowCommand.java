@@ -104,7 +104,7 @@ public final class TaskListShowCommand extends AbstractCommand {
             System.out.println("Task start date: " + dateFormat.format(dateConverter.convert(t.getStartDate())));
             System.out.println("Task finish date " + dateFormat.format(dateConverter.convert(t.getFinishDate())));
             System.out.println("Status: " + t.getStatus().toString());
-            if (showProjectId) System.out.println("Project ID: " + t.getProjectID());
+            if (showProjectId) System.out.println("Project ID: " + t.getProjectId());
             System.out.println();
         }
     }

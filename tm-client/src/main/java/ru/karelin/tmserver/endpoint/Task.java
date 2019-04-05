@@ -39,7 +39,7 @@ public class Task
 
     protected String description;
     protected String name;
-    protected String projectID;
+    protected String projectId;
 
     /**
      * Gets the value of the description property.
@@ -97,8 +97,8 @@ public class Task
      *     {@link String }
      *     
      */
-    public String getProjectID() {
-        return projectID;
+    public String getProjectId() {
+        return projectId;
     }
 
     /**
@@ -109,8 +109,8 @@ public class Task
      *     {@link String }
      *     
      */
-    public void setProjectID(String value) {
-        this.projectID = value;
+    public void setProjectId(String value) {
+        this.projectId = value;
     }
 
 }

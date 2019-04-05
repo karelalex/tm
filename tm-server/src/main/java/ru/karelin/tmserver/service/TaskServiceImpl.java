@@ -73,6 +73,7 @@ public final class TaskServiceImpl implements TaskService {
             session.commit();
         } catch (PersistenceException e) {
             session.rollback();
+            e.printStackTrace();
         } finally {
             session.close();
         }

@@ -79,12 +79,13 @@ public final class TaskCreateCommand  extends AbstractCommand {
             }
         }
         if (projectId.isEmpty()) {
-            System.out.println("Enter project id where task will be added or leave it empty");
+            System.out.println("Enter project id where task will be added");
             projectId = ts.readLn();
         }
-        while (!projectId.isEmpty() && !projectEndpoint.checkProjectId(session, projectId)) {
-            System.out.println("Wrong project id try again or leave it empty");
+        while (projectId.isEmpty() || !projectEndpoint.checkProjectId(session, projectId)) {
+            System.out.println("Wrong project id try again or print END to close this dialog");
             projectId = ts.readLn();
+            if (projectId.equals("END")) return;
         }
 
         taskEndpoint.createTask(session, taskName, taskDescription, dateConverter.convert(taskStartDate), dateConverter.convert(taskFinishDate), projectId);

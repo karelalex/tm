@@ -147,7 +147,7 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
         try {
             final List<Task> taskList = taskRepository.findAllByProjectId(id);
             taskRepository.removeAllInList(taskList);
-            session.commit();
+            //session.commit();
             Project p = projectRepository.findOneByIdAndUserId(id, userId);
             projectRepository.remove(p);
             session.commit();
