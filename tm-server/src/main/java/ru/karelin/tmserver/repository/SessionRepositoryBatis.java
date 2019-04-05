@@ -16,7 +16,8 @@ public interface SessionRepositoryBatis extends SessionRepository {
     String USER_ID_FIELD = "user_id";
 
     @Override
-    void removeOlder(Date date);
+    @Delete("DELETE from `" + TABLE_NAME +"` WHERE `" + CREATION_TIME_FIELD + "` < #{date}")
+    void removeOlder(@Param("date") Date date);
 
     @Override
     @Results({
@@ -49,7 +50,7 @@ public interface SessionRepositoryBatis extends SessionRepository {
     void merge(Session session);
 
     @Override
-    @Delete("DELETE from `" + TABLE_NAME + "` WHERE `" + ID_FIELD + "` = #{id}")
+    @Delete("DELETE from `session` WHERE `id` = #{id}")
     boolean remove(Session session);
 
     @Override

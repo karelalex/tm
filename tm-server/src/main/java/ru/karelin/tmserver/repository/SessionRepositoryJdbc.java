@@ -118,8 +118,8 @@ public class SessionRepositoryJdbc implements SessionRepository {
     @Override
     @SneakyThrows
     public void removeOlder(Date date) {
-        @NotNull final String qurey = "DELETE from `" + TABLE_NAME +"` WHERE `" + CREATION_TIME_FIELD + "` < ? ";
-        @NotNull final PreparedStatement statement = connection.prepareStatement(qurey);
+        @NotNull final String query = "DELETE from `" + TABLE_NAME +"` WHERE `" + CREATION_TIME_FIELD + "` < ? ";
+        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setTimestamp(1, new Timestamp(date.getTime()));
         statement.executeUpdate();
         statement.close();

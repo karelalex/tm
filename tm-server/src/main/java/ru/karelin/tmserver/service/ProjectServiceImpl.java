@@ -146,8 +146,8 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
         TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
         try {
             final List<Task> taskList = taskRepository.findAllByProjectId(id);
-            taskRepository.removeAllInList(taskList);
-            //session.commit();
+            if (taskList.size() > 0)
+                taskRepository.removeAllInList(taskList);
             Project p = projectRepository.findOneByIdAndUserId(id, userId);
             projectRepository.remove(p);
             session.commit();
