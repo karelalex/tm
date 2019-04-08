@@ -1,17 +1,15 @@
 package ru.karelin.tmserver.service;
 
 
-import org.apache.ibatis.exceptions.PersistenceException;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.api.repository.TaskRepository;
 import ru.karelin.tmserver.api.service.TaskService;
 import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.enumeration.Status;
-import ru.karelin.tmserver.repository.TaskRepositoryBatis;
 
+import javax.persistence.EntityManagerFactory;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -23,9 +21,9 @@ public final class TaskServiceImpl implements TaskService {
     private static final String FINISH_DATE_SORT_STRING = "fin";
     private static final String START_DATE_SORT_STRING = "start";
     private static final String STATUS_SORT_STRING = "stat";
-    final private SqlSessionFactory factory;
+    final private EntityManagerFactory factory;
 
-    public TaskServiceImpl(SqlSessionFactory factory) {
+    public TaskServiceImpl(EntityManagerFactory factory) {
         this.factory = factory;
     }
 

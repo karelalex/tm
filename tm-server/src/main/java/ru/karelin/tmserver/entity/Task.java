@@ -4,15 +4,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Setter
 @Getter
 @NoArgsConstructor
-public class Task extends AbstractSortableEntity implements Serializable {
-
-    private static final long serialVersionUID = 3636812355087287545L;
+@Entity
+public class Task extends AbstractSortableEntity  {
     private String name;
     private String description;
-    private String projectId;
+    @ManyToOne
+    @JoinColumn
+    private String Project;
 }

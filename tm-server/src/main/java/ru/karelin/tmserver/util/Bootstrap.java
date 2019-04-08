@@ -1,22 +1,15 @@
 package ru.karelin.tmserver.util;
 
-import org.apache.ibatis.session.SqlSessionFactory;
+
 import org.jetbrains.annotations.NotNull;
-import ru.karelin.tmserver.api.repository.SessionRepository;
-import ru.karelin.tmserver.api.repository.UserRepository;
-import ru.karelin.tmserver.api.service.DomainService;
-import ru.karelin.tmserver.api.service.ProjectService;
-import ru.karelin.tmserver.api.service.TaskService;
-import ru.karelin.tmserver.api.service.UserService;
+import ru.karelin.tmserver.api.service.*;
 import ru.karelin.tmserver.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.*;
-import ru.karelin.tmserver.repository.SessionRepositoryJdbc;
-import ru.karelin.tmserver.repository.UserRepositoryJdbc;
 import ru.karelin.tmserver.service.*;
 
+import javax.persistence.EntityManagerFactory;
 import javax.xml.ws.Endpoint;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,7 +33,7 @@ public final class Bootstrap implements ServiceLocator {
     @NotNull
     private DomainService domainService;
     @NotNull
-    private SessionService sessionService;
+    private SessionService sessionServiceImpl;
 
 
     @NotNull
@@ -77,25 +70,25 @@ public final class Bootstrap implements ServiceLocator {
 
     @Override
     public void init() throws SQLException, IOException, ClassNotFoundException {
-        SqlSessionFactory sqlSessionFactory = BatisInit.getSqlSessionFactory();
-        projectService = new ProjectServiceImpl(sqlSessionFactory);
-        taskService = new TaskServiceImpl(sqlSessionFactory);
-        userService = new UserServiceImpl(sqlSessionFactory);
-        domainService = new DomainServiceImpl(sqlSessionFactory);
-        sessionService = new SessionService(sqlSessionFactory);
+        EntityManagerFactory entityManagerFactory = HiberInit.getEntityManagerFactory();
+        projectService = new ProjectServiceImpl(entityManagerFactory);
+        taskService = new TaskServiceImpl(entityManagerFactory);
+        userService = new UserServiceImpl(entityManagerFactory);
+        domainService = new DomainServiceImpl(entityManagerFactory);
+        sessionServiceImpl = new SessionServiceImpl(entityManagerFactory);
 
-        sessionService.removeOldSessions(15); // clears old sessions from DB
+        sessionServiceImpl.removeOldSessions(15); // clears old sessions from DB
 
 
-        Endpoint.publish(USER_ENDPOINT_URL, new UserEndpoint(userService, sessionService));
+        Endpoint.publish(USER_ENDPOINT_URL, new UserEndpoint(userService, sessionServiceImpl));
         System.out.println("Endpoint with url " + USER_ENDPOINT_URL + " started.");
-        Endpoint.publish(PROJECT_ENDPOINT_URL, new ProjectEndpoint(projectService, sessionService));
+        Endpoint.publish(PROJECT_ENDPOINT_URL, new ProjectEndpoint(projectService, sessionServiceImpl));
         System.out.println("Endpoint with url " + PROJECT_ENDPOINT_URL + " started.");
-        Endpoint.publish(TASK_ENDPOINT_URL, new TaskEndpoint(taskService, sessionService));
+        Endpoint.publish(TASK_ENDPOINT_URL, new TaskEndpoint(taskService, sessionServiceImpl));
         System.out.println("Endpoint with url " + TASK_ENDPOINT_URL + " started.");
-        Endpoint.publish(DOMAIN_ENDPOINT_URL, new DomainEndpoint(domainService, sessionService));
+        Endpoint.publish(DOMAIN_ENDPOINT_URL, new DomainEndpoint(domainService, sessionServiceImpl));
         System.out.println("Endpoint with url " + DOMAIN_ENDPOINT_URL + " started.");
-        Endpoint.publish(SESSION_ENDPOINT_URL, new SessionEndpoint(sessionService));
+        Endpoint.publish(SESSION_ENDPOINT_URL, new SessionEndpoint(sessionServiceImpl));
         System.out.println("Endpoint with url " + SESSION_ENDPOINT_URL + " started");
 
 

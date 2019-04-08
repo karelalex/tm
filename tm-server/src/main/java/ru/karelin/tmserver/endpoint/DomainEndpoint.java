@@ -1,10 +1,11 @@
 package ru.karelin.tmserver.endpoint;
 
 import ru.karelin.tmserver.api.service.DomainService;
+import ru.karelin.tmserver.dto.SessionDto;
 import ru.karelin.tmserver.entity.Session;
 import ru.karelin.tmserver.exception.PermissionException;
 import ru.karelin.tmserver.exception.WrongSessionException;
-import ru.karelin.tmserver.service.SessionService;
+import ru.karelin.tmserver.api.service.SessionService;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -15,60 +16,60 @@ import java.io.IOException;
 public class DomainEndpoint {
 
     private DomainService domainService;
-    private SessionService sessionService;
+    private SessionService sessionServiceImpl;
 
-    public DomainEndpoint(DomainService domainService, SessionService sessionService) {
+    public DomainEndpoint(DomainService domainService, SessionService sessionServiceImpl) {
         this.domainService = domainService;
-        this.sessionService = sessionService;
+        this.sessionServiceImpl = sessionServiceImpl;
     }
 
     @WebMethod (operationName = "saveDomainByJavaSerialization")
-    public void saveSerialize(Session session) throws IOException, PermissionException, WrongSessionException {
-        if(sessionService.isSessionExists(session)) domainService.saveSerialize(session.getUserId());
+    public void saveSerialize(SessionDto session) throws IOException, PermissionException, WrongSessionException {
+        if(sessionServiceImpl.isSessionExists(session)) domainService.saveSerialize(session.getUserId());
     }
 
     @WebMethod (operationName = "restoreDomainFromJavaSerializedFile")
-    public void getSerialize(Session session) throws IOException, ClassNotFoundException, PermissionException, WrongSessionException {
-        if(sessionService.isSessionExists(session)) domainService.getSerialize(session.getUserId());
+    public void getSerialize(SessionDto session) throws IOException, ClassNotFoundException, PermissionException, WrongSessionException {
+        if(sessionServiceImpl.isSessionExists(session)) domainService.getSerialize(session.getUserId());
     }
 
     @WebMethod(operationName = "saveDomainToXmlByJaxB")
-    public void saveJaxXML(Session session) throws JAXBException, PermissionException, WrongSessionException {
-        if(sessionService.isSessionExists(session)) domainService.saveJaxXML(session.getUserId());
+    public void saveJaxXML(SessionDto session) throws JAXBException, PermissionException, WrongSessionException {
+        if(sessionServiceImpl.isSessionExists(session)) domainService.saveJaxXML(session.getUserId());
     }
 
     @WebMethod(operationName = "restoreDomainFromXmlByJaxB")
-    public void getJaxXML(Session session) throws JAXBException, PermissionException, WrongSessionException {
-        if(sessionService.isSessionExists(session)) domainService.getJaxXML(session.getUserId());
+    public void getJaxXML(SessionDto session) throws JAXBException, PermissionException, WrongSessionException {
+        if(sessionServiceImpl.isSessionExists(session)) domainService.getJaxXML(session.getUserId());
     }
 
     @WebMethod(operationName = "saveDomainToJsonByJaxB")
-    public void saveJaxJSON(Session session) throws JAXBException, PermissionException, WrongSessionException {
-        if(sessionService.isSessionExists(session)) domainService.saveJaxJSON(session.getUserId());
+    public void saveJaxJSON(SessionDto session) throws JAXBException, PermissionException, WrongSessionException {
+        if(sessionServiceImpl.isSessionExists(session)) domainService.saveJaxJSON(session.getUserId());
     }
 
     @WebMethod(operationName = "restoreDomainFromJsonByJaxB")
-    public void getJaxJSON(Session session) throws JAXBException, PermissionException, WrongSessionException {
-        if(sessionService.isSessionExists(session)) domainService.getJaxJSON(session.getUserId());
+    public void getJaxJSON(SessionDto session) throws JAXBException, PermissionException, WrongSessionException {
+        if(sessionServiceImpl.isSessionExists(session)) domainService.getJaxJSON(session.getUserId());
     }
 
     @WebMethod(operationName = "saveDomainToXmlByFasterXml")
-    public void saveFasterXML(Session session) throws IOException, PermissionException, WrongSessionException {
-        if(sessionService.isSessionExists(session)) domainService.saveFasterXML(session.getUserId());
+    public void saveFasterXML(SessionDto session) throws IOException, PermissionException, WrongSessionException {
+        if(sessionServiceImpl.isSessionExists(session)) domainService.saveFasterXML(session.getUserId());
     }
 
     @WebMethod(operationName = "restoreDomainFromXmlByFasterXml")
-    public void getFasterXML(Session session) throws IOException, PermissionException, WrongSessionException {
-        if(sessionService.isSessionExists(session)) domainService.getFasterXML(session.getUserId());
+    public void getFasterXML(SessionDto session) throws IOException, PermissionException, WrongSessionException {
+        if(sessionServiceImpl.isSessionExists(session)) domainService.getFasterXML(session.getUserId());
     }
 
     @WebMethod(operationName = "saveDomainToJsonByFasterXml")
-    public void saveFasterJSON(Session session) throws IOException, PermissionException, WrongSessionException {
-        if(sessionService.isSessionExists(session)) domainService.saveFasterJSON(session.getUserId());
+    public void saveFasterJSON(SessionDto session) throws IOException, PermissionException, WrongSessionException {
+        if(sessionServiceImpl.isSessionExists(session)) domainService.saveFasterJSON(session.getUserId());
     }
 
     @WebMethod(operationName = "restoreDomainFromJsonByFasterXml")
-    public void getFasterJSON(Session session) throws IOException, PermissionException, WrongSessionException {
-        if(sessionService.isSessionExists(session)) domainService.getFasterJSON(session.getUserId());
+    public void getFasterJSON(SessionDto session) throws IOException, PermissionException, WrongSessionException {
+        if(sessionServiceImpl.isSessionExists(session)) domainService.getFasterJSON(session.getUserId());
     }
 }

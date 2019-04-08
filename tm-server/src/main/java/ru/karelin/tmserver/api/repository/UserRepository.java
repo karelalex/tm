@@ -2,8 +2,10 @@ package ru.karelin.tmserver.api.repository;
 
 import ru.karelin.tmserver.entity.User;
 
-public interface UserRepository extends Repository<User> {
-    User findOneByLoginAndPassword(String login, String passHash);
+import javax.persistence.EntityManager;
 
-    User findOneByLogin(String login);
+public interface UserRepository extends Repository<User> {
+    User findOneByLoginAndPassword(String login, String passHash, EntityManager em);
+
+    User findOneByLogin(String login, EntityManager em);
 }

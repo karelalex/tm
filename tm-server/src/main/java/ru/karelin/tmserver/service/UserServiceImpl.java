@@ -1,47 +1,57 @@
 package ru.karelin.tmserver.service;
 
-import org.apache.ibatis.exceptions.PersistenceException;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.enumeration.RoleType;
-import ru.karelin.tmserver.exception.ObjectAlreadyExistsException;
-import ru.karelin.tmserver.repository.UserRepositoryBatis;
+import ru.karelin.tmserver.repository.UserRepositoryHiber;
 import ru.karelin.tmserver.util.MD5Generator;
 
-import java.text.ParseException;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 
 
 public final class UserServiceImpl implements UserService {
 
     @NotNull
-    private final SqlSessionFactory factory;
+    private final EntityManagerFactory factory;
 
 
-    public UserServiceImpl(@NotNull SqlSessionFactory factory) {
+    public UserServiceImpl(@NotNull EntityManagerFactory factory) {
         this.factory = factory;
     }
 
 
     @Override
     public User getUserByLoginAndPassword(final String login, final char[] password) {
-        try (SqlSession session = factory.openSession()) {
-            UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
-            return userRepository.findOneByLoginAndPassword(login, MD5Generator.generate(password));
+        EntityManager em = factory.createEntityManager();
+        UserRepository userRepository = new UserRepositoryHiber();
+        try {
+            return userRepository.findOneByLoginAndPassword(login, MD5Generator.generate(password), em);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            em.close();
         }
-
+        return null;
     }
 
     @Override
     public boolean isUserExistByLogin(final String login) {
-        try (SqlSession session = factory.openSession()) {
-            UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
-            return userRepository.findOneByLogin(login) != null;
+        EntityManager em = factory.createEntityManager();
+        UserRepository userRepository = new UserRepositoryHiber();
+        try {
+            return userRepository.findOneByLogin(login, em) != null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            em.close();
         }
+        return false;
     }
 
     @Override
@@ -51,67 +61,79 @@ public final class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(final String userId) {
-        try (SqlSession session = factory.openSession()) {
-            UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
-            return userRepository.findOne(userId);
+        EntityManager em = factory.createEntityManager();
+        UserRepository userRepository = new UserRepositoryHiber();
+        try {
+            return userRepository.findOne(userId, em);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            em.close();
         }
+        return null;
     }
 
     @Override
     public void editUser(final String userId, final String userName) {
-        SqlSession session = factory.openSession();
+        EntityManager em = factory.createEntityManager();
+        UserRepository userRepository = new UserRepositoryHiber();
+        EntityTransaction transaction = em.getTransaction();
         try {
-            UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
-
-            @Nullable final User user = userRepository.findOne(userId);
+            transaction.begin();
+            @Nullable final User user = userRepository.findOne(userId, em);
             if (user != null) {
                 if (!userName.isEmpty()) user.setUserName(userName);
-                userRepository.merge(user);
+                userRepository.merge(user, em);
             }
-            session.commit();
-        } catch (PersistenceException e) {
-            session.rollback();
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
             e.printStackTrace();
         } finally {
-            session.close();
+            em.close();
         }
     }
 
     @Override
     public void registerNewUser(final String login, char[] pass, final String name, final RoleType role) {
-        if (isUserExistByLogin(login)) throw new ObjectAlreadyExistsException("User with login " + login + " exists");
         final User user = new User();
         user.setLogin(login);
         user.setPasswordHash(MD5Generator.generate(pass));
         user.setUserName(name);
         user.setRole(role);
-        SqlSession session = factory.openSession();
+        EntityManager em = factory.createEntityManager();
+        UserRepository userRepository = new UserRepositoryHiber();
+        EntityTransaction transaction = em.getTransaction();
         try {
-            UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
-            userRepository.persist(user);
-        } catch (PersistenceException e) {
-            session.rollback();
+            transaction.begin();
+            userRepository.persist(user, em);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
             e.printStackTrace();
         } finally {
-            session.close();
+            em.close();
         }
     }
 
     @Override
     public boolean changePassword(final String userId, final char[] oldPass, final char[] newPass) {
-        SqlSession session = factory.openSession();
+        EntityManager em = factory.createEntityManager();
+        UserRepository userRepository = new UserRepositoryHiber();
+        EntityTransaction transaction = em.getTransaction();
         try {
-            UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
-            @Nullable final User user = userRepository.findOne(userId);
+            transaction.begin();
+            @Nullable final User user = userRepository.findOne(userId, em);
             if (user == null || !user.getPasswordHash().equals(MD5Generator.generate(oldPass))) return false;
             user.setPasswordHash(MD5Generator.generate(newPass));
-            userRepository.merge(user);
+            userRepository.merge(user, em);
+            transaction.commit();
             return true;
-        } catch (PersistenceException e) {
-            session.rollback();
+        } catch (Exception e) {
+            transaction.rollback();
             e.printStackTrace();
         } finally {
-            session.close();
+            em.close();
         }
         return false;
     }

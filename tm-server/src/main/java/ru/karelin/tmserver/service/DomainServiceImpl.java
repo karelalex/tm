@@ -26,11 +26,8 @@ import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.enumeration.RoleType;
 import ru.karelin.tmserver.exception.PermissionException;
-import ru.karelin.tmserver.repository.ProjectRepositoryBatis;
-import ru.karelin.tmserver.repository.TaskRepositoryBatis;
-import ru.karelin.tmserver.repository.UserRepositoryBatis;
-import sun.security.pkcs.ParsingException;
 
+import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -55,10 +52,10 @@ public class DomainServiceImpl implements DomainService {
     private final static String FASTER_JSON_FILE_NAME = "domainFASTER.json";
 
     @NotNull
-    private final SqlSessionFactory factory;
+    private final EntityManagerFactory factory;
 
 
-    public DomainServiceImpl(@NotNull SqlSessionFactory factory) {
+    public DomainServiceImpl(@NotNull EntityManagerFactory factory) {
         this.factory = factory;
     }
 
@@ -102,9 +99,11 @@ public class DomainServiceImpl implements DomainService {
                 if (o instanceof Project) {
                     projectRepository.persist((Project) o);
                 }
+
             }
             session.commit();
         } catch (EOFException e) {
+            session.commit();
             e.printStackTrace();
         } catch (PersistenceException e) {
             session.rollback();

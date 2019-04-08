@@ -12,9 +12,8 @@ import ru.karelin.tmserver.api.service.ProjectService;
 import ru.karelin.tmserver.entity.Project;
 import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.enumeration.Status;
-import ru.karelin.tmserver.repository.ProjectRepositoryBatis;
-import ru.karelin.tmserver.repository.TaskRepositoryBatis;
 
+import javax.persistence.EntityManagerFactory;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -23,14 +22,14 @@ import java.util.List;
 public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Project>*/ implements ProjectService {
 
 
-    final private SqlSessionFactory factory;
+    final private EntityManagerFactory factory;
 
     private static final String CREATION_DATE_SORT_STRING = "cre";
     private static final String FINISH_DATE_SORT_STRING = "fin";
     private static final String START_DATE_SORT_STRING = "start";
     private static final String STATUS_SORT_STRING = "stat";
 
-    public ProjectServiceImpl(@NotNull final SqlSessionFactory factory) {
+    public ProjectServiceImpl(@NotNull final EntityManagerFactory factory) {
         this.factory = factory;
     }
 

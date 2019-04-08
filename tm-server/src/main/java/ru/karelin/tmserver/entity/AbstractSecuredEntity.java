@@ -4,14 +4,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 @Setter
 @Getter
 @NoArgsConstructor
-public abstract class AbstractSecuredEntity extends AbstractEntity implements Serializable {
+@MappedSuperclass
+public abstract class AbstractSecuredEntity extends AbstractEntity  {
 
-    private static final long serialVersionUID = -4934536461890031112L;
-    private String userId;
+    @ManyToOne(optional = false)
+    @JoinColumn
+    private User user;
 
 }

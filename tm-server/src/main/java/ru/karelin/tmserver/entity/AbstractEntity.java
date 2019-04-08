@@ -4,15 +4,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class AbstractEntity implements Serializable {
+public abstract class AbstractEntity {
 
-    private static final long serialVersionUID = 2699580275687182107L;
+    @Id
     private String id= UUID.randomUUID().toString();
 
 }
