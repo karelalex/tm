@@ -2,47 +2,28 @@ package ru.karelin.tmserver.service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import org.apache.ibatis.exceptions.PersistenceException;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.eclipse.persistence.jaxb.JAXBContextFactory;
-import org.eclipse.persistence.jaxb.JAXBContextProperties;
-import org.eclipse.persistence.jaxb.MarshallerProperties;
 import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmserver.api.repository.ProjectRepository;
 import ru.karelin.tmserver.api.repository.TaskRepository;
 import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.api.service.DomainService;
-import ru.karelin.tmserver.entity.AbstractEntity;
 import ru.karelin.tmserver.entity.Project;
 import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.entity.User;
-import ru.karelin.tmserver.enumeration.RoleType;
 import ru.karelin.tmserver.exception.PermissionException;
 
 import javax.persistence.EntityManagerFactory;
-import javax.ws.rs.core.MediaType;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.transform.stream.StreamSource;
-import java.io.*;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DomainServiceImpl implements DomainService {
     private final static String SERIALIZE_FILE_NAME = "domain.ser";
@@ -61,7 +42,7 @@ public class DomainServiceImpl implements DomainService {
 
     @Override
     public void saveSerialize(String userId) throws IOException, PermissionException {
-        File f = new File(SERIALIZE_FILE_NAME);
+       /* File f = new File(SERIALIZE_FILE_NAME);
         try (SqlSession session = factory.openSession(); ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(f));) {
             UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
             ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
@@ -74,13 +55,13 @@ public class DomainServiceImpl implements DomainService {
             for (AbstractEntity t : list) {
                 objectOutputStream.writeObject(t);
             }
-        }
+        }*/
 
     }
 
     @Override
     public void getSerialize(String userId) throws IOException, ClassNotFoundException, PermissionException {
-        File f = new File(SERIALIZE_FILE_NAME);
+       /* File f = new File(SERIALIZE_FILE_NAME);
         Object o;
         SqlSession session = factory.openSession();
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));) {
@@ -110,13 +91,13 @@ public class DomainServiceImpl implements DomainService {
             e.printStackTrace();
         } finally {
             session.close();
-        }
+        }*/
 
     }
 
     @Override
     public void saveJaxXML(String userId) throws JAXBException, PermissionException {
-        try (SqlSession session = factory.openSession()) {
+        /*try (SqlSession session = factory.openSession()) {
             UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
             ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
             TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
@@ -127,12 +108,12 @@ public class DomainServiceImpl implements DomainService {
             final Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(createHolder(taskRepository, projectRepository, userRepository), new File(JAX_XLM_FILE_NAME));
-        }
+        }*/
     }
 
     @Override
     public void getJaxXML(String userId) throws JAXBException, PermissionException {
-        SqlSession session = factory.openSession();
+       /* SqlSession session = factory.openSession();
         try  {
             UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
             ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
@@ -148,12 +129,12 @@ public class DomainServiceImpl implements DomainService {
             e.printStackTrace();
         } finally {
             session.close();
-        }
+        }*/
     }
 
     @Override
     public void saveJaxJSON(String userId) throws JAXBException, PermissionException {
-        try (SqlSession session = factory.openSession();) {
+        /*try (SqlSession session = factory.openSession();) {
             UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
             ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
             TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
@@ -167,12 +148,12 @@ public class DomainServiceImpl implements DomainService {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.setProperty(MarshallerProperties.MEDIA_TYPE, MediaType.APPLICATION_JSON);
             marshaller.marshal(createHolder(taskRepository, projectRepository, userRepository), new File(JAX_JSON_FILE_NAME));
-        }
+        }*/
     }
 
     @Override
     public void getJaxJSON(String userId) throws JAXBException, PermissionException {
-        SqlSession session = factory.openSession();
+       /* SqlSession session = factory.openSession();
         try  {
             UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
             ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
@@ -190,12 +171,12 @@ public class DomainServiceImpl implements DomainService {
             e.printStackTrace();
         } finally {
             session.close();
-        }
+        }*/
     }
 
     @Override
     public void saveFasterXML(String userId) throws IOException, PermissionException {
-        try (SqlSession session = factory.openSession()) {
+        /*try (SqlSession session = factory.openSession()) {
             UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
             ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
             TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
@@ -204,13 +185,13 @@ public class DomainServiceImpl implements DomainService {
             XmlMapper xmlMapper = new XmlMapper();
             xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
             xmlMapper.writeValue(new File(FASTER_XML_FILE_NAME), createHolder(taskRepository, projectRepository, userRepository));
-        }
+        }*/
 
     }
 
     @Override
     public void getFasterXML(String userId) throws IOException, PermissionException {
-        SqlSession session = factory.openSession();
+        /*SqlSession session = factory.openSession();
         File f = new File(FASTER_XML_FILE_NAME);
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(f));) {
             UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
@@ -226,12 +207,12 @@ public class DomainServiceImpl implements DomainService {
             e.printStackTrace();
         } finally {
             session.close();
-        }
+        }*/
     }
 
     @Override
     public void saveFasterJSON(String userId) throws IOException, PermissionException {
-        try (SqlSession session = factory.openSession()) {
+       /* try (SqlSession session = factory.openSession()) {
             UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
             ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
             TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
@@ -240,12 +221,12 @@ public class DomainServiceImpl implements DomainService {
             ObjectMapper mapper = new ObjectMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
             mapper.writeValue(new File(FASTER_JSON_FILE_NAME), createHolder(taskRepository, projectRepository, userRepository));
-        }
+        }*/
     }
 
     @Override
     public void getFasterJSON(String userId) throws IOException, PermissionException {
-        SqlSession session = factory.openSession();
+       /* SqlSession session = factory.openSession();
         try  {
             UserRepository userRepository = session.getMapper(UserRepositoryBatis.class);
             ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
@@ -260,19 +241,19 @@ public class DomainServiceImpl implements DomainService {
             e.printStackTrace();
         } finally {
             session.close();
-        }
+        }*/
     }
 
     private Holder createHolder(TaskRepository taskRepository, ProjectRepository projectRepository, UserRepository userRepository) {
         final Holder holder = new Holder();
-        holder.projectList = projectRepository.findAll();
+        /*holder.projectList = projectRepository.findAll();
         holder.taskList = taskRepository.findAll();
-        holder.userList = userRepository.findAll();
+        holder.userList = userRepository.findAll();*/
         return holder;
     }
 
     private void extractHolder(Holder holder, TaskRepository taskRepository, ProjectRepository projectRepository, UserRepository userRepository) {
-        for (Task t : holder.taskList) {
+        /*for (Task t : holder.taskList) {
             taskRepository.persist(t);
         }
         for (Project p : holder.projectList) {
@@ -280,7 +261,7 @@ public class DomainServiceImpl implements DomainService {
         }
         for (User u : holder.userList) {
             userRepository.persist(u);
-        }
+        }*/
     }
 
     @XmlRootElement(name = "Domain")

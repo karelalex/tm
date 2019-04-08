@@ -18,5 +18,5 @@ public class Task extends AbstractSortableEntity  {
     private String description;
     @ManyToOne
     @JoinColumn
-    private String Project;
+    private Project project;
 }

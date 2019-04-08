@@ -16,7 +16,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-@MappedSuperclass
 public class Project extends AbstractSortableEntity{
     private String name;
     private String description;

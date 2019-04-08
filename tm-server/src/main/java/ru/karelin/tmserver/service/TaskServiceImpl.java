@@ -29,12 +29,12 @@ public final class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getList(String userId) {
-        try (SqlSession session = factory.openSession()) {
+       /* try (SqlSession session = factory.openSession()) {
             TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
             return taskRepository.findAllByUserId(userId);
         } catch (PersistenceException e) {
             e.printStackTrace();
-        }
+        }*/
         return Collections.emptyList();
     }
 
@@ -45,18 +45,18 @@ public final class TaskServiceImpl implements TaskService {
 
     @Override
     public Task getOne(String userId, String id) {
-        try (SqlSession session = factory.openSession()) {
+       /* try (SqlSession session = factory.openSession()) {
             TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
             return taskRepository.findOneByIdAndUserId(id, userId);
         } catch (PersistenceException e) {
             e.printStackTrace();
-        }
+        }*/
         return null;
     }
 
     @Override
     public void create(final String userId, final String name, final String description, final Date startDate, final Date finishDate, final String projectId) {
-        @NotNull final Task task = new Task();
+       /* @NotNull final Task task = new Task();
         task.setName(name);
         task.setDescription(description);
         task.setStartDate(startDate);
@@ -74,12 +74,12 @@ public final class TaskServiceImpl implements TaskService {
             e.printStackTrace();
         } finally {
             session.close();
-        }
+        }*/
     }
 
     @Override
     public void edit(final String userId, final String id, final String name, final String description, final Date startDate, final Date finishDate, final String projectId, final Status status) {
-        SqlSession session = factory.openSession();
+       /* SqlSession session = factory.openSession();
         try {
             TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
             @Nullable final Task task = taskRepository.findOneByIdAndUserId(id, userId);
@@ -98,25 +98,25 @@ public final class TaskServiceImpl implements TaskService {
             e.printStackTrace();
         } finally {
             session.close();
-        }
+        }*/
     }
 
 
     @Override
     public List<Task> getListByProjectId(final String userId, final String projectId) {
-        try (SqlSession session = factory.openSession()) {
+        /*try (SqlSession session = factory.openSession()) {
             TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
             return taskRepository.findAllByProjectIdAndUserId(projectId, userId);
         } catch (PersistenceException e) {
             e.printStackTrace();
-        }
+        }*/
         return Collections.emptyList();
     }
 
 
     @Override
     public void remove(final String userId, final String id) {
-        SqlSession session = factory.openSession();
+       /* SqlSession session = factory.openSession();
         try {
             TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
             @Nullable final Task task = taskRepository.findOneByIdAndUserId(id, userId);
@@ -128,12 +128,12 @@ public final class TaskServiceImpl implements TaskService {
             session.rollback();
         } finally {
             session.close();
-        }
+        }*/
     }
 
     @Override
     public List<Task> getSortedListByProjectId(String userId, String projectId, String sortField, boolean isStraight) {
-        try (SqlSession session = factory.openSession()) {
+       /* try (SqlSession session = factory.openSession()) {
             TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
             switch (sortField) {
                 case START_DATE_SORT_STRING:
@@ -165,13 +165,13 @@ public final class TaskServiceImpl implements TaskService {
             }
         } catch (PersistenceException e) {
             e.printStackTrace();
-        }
+        }*/
         return Collections.emptyList();
     }
 
     @Override
     public List<Task> getSortedList(String userId, String sortField, boolean isStraight) {
-        try (SqlSession session = factory.openSession()) {
+        /*try (SqlSession session = factory.openSession()) {
             TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
             switch (sortField) {
                 case START_DATE_SORT_STRING:
@@ -203,18 +203,18 @@ public final class TaskServiceImpl implements TaskService {
             }
         } catch (PersistenceException e) {
             e.printStackTrace();
-        }
+        }*/
         return Collections.emptyList();
     }
 
     @Override
     public List<Task> getListByKeyword(String userId, String keyword) {
-        try (SqlSession session = factory.openSession()) {
+      /*  try (SqlSession session = factory.openSession()) {
             TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
             return taskRepository.findAllByUserIdAndKeyword(userId, keyword);
         } catch (PersistenceException e) {
             e.printStackTrace();
-        }
+        }*/
         return Collections.emptyList();
     }
 

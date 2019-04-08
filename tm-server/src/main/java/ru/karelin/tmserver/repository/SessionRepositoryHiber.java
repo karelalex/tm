@@ -10,7 +10,7 @@ import java.util.List;
 public class SessionRepositoryHiber implements ru.karelin.tmserver.api.repository.SessionRepository {
     @Override
     public void removeOlder(Date date, EntityManager em) {
-        em.createQuery("DELETE form Session s WHERE s.creationDate < :date").setParameter("date", date).executeUpdate();
+        em.createQuery("DELETE FROM Session s WHERE s.creationDate < :date").setParameter("date", date).executeUpdate();
     }
 
     @Override

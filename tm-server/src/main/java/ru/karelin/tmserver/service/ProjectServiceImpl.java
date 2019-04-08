@@ -1,16 +1,10 @@
 package ru.karelin.tmserver.service;
 
 
-import org.apache.ibatis.exceptions.PersistenceException;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import ru.karelin.tmserver.api.repository.ProjectRepository;
-import ru.karelin.tmserver.api.repository.TaskRepository;
 import ru.karelin.tmserver.api.service.ProjectService;
 import ru.karelin.tmserver.entity.Project;
-import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.enumeration.Status;
 
 import javax.persistence.EntityManagerFactory;
@@ -35,11 +29,11 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
 
     @Override
     public List<Project> getList(String userId) {
-        SqlSession session = factory.openSession();
-        ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
-        List<Project> list;
-        list = projectRepository.findAllByUserId(userId);
-        session.close();
+       /* SqlSession session = factory.openSession();
+        ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);*/
+        List<Project> list = null;
+        /*list = projectRepository.findAllByUserId(userId);
+        session.close();*/
         return list;
     }
 
@@ -50,16 +44,16 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
 
     @Override
     public Project getOne(String userId, String id) {
-        SqlSession session = factory.openSession();
-        ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
-        Project p = projectRepository.findOneByIdAndUserId(id, userId);
-        session.close();
+       /* SqlSession session = factory.openSession();
+        ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);*/
+        Project p = null; /*projectRepository.findOneByIdAndUserId(id, userId);*/
+       /* session.close();*/
         return p;
     }
 
     @Override
     public void create(@NotNull final String userId, final String name, final String description, final Date startDate, final Date finishDate) {
-        SqlSession session = factory.openSession();
+        /*SqlSession session = factory.openSession();
         try {
             ProjectRepository entityRepository = session.getMapper(ProjectRepositoryBatis.class);
             @NotNull final Project project = new Project();
@@ -75,12 +69,12 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
             session.rollback();
         } finally {
             session.close();
-        }
+        }*/
     }
 
     @Override
     public void edit(final String userId, final String id, final String name, final String description, final Date startDate, final Date finishDate, Status status) {
-        SqlSession session = factory.openSession();
+        /*SqlSession session = factory.openSession();
         ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
         try {
             @Nullable final Project project = projectRepository.findOneByIdAndUserId(id, userId);
@@ -97,12 +91,12 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
             session.rollback();
         } finally {
             session.close();
-        }
+        }*/
     }
 
     @Override
     public List<Project> getSortedList(String userId, String sortField, boolean isStraight) {
-        try (SqlSession session = factory.openSession()) {
+        /*try (SqlSession session = factory.openSession()) {
             ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
             switch (sortField) {
                 case START_DATE_SORT_STRING:
@@ -134,13 +128,13 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
             }
         } catch (PersistenceException e) {
             e.printStackTrace();
-        }
+        }*/
         return Collections.emptyList();
     }
 
     @Override
     public void remove(final String userId, final String id) {
-        SqlSession session = factory.openSession();
+        /*SqlSession session = factory.openSession();
         ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
         TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
         try {
@@ -155,18 +149,18 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
             session.rollback();
         } finally {
             session.close();
-        }
+        }*/
 
     }
 
     @Override
     public List<Project> getListByKeyword(String userId, String keyword) {
-        try (SqlSession session = factory.openSession()) {
+        /*try (SqlSession session = factory.openSession()) {
             ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
             return projectRepository.findAllByUserIdAndKeyword(userId, keyword);
         } catch (PersistenceException e) {
             e.printStackTrace();
-        }
+        }*/
         return Collections.emptyList();
     }
 }
