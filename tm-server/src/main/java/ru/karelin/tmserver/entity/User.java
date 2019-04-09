@@ -6,9 +6,9 @@ import lombok.Setter;
 import ru.karelin.tmserver.enumeration.RoleType;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.io.Serializable;
 
 @Getter
 @Setter
@@ -19,6 +19,7 @@ public class User extends AbstractEntity  {
     private String login;
     private String passwordHash;
     private String userName;
+   @Enumerated(EnumType.STRING)
     private RoleType role;
 
 }

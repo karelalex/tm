@@ -34,7 +34,7 @@ public final class Bootstrap implements ServiceLocator {
     @NotNull
     private DomainService domainService;
     @NotNull
-    private SessionService sessionServiceImpl;
+    private SessionService sessionService;
 
 
     @NotNull
@@ -76,26 +76,27 @@ public final class Bootstrap implements ServiceLocator {
         taskService = new TaskServiceImpl(entityManagerFactory);
         userService = new UserServiceImpl(entityManagerFactory);
         domainService = new DomainServiceImpl(entityManagerFactory);
-        sessionServiceImpl = new SessionServiceImpl(entityManagerFactory);
+        sessionService = new SessionServiceImpl(entityManagerFactory);
 
-        sessionServiceImpl.removeOldSessions(15); // clears old sessions from DB
+        sessionService.removeOldSessions(15); // clears old sessions from DB
 
 
-        Endpoint.publish(USER_ENDPOINT_URL, new UserEndpoint(userService, sessionServiceImpl));
+        Endpoint.publish(USER_ENDPOINT_URL, new UserEndpoint(userService, sessionService));
         System.out.println("Endpoint with url " + USER_ENDPOINT_URL + " started.");
-        Endpoint.publish(PROJECT_ENDPOINT_URL, new ProjectEndpoint(projectService, sessionServiceImpl));
+        Endpoint.publish(PROJECT_ENDPOINT_URL, new ProjectEndpoint(projectService, sessionService));
         System.out.println("Endpoint with url " + PROJECT_ENDPOINT_URL + " started.");
-        Endpoint.publish(TASK_ENDPOINT_URL, new TaskEndpoint(taskService, sessionServiceImpl));
+        Endpoint.publish(TASK_ENDPOINT_URL, new TaskEndpoint(taskService, sessionService));
         System.out.println("Endpoint with url " + TASK_ENDPOINT_URL + " started.");
-        Endpoint.publish(DOMAIN_ENDPOINT_URL, new DomainEndpoint(domainService, sessionServiceImpl));
+        Endpoint.publish(DOMAIN_ENDPOINT_URL, new DomainEndpoint(domainService, sessionService));
         System.out.println("Endpoint with url " + DOMAIN_ENDPOINT_URL + " started.");
-        Endpoint.publish(SESSION_ENDPOINT_URL, new SessionEndpoint(sessionServiceImpl));
+        Endpoint.publish(SESSION_ENDPOINT_URL, new SessionEndpoint(sessionService));
         System.out.println("Endpoint with url " + SESSION_ENDPOINT_URL + " started");
 
 
         // create two users block
         //userService.registerNewUser("sk", "pp".toCharArray(), "alex", RoleType.ORDINARY_USER);
-        //userService.registerNewUser("bb", "ee".toCharArray(), "boris", RoleType.ADMIN);
+        //userService.registerNewUser("zz", "tt".toCharArray(), "tank", RoleType.ORDINARY_USER);
+        // userService.registerNewUser("bb", "ee".toCharArray(), "boris", RoleType.ADMIN);
 
         // end of create two users block
 

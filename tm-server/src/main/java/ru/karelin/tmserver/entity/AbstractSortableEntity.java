@@ -27,6 +27,6 @@ public abstract class AbstractSortableEntity extends AbstractSecuredEntity  {
     @CreationTimestamp
     @Temporal(value = TemporalType.DATE)
     private Date creationDate;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Status status;
 }

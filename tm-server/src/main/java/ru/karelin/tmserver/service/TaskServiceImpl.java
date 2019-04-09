@@ -2,6 +2,7 @@ package ru.karelin.tmserver.service;
 
 
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.api.repository.TaskRepository;
@@ -22,6 +23,7 @@ public final class TaskServiceImpl implements TaskService {
     private static final String START_DATE_SORT_STRING = "start";
     private static final String STATUS_SORT_STRING = "stat";
     final private EntityManagerFactory factory;
+
 
     public TaskServiceImpl(EntityManagerFactory factory) {
         this.factory = factory;
