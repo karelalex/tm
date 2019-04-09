@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmserver.api.service.*;
 import ru.karelin.tmserver.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.*;
+import ru.karelin.tmserver.enumeration.RoleType;
 import ru.karelin.tmserver.service.*;
 
 import javax.persistence.EntityManagerFactory;

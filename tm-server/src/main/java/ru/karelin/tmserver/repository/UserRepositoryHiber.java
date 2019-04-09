@@ -17,14 +17,14 @@ public class UserRepositoryHiber implements ru.karelin.tmserver.api.repository.U
 
     @Override
     public User findOneByLogin(String login, EntityManager em) {
-        return em.createQuery("SELECT u FROM User WHERE u.login = :login", User.class)
+        return em.createQuery("SELECT u FROM User u WHERE u.login = :login", User.class)
                 .setParameter("login", login)
                 .getSingleResult();
     }
 
     @Override
     public List<User> findAll(EntityManager em) {
-        return em.createQuery("SELECT from User", User.class).getResultList();
+        return em.createQuery("SELECT u from User u", User.class).getResultList();
     }
 
     @Override

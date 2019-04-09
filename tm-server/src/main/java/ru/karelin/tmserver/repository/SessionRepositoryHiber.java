@@ -15,7 +15,7 @@ public class SessionRepositoryHiber implements ru.karelin.tmserver.api.repositor
 
     @Override
     public List<Session> findAll(EntityManager em) {
-        return em.createQuery("SELECT from Session", Session.class).getResultList();
+        return em.createQuery("SELECT s FROM Session s", Session.class).getResultList();
     }
 
     @Override

@@ -8,7 +8,6 @@ import java.sql.SQLException;
 public class Application {
 
     public static void main(String[] args)  {
-
         try {
             new Bootstrap().init();
         } catch (SQLException e) {
