@@ -38,9 +38,9 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
     @Override
     public List<Project> getList(String userId) {
         EntityManager em = factory.createEntityManager();
-        ProjectRepository projectRepository = new ProjectRepositoryHiber();
+        ProjectRepository projectRepository = new ProjectRepositoryHiber(em);
         try {
-            return projectRepository.findAllByUserId(userId, em);
+            return projectRepository.findAllByUserId(userId);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -58,9 +58,9 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
     @Override
     public Project getOne(String userId, String id) {
         EntityManager em = factory.createEntityManager();
-        ProjectRepository projectRepository = new ProjectRepositoryHiber();
+        ProjectRepository projectRepository = new ProjectRepositoryHiber(em);
         try {
-            return projectRepository.findOneByIdAndUserId(id, userId, em);
+            return projectRepository.findOneByIdAndUserId(id, userId);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -72,8 +72,8 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
     @Override
     public void create(@NotNull final String userId, final String name, final String description, final Date startDate, final Date finishDate) {
         EntityManager em = factory.createEntityManager();
-        ProjectRepository projectRepository = new ProjectRepositoryHiber();
-        UserRepository userRepository = new UserRepositoryHiber();
+        ProjectRepository projectRepository = new ProjectRepositoryHiber(em);
+        UserRepository userRepository = new UserRepositoryHiber(em);
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
@@ -82,14 +82,14 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
             project.setDescription(description);
             project.setStartDate(startDate);
             project.setFinishDate(finishDate);
-            User user = userRepository.findOne(userId, em);
+            User user = userRepository.findOne(userId);
             if (user==null){
                 transaction.rollback();
                 return;
             }
             project.setUser(user);
             project.setStatus(Status.PLANNED);
-            projectRepository.persist(project, em);
+            projectRepository.persist(project);
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -102,18 +102,18 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
     @Override
     public void edit(final String userId, final String id, final String name, final String description, final Date startDate, final Date finishDate, Status status) {
         EntityManager em = factory.createEntityManager();
-        ProjectRepository projectRepository = new ProjectRepositoryHiber();
+        ProjectRepository projectRepository = new ProjectRepositoryHiber(em);
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
-            @Nullable final Project project = projectRepository.findOneByIdAndUserId(id, userId, em);
+            @Nullable final Project project = projectRepository.findOneByIdAndUserId(id, userId);
             if (project != null) {
                 if (!name.isEmpty()) project.setName(name);
                 if (!description.isEmpty()) project.setDescription(description);
                 if (startDate != null) project.setStartDate(startDate);
                 if (finishDate != null) project.setFinishDate(finishDate);
                 if (status != null) project.setStatus(status);
-                projectRepository.merge(project, em);
+                projectRepository.merge(project);
             }
             transaction.commit();
         } catch (Exception e) {
@@ -127,32 +127,32 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
     @Override
     public List<Project> getSortedList(String userId, String sortField, boolean isStraight) {
         EntityManager em = factory.createEntityManager();
-        ProjectRepository projectRepository = new ProjectRepositoryHiber();
+        ProjectRepository projectRepository = new ProjectRepositoryHiber(em);
         try {
             switch (sortField) {
                 case START_DATE_SORT_STRING:
                     if (isStraight) {
-                        return projectRepository.findAllByUserIdOrderByStartDate(userId, em);
+                        return projectRepository.findAllByUserIdOrderByStartDate(userId);
                     } else {
-                        return projectRepository.findAllByUserIdOrderByStartDateDesc(userId, em);
+                        return projectRepository.findAllByUserIdOrderByStartDateDesc(userId);
                     }
                 case FINISH_DATE_SORT_STRING:
                     if (isStraight) {
-                        return projectRepository.findAllByUserIdOrderByFinishDate(userId, em);
+                        return projectRepository.findAllByUserIdOrderByFinishDate(userId);
                     } else {
-                        return projectRepository.findAllByUserIdOrderByFinishDateDesc(userId, em);
+                        return projectRepository.findAllByUserIdOrderByFinishDateDesc(userId);
                     }
                 case CREATION_DATE_SORT_STRING:
                     if (isStraight) {
-                        return projectRepository.findAllByUserIdOrderByCreationDate(userId, em);
+                        return projectRepository.findAllByUserIdOrderByCreationDate(userId);
                     } else {
-                        return projectRepository.findAllByUserIdOrderByCreationDateDesc(userId, em);
+                        return projectRepository.findAllByUserIdOrderByCreationDateDesc(userId);
                     }
                 case STATUS_SORT_STRING:
                     if (isStraight) {
-                        return projectRepository.findAllByUserIdOrderByStatus(userId, em);
+                        return projectRepository.findAllByUserIdOrderByStatus(userId);
                     } else {
-                        return projectRepository.findAllByUserIdOrderByStatusDesc(userId, em);
+                        return projectRepository.findAllByUserIdOrderByStatusDesc(userId);
                     }
                 default:
                     return getList(userId);
@@ -168,13 +168,13 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
     @Override
     public void remove(final String userId, final String id) {
         EntityManager em = factory.createEntityManager();
-        ProjectRepository projectRepository = new ProjectRepositoryHiber();
+        ProjectRepository projectRepository = new ProjectRepositoryHiber(em);
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
-            Project p = projectRepository.findOneByIdAndUserId(id, userId, em);
+            Project p = projectRepository.findOneByIdAndUserId(id, userId);
             if (p != null)
-                projectRepository.remove(p, em);
+                projectRepository.remove(p);
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -188,9 +188,9 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
     @Override
     public List<Project> getListByKeyword(String userId, String keyword) {
         EntityManager em = factory.createEntityManager();
-        ProjectRepository projectRepository = new ProjectRepositoryHiber();
+        ProjectRepository projectRepository = new ProjectRepositoryHiber(em);
         try {
-            return projectRepository.findAllByUserIdAndKeyword(userId, keyword, em);
+            return projectRepository.findAllByUserIdAndKeyword(userId, keyword);
         } catch (Exception e) {
             e.printStackTrace();
         }

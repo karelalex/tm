@@ -34,16 +34,16 @@ public final class SessionServiceImpl implements SessionService {
     public Session getNewSession(final String login, final String password) {
         EntityManager em = factory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
-        UserRepository userRepository = new UserRepositoryHiber();
-        SessionRepository sessionRepository = new SessionRepositoryHiber();
+        UserRepository userRepository = new UserRepositoryHiber(em);
+        SessionRepository sessionRepository = new SessionRepositoryHiber(em);
         try {
             transaction.begin();
-            @Nullable final User user = userRepository.findOneByLoginAndPassword(login, MD5Generator.generate(password), em);
+            @Nullable final User user = userRepository.findOneByLoginAndPassword(login, MD5Generator.generate(password));
             if (user != null) {
                 Session session = new Session();
                 session.setUser(user);
                 session.setSignature(SignatureUtil.sign(session.getId()+session.getUser().getId(), SALT, CIRCLE));
-                sessionRepository.persist(session, em);
+                sessionRepository.persist(session);
                 transaction.commit();
                 return session;
             }
@@ -62,10 +62,10 @@ public final class SessionServiceImpl implements SessionService {
         System.out.println(date);
         EntityManager em = factory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
-        SessionRepository sessionRepository = new SessionRepositoryHiber();
+        SessionRepository sessionRepository = new SessionRepositoryHiber(em);
         try {
             transaction.begin();
-            sessionRepository.removeOlder(date, em);
+            sessionRepository.removeOlder(date);
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,13 +78,13 @@ public final class SessionServiceImpl implements SessionService {
 
     @Override public void removeSession(@Nullable String sessionId) throws WrongSessionException {
         EntityManager em = factory.createEntityManager();
-        SessionRepository sessionRepository = new SessionRepositoryHiber();
+        SessionRepository sessionRepository = new SessionRepositoryHiber(em);
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
-            final Session session = sessionRepository.findOne(sessionId, em);
+            final Session session = sessionRepository.findOne(sessionId);
             if (session != null) {
-                sessionRepository.remove(session, em);
+                sessionRepository.remove(session);
                transaction.commit();
             } else throw new WrongSessionException("No such session found");
         }
@@ -106,9 +106,9 @@ public final class SessionServiceImpl implements SessionService {
         session.setSignature(null);
         if (signature.equals(SignatureUtil.sign(session.getId()+session.getUserId(), SALT, CIRCLE))) {
             EntityManager em = factory.createEntityManager();
-            SessionRepository sessionRepository = new SessionRepositoryHiber();
+            SessionRepository sessionRepository = new SessionRepositoryHiber(em);
             try  {
-                Session tempSession = sessionRepository.findOne(session.getId(), em);
+                Session tempSession = sessionRepository.findOne(session.getId());
                 if (tempSession == null || !tempSession.getUser().getId().equals(session.getUserId())) throw new WrongSessionException("No such session found");
                 session.setSignature(signature);
                 return true;

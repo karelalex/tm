@@ -32,9 +32,9 @@ public final class UserServiceImpl implements UserService {
     @Override
     public User getUserByLoginAndPassword(final String login, final char[] password) {
         EntityManager em = factory.createEntityManager();
-        UserRepository userRepository = new UserRepositoryHiber();
+        UserRepository userRepository = new UserRepositoryHiber(em);
         try {
-            return userRepository.findOneByLoginAndPassword(login, MD5Generator.generate(password), em);
+            return userRepository.findOneByLoginAndPassword(login, MD5Generator.generate(password));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -46,9 +46,9 @@ public final class UserServiceImpl implements UserService {
     @Override
     public boolean isUserExistByLogin(final String login) {
         EntityManager em = factory.createEntityManager();
-        UserRepository userRepository = new UserRepositoryHiber();
+        UserRepository userRepository = new UserRepositoryHiber(em);
         try {
-            return userRepository.findOneByLogin(login, em) != null;
+            return userRepository.findOneByLogin(login) != null;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -66,9 +66,9 @@ public final class UserServiceImpl implements UserService {
     @Override
     public User getUserById(final String userId) {
         EntityManager em = factory.createEntityManager();
-        UserRepository userRepository = new UserRepositoryHiber();
+        UserRepository userRepository = new UserRepositoryHiber(em);
         try {
-            return userRepository.findOne(userId, em);
+            return userRepository.findOne(userId);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -80,14 +80,14 @@ public final class UserServiceImpl implements UserService {
     @Override
     public void editUser(final String userId, final String userName) {
         EntityManager em = factory.createEntityManager();
-        UserRepository userRepository = new UserRepositoryHiber();
+        UserRepository userRepository = new UserRepositoryHiber(em);
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
-            @Nullable final User user = userRepository.findOne(userId, em);
+            @Nullable final User user = userRepository.findOne(userId);
             if (user != null) {
                 if (!userName.isEmpty()) user.setUserName(userName);
-                userRepository.merge(user, em);
+                userRepository.merge(user);
             }
             transaction.commit();
         } catch (Exception e) {
@@ -106,11 +106,11 @@ public final class UserServiceImpl implements UserService {
         user.setUserName(name);
         user.setRole(role);
         EntityManager em = factory.createEntityManager();
-        UserRepository userRepository = new UserRepositoryHiber();
+        UserRepository userRepository = new UserRepositoryHiber(em);
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
-            userRepository.persist(user, em);
+            userRepository.persist(user);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
@@ -123,14 +123,14 @@ public final class UserServiceImpl implements UserService {
     @Override
     public boolean changePassword(final String userId, final char[] oldPass, final char[] newPass) {
         EntityManager em = factory.createEntityManager();
-        UserRepository userRepository = new UserRepositoryHiber();
+        UserRepository userRepository = new UserRepositoryHiber(em);
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
-            @Nullable final User user = userRepository.findOne(userId, em);
+            @Nullable final User user = userRepository.findOne(userId);
             if (user == null || !user.getPasswordHash().equals(MD5Generator.generate(oldPass))) return false;
             user.setPasswordHash(MD5Generator.generate(newPass));
-            userRepository.merge(user, em);
+            userRepository.merge(user);
             transaction.commit();
             return true;
         } catch (Exception e) {

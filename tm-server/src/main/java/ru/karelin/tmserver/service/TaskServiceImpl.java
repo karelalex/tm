@@ -40,9 +40,9 @@ public final class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> getList(String userId) {
         EntityManager em = factory.createEntityManager();
-        TaskRepository taskRepository = new TaskRepositoryHiber();
+        TaskRepository taskRepository = new TaskRepositoryHiber(em);
         try {
-            return taskRepository.findAllByUserId(userId, em);
+            return taskRepository.findAllByUserId(userId);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -59,13 +59,12 @@ public final class TaskServiceImpl implements TaskService {
     @Override
     public Task getOne(String userId, String id) {
         EntityManager em = factory.createEntityManager();
-        TaskRepository taskRepository = new TaskRepositoryHiber();
+        TaskRepository taskRepository = new TaskRepositoryHiber(em);
         try {
-            return taskRepository.findOneByIdAndUserId(id, userId, em);
+            return taskRepository.findOneByIdAndUserId(id, userId);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             em.close();
         }
         return null;
@@ -74,19 +73,19 @@ public final class TaskServiceImpl implements TaskService {
     @Override
     public void create(final String userId, final String name, final String description, final Date startDate, final Date finishDate, final String projectId) {
         EntityManager em = factory.createEntityManager();
-        TaskRepository taskRepository = new TaskRepositoryHiber();
-        UserRepository userRepository = new UserRepositoryHiber();
-        ProjectRepository projectRepository = new ProjectRepositoryHiber();
+        TaskRepository taskRepository = new TaskRepositoryHiber(em);
+        UserRepository userRepository = new UserRepositoryHiber(em);
+        ProjectRepository projectRepository = new ProjectRepositoryHiber(em);
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
-            User user = userRepository.findOne(userId, em);
-            if (user==null) {
+            User user = userRepository.findOne(userId);
+            if (user == null) {
                 transaction.rollback();
                 return;
             }
-            Project project = projectRepository.findOneByIdAndUserId(projectId, userId, em);
-            if (project==null){
+            Project project = projectRepository.findOneByIdAndUserId(projectId, userId);
+            if (project == null) {
                 transaction.rollback();
                 return;
             }
@@ -98,7 +97,7 @@ public final class TaskServiceImpl implements TaskService {
             task.setDescription(description);
             task.setStartDate(startDate);
             task.setFinishDate(finishDate);
-            taskRepository.persist(task, em);
+            taskRepository.persist(task);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
@@ -109,32 +108,31 @@ public final class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void edit( @NotNull final String userId, @NotNull final String id, @NotNull final String name, @NotNull final String description, @Nullable final Date startDate, @Nullable final Date finishDate, @NotNull final String projectId, @Nullable final Status status) {
-       EntityManager em = factory.createEntityManager();
-       TaskRepository taskRepository = new TaskRepositoryHiber();
-       ProjectRepository projectRepository = new ProjectRepositoryHiber();
-       EntityTransaction transaction = em.getTransaction();
+    public void edit(@NotNull final String userId, @NotNull final String id, @NotNull final String name, @NotNull final String description, @Nullable final Date startDate, @Nullable final Date finishDate, @NotNull final String projectId, @Nullable final Status status) {
+        EntityManager em = factory.createEntityManager();
+        TaskRepository taskRepository = new TaskRepositoryHiber(em);
+        ProjectRepository projectRepository = new ProjectRepositoryHiber(em);
+        EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
-            @Nullable final Task task = taskRepository.findOneByIdAndUserId(id, userId, em);
+            @Nullable final Task task = taskRepository.findOneByIdAndUserId(id, userId);
             if (task != null) {
                 if (!name.isEmpty()) task.setName(name);
                 if (!description.isEmpty()) task.setDescription(description);
                 if (startDate != null) task.setStartDate(startDate);
                 if (finishDate != null) task.setFinishDate(finishDate);
                 if (!projectId.isEmpty()) {
-                    @Nullable final Project project = projectRepository.findOneByIdAndUserId(projectId, userId, em);
-                    if (project==null){
+                    @Nullable final Project project = projectRepository.findOneByIdAndUserId(projectId, userId);
+                    if (project == null) {
                         transaction.rollback();
                         return;
                     }
                     task.setProject(project);
                 }
                 if (status != null) task.setStatus(status);
-                taskRepository.merge(task, em);
+                taskRepository.merge(task);
                 transaction.commit();
-            }
-            else {
+            } else {
                 transaction.rollback();
             }
         } catch (Exception e) {
@@ -148,37 +146,45 @@ public final class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getListByProjectId(final String userId, final String projectId) {
-        /*try (SqlSession session = factory.openSession()) {
-            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
+        EntityManager em = factory.createEntityManager();
+        TaskRepository taskRepository = new TaskRepositoryHiber(em);
+        try {
             return taskRepository.findAllByProjectIdAndUserId(projectId, userId);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        } finally {
+            em.close();
+        }
         return Collections.emptyList();
     }
 
 
     @Override
     public void remove(final String userId, final String id) {
-       /* SqlSession session = factory.openSession();
+        EntityManager em = factory.createEntityManager();
+        TaskRepository taskRepository = new TaskRepositoryHiber(em);
+        EntityTransaction transaction = em.getTransaction();
         try {
-            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
+            transaction.begin();
             @Nullable final Task task = taskRepository.findOneByIdAndUserId(id, userId);
-            if (task != null)
+            if (task != null) {
                 taskRepository.remove(task);
-            session.commit();
-        } catch (PersistenceException e) {
+                transaction.rollback();
+            }
+            transaction.commit();
+        } catch (Exception e) {
             e.printStackTrace();
-            session.rollback();
+            transaction.rollback();
         } finally {
-            session.close();
-        }*/
+            em.close();
+        }
     }
 
     @Override
     public List<Task> getSortedListByProjectId(String userId, String projectId, String sortField, boolean isStraight) {
-       /* try (SqlSession session = factory.openSession()) {
-            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
+        EntityManager em = factory.createEntityManager();
+        TaskRepository taskRepository = new TaskRepositoryHiber(em);
+        try {
             switch (sortField) {
                 case START_DATE_SORT_STRING:
                     if (isStraight) {
@@ -207,16 +213,19 @@ public final class TaskServiceImpl implements TaskService {
                 default:
                     return getList(userId);
             }
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        } finally {
+            em.close();
+        }
         return Collections.emptyList();
     }
 
     @Override
     public List<Task> getSortedList(String userId, String sortField, boolean isStraight) {
-        /*try (SqlSession session = factory.openSession()) {
-            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
+        EntityManager em = factory.createEntityManager();
+        TaskRepository taskRepository = new TaskRepositoryHiber(em);
+        try {
             switch (sortField) {
                 case START_DATE_SORT_STRING:
                     if (isStraight) {
@@ -245,20 +254,25 @@ public final class TaskServiceImpl implements TaskService {
                 default:
                     return getList(userId);
             }
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }finally {
+            em.close();
+        }
         return Collections.emptyList();
     }
 
     @Override
     public List<Task> getListByKeyword(String userId, String keyword) {
-      /*  try (SqlSession session = factory.openSession()) {
-            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
+        EntityManager em = factory.createEntityManager();
+        TaskRepository taskRepository = new TaskRepositoryHiber(em);
+        try {
             return taskRepository.findAllByUserIdAndKeyword(userId, keyword);
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        } finally {
+            em.close();
+        }
         return Collections.emptyList();
     }
 
