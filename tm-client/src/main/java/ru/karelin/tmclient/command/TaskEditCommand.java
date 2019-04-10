@@ -66,6 +66,10 @@ public final class TaskEditCommand extends AbstractCommand {
             }
             System.out.println("\b\b");
             taskStatusString = ts.readLn();
+            if (taskStatusString.isEmpty()){
+                taskStatus=null;
+                break;
+            }
             for (Status s : Status.values()) {
                 if (s.toString().equals(taskStatusString)) {
                     taskStatus = s;

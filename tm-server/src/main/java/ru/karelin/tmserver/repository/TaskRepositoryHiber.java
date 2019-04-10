@@ -9,7 +9,8 @@ import java.util.List;
 
 public class TaskRepositoryHiber implements TaskRepository {
 
-    @NotNull final EntityManager em;
+    @NotNull
+    private final EntityManager em;
 
     public TaskRepositoryHiber(@NotNull EntityManager em) {
         this.em = em;
@@ -168,7 +169,10 @@ public class TaskRepositoryHiber implements TaskRepository {
 
     @Override
     public Task findOneByIdAndUserId(String id, String userId) {
-        return em.createQuery("select t from Task t where t.id = :id and t.user.id = :uid", Task.class).getSingleResult();
+        return em.createQuery("select t from Task t where t.id = :id and t.user.id = :uid", Task.class)
+                .setParameter("id", id)
+                .setParameter("uid", userId)
+                .getSingleResult();
     }
 
     @Override

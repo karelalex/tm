@@ -66,7 +66,7 @@ public final class ProjectEditCommand extends AbstractCommand {
             projectStatusString = ts.readLn();
             if(projectStatusString.isEmpty()) {
                 projectStatus=null;
-                break stat;
+                break;
             }
             for (Status s : Status.values()) {
                 if (s.toString().equals(projectStatusString)) {
