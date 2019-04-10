@@ -1,6 +1,7 @@
 package ru.karelin.tmserver.service;
 
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.api.repository.UserRepository;
@@ -21,11 +22,13 @@ public final class UserServiceImpl implements UserService {
     private final EntityManagerFactory factory;
 
 
+
     public UserServiceImpl(@NotNull EntityManagerFactory factory) {
         this.factory = factory;
     }
 
 
+    @Nullable
     @Override
     public User getUserByLoginAndPassword(final String login, final char[] password) {
         EntityManager em = factory.createEntityManager();
@@ -59,6 +62,7 @@ public final class UserServiceImpl implements UserService {
         registerNewUser(login, pass, name, RoleType.ORDINARY_USER);
     }
 
+    @Nullable
     @Override
     public User getUserById(final String userId) {
         EntityManager em = factory.createEntityManager();

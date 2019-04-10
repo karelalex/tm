@@ -10,7 +10,7 @@ import java.util.List;
 public class ProjectRepositoryHiber implements ProjectRepository {
     @Override
     public List<Project> findAllByUserIdAndKeyword(String userId, String key, @NotNull EntityManager em) {
-        return em.createQuery("select p from Project p where p.user.id = :uid and (p.name like %:key% or p.description like %:key%)", Project.class)
+        return em.createQuery("select p from Project p where p.user.id = :uid AND (p.name like %:key% or p.description like %:key%)", Project.class)
                 .setParameter("uid", userId)
                 .setParameter("key", key)
                 .getResultList();

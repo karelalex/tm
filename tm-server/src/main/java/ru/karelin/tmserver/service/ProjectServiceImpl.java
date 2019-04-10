@@ -1,13 +1,20 @@
 package ru.karelin.tmserver.service;
 
 
-
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ru.karelin.tmserver.api.repository.ProjectRepository;
+import ru.karelin.tmserver.api.repository.TaskRepository;
+import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.api.service.ProjectService;
 import ru.karelin.tmserver.entity.Project;
 import ru.karelin.tmserver.enumeration.Status;
+import ru.karelin.tmserver.repository.ProjectRepositoryHiber;
+import ru.karelin.tmserver.repository.UserRepositoryHiber;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -29,12 +36,16 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
 
     @Override
     public List<Project> getList(String userId) {
-       /* SqlSession session = factory.openSession();
-        ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);*/
-        List<Project> list = null;
-        /*list = projectRepository.findAllByUserId(userId);
-        session.close();*/
-        return list;
+        EntityManager em = factory.createEntityManager();
+        ProjectRepository projectRepository = new ProjectRepositoryHiber();
+        try {
+            return projectRepository.findAllByUserId(userId, em);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return Collections.emptyList();
     }
 
     @Override
@@ -42,125 +53,144 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
         return getOne(userId, id) != null;
     }
 
+    @Nullable
     @Override
     public Project getOne(String userId, String id) {
-       /* SqlSession session = factory.openSession();
-        ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);*/
-        Project p = null; /*projectRepository.findOneByIdAndUserId(id, userId);*/
-       /* session.close();*/
-        return p;
+        EntityManager em = factory.createEntityManager();
+        ProjectRepository projectRepository = new ProjectRepositoryHiber();
+        try {
+            return projectRepository.findOneByIdAndUserId(id, userId, em);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return null;
     }
 
     @Override
     public void create(@NotNull final String userId, final String name, final String description, final Date startDate, final Date finishDate) {
-        /*SqlSession session = factory.openSession();
+        EntityManager em = factory.createEntityManager();
+        ProjectRepository projectRepository = new ProjectRepositoryHiber();
+        UserRepository userRepository = new UserRepositoryHiber();
+        EntityTransaction transaction = em.getTransaction();
         try {
-            ProjectRepository entityRepository = session.getMapper(ProjectRepositoryBatis.class);
+            transaction.begin();
             @NotNull final Project project = new Project();
             project.setName(name);
             project.setDescription(description);
             project.setStartDate(startDate);
             project.setFinishDate(finishDate);
-            project.setUserId(userId);
+            project.setUser(userRepository.findOne(userId, em));
             project.setStatus(Status.PLANNED);
-            entityRepository.persist(project);
-            session.commit();
-        } catch (PersistenceException e) {
-            session.rollback();
+            projectRepository.persist(project, em);
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            transaction.rollback();
         } finally {
-            session.close();
-        }*/
+            em.close();
+        }
     }
 
     @Override
     public void edit(final String userId, final String id, final String name, final String description, final Date startDate, final Date finishDate, Status status) {
-        /*SqlSession session = factory.openSession();
-        ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
+        EntityManager em = factory.createEntityManager();
+        ProjectRepository projectRepository = new ProjectRepositoryHiber();
+        EntityTransaction transaction = em.getTransaction();
         try {
-            @Nullable final Project project = projectRepository.findOneByIdAndUserId(id, userId);
+            transaction.begin();
+            @Nullable final Project project = projectRepository.findOneByIdAndUserId(id, userId, em);
             if (project != null) {
                 if (!name.isEmpty()) project.setName(name);
                 if (!description.isEmpty()) project.setDescription(description);
                 if (startDate != null) project.setStartDate(startDate);
                 if (finishDate != null) project.setFinishDate(finishDate);
                 if (status != null) project.setStatus(status);
-                projectRepository.merge(project);
-                session.commit();
+                projectRepository.merge(project, em);
             }
-        } catch (PersistenceException e) {
-            session.rollback();
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            transaction.rollback();
         } finally {
-            session.close();
-        }*/
+            em.close();
+        }
     }
 
     @Override
     public List<Project> getSortedList(String userId, String sortField, boolean isStraight) {
-        /*try (SqlSession session = factory.openSession()) {
-            ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
+        EntityManager em = factory.createEntityManager();
+        ProjectRepository projectRepository = new ProjectRepositoryHiber();
+        try {
             switch (sortField) {
                 case START_DATE_SORT_STRING:
                     if (isStraight) {
-                        return projectRepository.findAllByUserIdOrderByStartDate(userId);
+                        return projectRepository.findAllByUserIdOrderByStartDate(userId, em);
                     } else {
-                        return projectRepository.findAllByUserIdOrderByStartDateDesc(userId);
+                        return projectRepository.findAllByUserIdOrderByStartDateDesc(userId, em);
                     }
                 case FINISH_DATE_SORT_STRING:
                     if (isStraight) {
-                        return projectRepository.findAllByUserIdOrderByFinishDate(userId);
+                        return projectRepository.findAllByUserIdOrderByFinishDate(userId, em);
                     } else {
-                        return projectRepository.findAllByUserIdOrderByFinishDateDesc(userId);
+                        return projectRepository.findAllByUserIdOrderByFinishDateDesc(userId, em);
                     }
                 case CREATION_DATE_SORT_STRING:
                     if (isStraight) {
-                        return projectRepository.findAllByUserIdOrderByCreationDate(userId);
+                        return projectRepository.findAllByUserIdOrderByCreationDate(userId, em);
                     } else {
-                        return projectRepository.findAllByUserIdOrderByCreationDateDesc(userId);
+                        return projectRepository.findAllByUserIdOrderByCreationDateDesc(userId, em);
                     }
                 case STATUS_SORT_STRING:
                     if (isStraight) {
-                        return projectRepository.findAllByUserIdOrderByStatus(userId);
+                        return projectRepository.findAllByUserIdOrderByStatus(userId, em);
                     } else {
-                        return projectRepository.findAllByUserIdOrderByStatusDesc(userId);
+                        return projectRepository.findAllByUserIdOrderByStatusDesc(userId, em);
                     }
                 default:
                     return getList(userId);
             }
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        } finally {
+            em.close();
+        }
         return Collections.emptyList();
     }
 
     @Override
     public void remove(final String userId, final String id) {
-        /*SqlSession session = factory.openSession();
-        ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
-        TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
+        EntityManager em = factory.createEntityManager();
+        ProjectRepository projectRepository = new ProjectRepositoryHiber();
+        EntityTransaction transaction = em.getTransaction();
         try {
-            final List<Task> taskList = taskRepository.findAllByProjectId(id);
-            if (taskList.size() > 0)
-                taskRepository.removeAllInList(taskList);
-            Project p = projectRepository.findOneByIdAndUserId(id, userId);
-            projectRepository.remove(p);
-            session.commit();
-        } catch (PersistenceException e) {
+            transaction.begin();
+            Project p = projectRepository.findOneByIdAndUserId(id, userId, em);
+            if (p != null)
+                projectRepository.remove(p, em);
+            transaction.commit();
+        } catch (Exception e) {
             e.printStackTrace();
-            session.rollback();
+            transaction.rollback();
         } finally {
-            session.close();
-        }*/
+            em.close();
+        }
 
     }
 
     @Override
     public List<Project> getListByKeyword(String userId, String keyword) {
-        /*try (SqlSession session = factory.openSession()) {
-            ProjectRepository projectRepository = session.getMapper(ProjectRepositoryBatis.class);
-            return projectRepository.findAllByUserIdAndKeyword(userId, keyword);
-        } catch (PersistenceException e) {
+        EntityManager em = factory.createEntityManager();
+        ProjectRepository projectRepository = new ProjectRepositoryHiber();
+        try {
+            return projectRepository.findAllByUserIdAndKeyword(userId, keyword, em);
+        } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
+        finally {
+            em.close();
+        }
         return Collections.emptyList();
     }
 }
