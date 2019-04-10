@@ -89,7 +89,8 @@ public class TaskRepositoryHiber implements TaskRepository {
 
     @Override
     public List<Task> findAllByUserIdAndKeyword(String userId, String key, @NotNull EntityManager em) {
-        return em.createQuery( "select t from Task t where t.user.id = :uid and (t.description like %:key% or t.name like %:key%)", Task.class)
+        key = '%' + key + '%';
+        return em.createQuery( "select t from Task t where t.user.id = :uid and (t.description like :key or t.name like :key)", Task.class)
                 .setParameter("uid", userId)
                 .setParameter("key", key)
                 .getResultList();
