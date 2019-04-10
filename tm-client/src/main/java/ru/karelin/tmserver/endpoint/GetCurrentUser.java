@@ -1,0 +1,60 @@
+
+package ru.karelin.tmserver.endpoint;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+
+
+/**
+ * <p>Java class for getCurrentUser complex type.
+ * 
+ * <p>The following schema fragment specifies the expected content contained within this class.
+ * 
+ * <pre>
+ * &lt;complexType name="getCurrentUser"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="session" type="{http://endpoint.tmserver.karelin.ru/}sessionDto" minOccurs="0"/&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
+ * </pre>
+ * 
+ * 
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "getCurrentUser", propOrder = {
+    "session"
+})
+public class GetCurrentUser {
+
+    protected SessionDto session;
+
+    /**
+     * Gets the value of the session property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link SessionDto }
+     *     
+     */
+    public SessionDto getSession() {
+        return session;
+    }
+
+    /**
+     * Sets the value of the session property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link SessionDto }
+     *     
+     */
+    public void setSession(SessionDto value) {
+        this.session = value;
+    }
+
+}
