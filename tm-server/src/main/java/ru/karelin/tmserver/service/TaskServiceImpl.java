@@ -1,16 +1,24 @@
 package ru.karelin.tmserver.service;
 
 
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.karelin.tmserver.api.repository.ProjectRepository;
 import ru.karelin.tmserver.api.repository.TaskRepository;
+import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.api.service.TaskService;
+import ru.karelin.tmserver.entity.Project;
 import ru.karelin.tmserver.entity.Task;
+import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.enumeration.Status;
+import ru.karelin.tmserver.repository.ProjectRepositoryHiber;
+import ru.karelin.tmserver.repository.TaskRepositoryHiber;
+import ru.karelin.tmserver.repository.UserRepositoryHiber;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -31,12 +39,15 @@ public final class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getList(String userId) {
-       /* try (SqlSession session = factory.openSession()) {
-            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
-            return taskRepository.findAllByUserId(userId);
-        } catch (PersistenceException e) {
+        EntityManager em = factory.createEntityManager();
+        TaskRepository taskRepository = new TaskRepositoryHiber();
+        try {
+            return taskRepository.findAllByUserId(userId, em);
+        } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        } finally {
+            em.close();
+        }
         return Collections.emptyList();
     }
 
@@ -47,60 +58,91 @@ public final class TaskServiceImpl implements TaskService {
 
     @Override
     public Task getOne(String userId, String id) {
-       /* try (SqlSession session = factory.openSession()) {
-            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
-            return taskRepository.findOneByIdAndUserId(id, userId);
-        } catch (PersistenceException e) {
+        EntityManager em = factory.createEntityManager();
+        TaskRepository taskRepository = new TaskRepositoryHiber();
+        try {
+            return taskRepository.findOneByIdAndUserId(id, userId, em);
+        } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
+        finally {
+            em.close();
+        }
         return null;
     }
 
     @Override
     public void create(final String userId, final String name, final String description, final Date startDate, final Date finishDate, final String projectId) {
-       /* @NotNull final Task task = new Task();
-        task.setName(name);
-        task.setDescription(description);
-        task.setStartDate(startDate);
-        task.setFinishDate(finishDate);
-        task.setUserId(userId);
-        task.setStatus(Status.PLANNED);
-        if (!projectId.isEmpty()) task.setProjectId(projectId);
-        SqlSession session = factory.openSession();
+        EntityManager em = factory.createEntityManager();
+        TaskRepository taskRepository = new TaskRepositoryHiber();
+        UserRepository userRepository = new UserRepositoryHiber();
+        ProjectRepository projectRepository = new ProjectRepositoryHiber();
+        EntityTransaction transaction = em.getTransaction();
         try {
-            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
-            taskRepository.persist(task);
-            session.commit();
-        } catch (PersistenceException e) {
-            session.rollback();
+            transaction.begin();
+            User user = userRepository.findOne(userId, em);
+            if (user==null) {
+                transaction.rollback();
+                return;
+            }
+            Project project = projectRepository.findOneByIdAndUserId(projectId, userId, em);
+            if (project==null){
+                transaction.rollback();
+                return;
+            }
+            @NotNull final Task task = new Task();
+            task.setUser(user);
+            task.setStatus(Status.PLANNED);
+            task.setProject(project);
+            task.setName(name);
+            task.setDescription(description);
+            task.setStartDate(startDate);
+            task.setFinishDate(finishDate);
+            taskRepository.persist(task, em);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
             e.printStackTrace();
         } finally {
-            session.close();
-        }*/
+            em.close();
+        }
     }
 
     @Override
-    public void edit(final String userId, final String id, final String name, final String description, final Date startDate, final Date finishDate, final String projectId, final Status status) {
-       /* SqlSession session = factory.openSession();
+    public void edit( @NotNull final String userId, @NotNull final String id, @NotNull final String name, @NotNull final String description, @Nullable final Date startDate, @Nullable final Date finishDate, @NotNull final String projectId, @Nullable final Status status) {
+       EntityManager em = factory.createEntityManager();
+       TaskRepository taskRepository = new TaskRepositoryHiber();
+       ProjectRepository projectRepository = new ProjectRepositoryHiber();
+       EntityTransaction transaction = em.getTransaction();
         try {
-            TaskRepository taskRepository = session.getMapper(TaskRepositoryBatis.class);
-            @Nullable final Task task = taskRepository.findOneByIdAndUserId(id, userId);
+            transaction.begin();
+            @Nullable final Task task = taskRepository.findOneByIdAndUserId(id, userId, em);
             if (task != null) {
                 if (!name.isEmpty()) task.setName(name);
                 if (!description.isEmpty()) task.setDescription(description);
                 if (startDate != null) task.setStartDate(startDate);
                 if (finishDate != null) task.setFinishDate(finishDate);
-                if (!projectId.isEmpty()) task.setProjectId(projectId);
+                if (!projectId.isEmpty()) {
+                    @Nullable final Project project = projectRepository.findOneByIdAndUserId(projectId, userId, em);
+                    if (project==null){
+                        transaction.rollback();
+                        return;
+                    }
+                    task.setProject(project);
+                }
                 if (status != null) task.setStatus(status);
-                taskRepository.merge(task);
-                session.commit();
+                taskRepository.merge(task, em);
+                transaction.commit();
             }
-        } catch (PersistenceException e) {
-            session.rollback();
+            else {
+                transaction.rollback();
+            }
+        } catch (Exception e) {
+            transaction.rollback();
             e.printStackTrace();
         } finally {
-            session.close();
-        }*/
+            em.close();
+        }
     }
 
 

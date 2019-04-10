@@ -3,10 +3,8 @@ package ru.karelin.tmclient.command;
 import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.util.DateConverter;
-import ru.karelin.tmserver.endpoint.Project;
-import ru.karelin.tmserver.endpoint.ProjectEndpoint;
-import ru.karelin.tmserver.endpoint.Session;
-import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
+import ru.karelin.tmserver.endpoint.*;
+
 
 import java.text.DateFormat;
 import java.util.List;
@@ -36,7 +34,7 @@ public final class ProjectListShowCommand extends AbstractCommand {
         @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
         @NotNull final DateConverter dateConverter = locator.getDateConverter();
-        @NotNull final Session session = locator.getCurrentSession();
+        @NotNull final SessionDto session = locator.getCurrentSession();
         boolean isSorted = false;
         @NotNull String sortField = "";
         boolean isStraight = true;
@@ -70,11 +68,11 @@ public final class ProjectListShowCommand extends AbstractCommand {
 
         }
 
-        @NotNull final List<Project> projects;
+        @NotNull final List<ProjectDto> projects;
         if (isFind) projects = projectEndpoint.getProjectListByKeyword(session, searchItem);
         else if (isSorted) projects= projectEndpoint.getProjectSortedList(session, sortField, isStraight);
         else projects = projectEndpoint.getProjectList(session);
-        for (Project p :projects) {
+        for (ProjectDto p :projects) {
             System.out.println("Project ID: " + p.getId());
             System.out.println("Project name: " + p.getName() );
             System.out.println("Creation date: " + dateFormat.format(dateConverter.convert(p.getCreationDate())));

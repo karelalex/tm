@@ -8,6 +8,7 @@ import ru.karelin.tmserver.api.repository.TaskRepository;
 import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.api.service.ProjectService;
 import ru.karelin.tmserver.entity.Project;
+import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.enumeration.Status;
 import ru.karelin.tmserver.repository.ProjectRepositoryHiber;
 import ru.karelin.tmserver.repository.UserRepositoryHiber;
@@ -81,7 +82,12 @@ public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Pro
             project.setDescription(description);
             project.setStartDate(startDate);
             project.setFinishDate(finishDate);
-            project.setUser(userRepository.findOne(userId, em));
+            User user = userRepository.findOne(userId, em);
+            if (user==null){
+                transaction.rollback();
+                return;
+            }
+            project.setUser(user);
             project.setStatus(Status.PLANNED);
             projectRepository.persist(project, em);
             transaction.commit();

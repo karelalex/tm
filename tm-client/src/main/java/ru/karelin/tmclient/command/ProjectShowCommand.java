@@ -4,11 +4,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.util.DateConverter;
-import ru.karelin.tmserver.endpoint.Project;
+import ru.karelin.tmserver.endpoint.ProjectDto;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
-import ru.karelin.tmserver.endpoint.Session;
+import ru.karelin.tmserver.endpoint.SessionDto;
 import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
-
 import java.text.DateFormat;
 
 
@@ -41,12 +40,12 @@ public final class ProjectShowCommand extends AbstractCommand{
         @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         @Nullable final DateFormat dateFormat = locator.getDateFormat();
         @NotNull final DateConverter dateConverter = locator.getDateConverter();
-        @Nullable final Session session = locator.getCurrentSession();
+        @Nullable final SessionDto session = locator.getCurrentSession();
         if(!projectEndpoint.checkProjectId(session, projectId)) {
             System.out.println("Wrong ID "+ projectId);
             return;
         }
-        @NotNull final Project project = projectEndpoint.getProject(session, projectId);
+        @NotNull final ProjectDto project = projectEndpoint.getProject(session, projectId);
         if (project == null) System.out.println("No projects with");
         System.out.println("Project name: " + project.getName() );
         System.out.println("Project description: " + project.getDescription());

@@ -10,9 +10,9 @@ import java.text.DateFormat;
 import java.util.Map;
 
 public interface ServiceLocator {
-    Session getCurrentSession();
+    SessionDto getCurrentSession();
 
-    void setCurrentSession(Session session);
+    void setCurrentSession(SessionDto session);
 
     Map<String, AbstractCommand> getCommands();
 

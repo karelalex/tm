@@ -45,7 +45,7 @@ public final class TaskEditCommand extends AbstractCommand {
         @NotNull final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
         @NotNull final DateConverter dateConverter = locator.getDateConverter();
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
-        @Nullable final Session session = locator.getCurrentSession();
+        @Nullable final SessionDto session = locator.getCurrentSession();
         @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         if (!taskEndpoint.checkTaskId(session, taskId)) {
             System.out.println("Wrong ID!");

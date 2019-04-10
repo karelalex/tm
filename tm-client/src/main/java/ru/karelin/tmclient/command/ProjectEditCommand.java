@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
-import ru.karelin.tmserver.endpoint.Session;
+import ru.karelin.tmserver.endpoint.SessionDto;
 import ru.karelin.tmserver.endpoint.Status;
 import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
@@ -42,7 +42,7 @@ public final class ProjectEditCommand extends AbstractCommand {
             return;
         }
         final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
-        final Session currentSession = locator.getCurrentSession();
+        final SessionDto currentSession = locator.getCurrentSession();
         final DateFormat dateFormat = locator.getDateFormat();
         final DateConverter dateConverter = locator.getDateConverter();
         if (!projectEndpoint.checkProjectId(currentSession, projectId)) {

@@ -37,7 +37,7 @@ public final class Bootstrap implements ServiceLocator {
     @NotNull private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 
-    @Nullable private Session currentSession;
+    @Nullable private SessionDto currentSession;
 
     @Override
     @NotNull
@@ -73,12 +73,12 @@ public final class Bootstrap implements ServiceLocator {
 
     @Override
     @Nullable
-    public Session getCurrentSession() {
+    public SessionDto getCurrentSession() {
         return currentSession;
     }
 
     @Override
-    public void setCurrentSession(@Nullable Session currentSession) {
+    public void setCurrentSession(@Nullable SessionDto currentSession) {
         this.currentSession = currentSession;
     }
 

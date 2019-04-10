@@ -1,8 +1,12 @@
 package ru.karelin.tmserver.endpoint;
 
+import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.api.service.TaskService;
 import ru.karelin.tmserver.dto.SessionDto;
+import ru.karelin.tmserver.dto.TaskDto;
 import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.enumeration.Status;
 import ru.karelin.tmserver.exception.WrongSessionException;
@@ -11,11 +15,13 @@ import ru.karelin.tmserver.api.service.SessionService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 @WebService
+@NoArgsConstructor
 public class TaskEndpoint {
     @NotNull private TaskService taskService;
     @NotNull private SessionService sessionServiceImpl;
@@ -50,39 +56,39 @@ public class TaskEndpoint {
     }
 
     @WebMethod
-    public List<Task> getTaskListByProjectId(@WebParam(name = "session") final SessionDto session,
-                                             @WebParam(name = "projectId") final String projectId) throws WrongSessionException {
-        if (sessionServiceImpl.isSessionExists(session)) return taskService.getListByProjectId(session.getUserId(), projectId);
+    public List<TaskDto> getTaskListByProjectId(@WebParam(name = "session") final SessionDto session,
+                                                @WebParam(name = "projectId") final String projectId) throws WrongSessionException {
+        if (sessionServiceImpl.isSessionExists(session)) return convert(taskService.getListByProjectId(session.getUserId(), projectId));
         return Collections.emptyList();
     }
 
     @WebMethod
-    public List<Task> getSortedTaskListByProjectId(@WebParam(name = "session") final SessionDto session,
+    public List<TaskDto> getSortedTaskListByProjectId(@WebParam(name = "session") final SessionDto session,
                                                    @WebParam(name = "tasksProjectId") final String projectId,
                                                    @WebParam(name = "sortField") String sortField,
                                                    @WebParam(name = "isOrderStraight") boolean isStraight) throws WrongSessionException {
-        if (sessionServiceImpl.isSessionExists(session)) return taskService.getSortedListByProjectId(session.getUserId(), projectId, sortField, isStraight);
+        if (sessionServiceImpl.isSessionExists(session)) return convert(taskService.getSortedListByProjectId(session.getUserId(), projectId, sortField, isStraight));
         return Collections.emptyList();
     }
 
     @WebMethod
-    public List<Task> getSortedTaskList(@WebParam(name = "session") final SessionDto session,
+    public List<TaskDto> getSortedTaskList(@WebParam(name = "session") final SessionDto session,
                                         @WebParam(name = "sortField") final String sortField,
                                         @WebParam(name = "isOrderStraight") boolean isStraight) throws WrongSessionException {
-       if(sessionServiceImpl.isSessionExists(session)) return taskService.getSortedList(session.getUserId(), sortField, isStraight);
+       if(sessionServiceImpl.isSessionExists(session)) return convert(taskService.getSortedList(session.getUserId(), sortField, isStraight));
        return Collections.emptyList();
     }
 
     @WebMethod
-    public List<Task> getTaskListByKeyword(@WebParam(name = "session") final SessionDto session,
+    public List<TaskDto> getTaskListByKeyword(@WebParam(name = "session") final SessionDto session,
                                            @WebParam(name = "searchString") String keyword) throws WrongSessionException {
-        if(sessionServiceImpl.isSessionExists(session)) return taskService.getListByKeyword(session.getUserId(), keyword);
+        if(sessionServiceImpl.isSessionExists(session)) return convert(taskService.getListByKeyword(session.getUserId(), keyword));
         return Collections.emptyList();
     }
 
     @WebMethod
-    public List<Task> getTaskList(@WebParam(name = "session") final SessionDto session) throws WrongSessionException {
-        if(sessionServiceImpl.isSessionExists(session)) return taskService.getList(session.getUserId());
+    public List<TaskDto> getTaskList(@WebParam(name = "session") final SessionDto session) throws WrongSessionException {
+        if(sessionServiceImpl.isSessionExists(session)) return convert(taskService.getList(session.getUserId()));
         return Collections.emptyList();
     }
 
@@ -100,9 +106,32 @@ public class TaskEndpoint {
     }
 
     @WebMethod
-    public Task getTask(@WebParam(name = "session") final SessionDto session,
+    public TaskDto getTask(@WebParam(name = "session") final SessionDto session,
                         @WebParam(name = "taskId") String id) throws WrongSessionException {
-        if(sessionServiceImpl.isSessionExists(session)) return taskService.getOne(session.getUserId(), id);
+        if(sessionServiceImpl.isSessionExists(session)) return convert(taskService.getOne(session.getUserId(), id));
         return null;
+    }
+
+    @Contract(value = "null -> null")
+    private TaskDto convert(@Nullable final Task task){
+        if (task==null) return null;
+        TaskDto taskDto = new TaskDto();
+        taskDto.setId(task.getId());
+        taskDto.setName(task.getName());
+        taskDto.setDescription(task.getDescription());
+        taskDto.setProjectId(task.getProject().getId());
+        taskDto.setCreationDate(task.getCreationDate());
+        taskDto.setStartDate(task.getStartDate());
+        taskDto.setFinishDate(task.getFinishDate());
+        taskDto.setStatus(task.getStatus());
+        return taskDto;
+    }
+
+    private List<TaskDto> convert (List<Task> tasks){
+        List<TaskDto> taskDtoList = new ArrayList<>();
+        for(Task t: tasks){
+            taskDtoList.add(convert(t));
+        }
+        return taskDtoList;
     }
 }

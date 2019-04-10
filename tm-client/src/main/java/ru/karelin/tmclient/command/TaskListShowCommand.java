@@ -34,7 +34,7 @@ public final class TaskListShowCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) throws WrongSessionException_Exception {
-        @Nullable final Session session = locator.getCurrentSession();
+        @Nullable final SessionDto session = locator.getCurrentSession();
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
         @NotNull final DateConverter dateConverter = locator.getDateConverter();
         @NotNull final String projectId;
@@ -79,7 +79,7 @@ public final class TaskListShowCommand extends AbstractCommand {
         } else projectId = "";
         @NotNull final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
         @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
-        @NotNull final List<Task> tasks;
+        @NotNull final List<TaskDto> tasks;
         boolean showProjectId = true;
         if (isFind) tasks = taskEndpoint.getTaskListByKeyword(session, searchItem);
         else if (projectId.isEmpty()) {
@@ -96,7 +96,7 @@ public final class TaskListShowCommand extends AbstractCommand {
             System.out.println("Wrong Project ID");
             return;
         }
-        for (Task t : tasks) {
+        for (TaskDto t : tasks) {
             System.out.println("Task: " + t.getId());
             System.out.println("Task name: " + t.getName());
             System.out.println("Task description: " + t.getDescription());

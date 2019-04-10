@@ -19,11 +19,5 @@ public abstract class AbstractSortableDto extends AbstractSecuredDto implements 
     private Date creationDate;
     private Status status;
 
-    public AbstractSortableDto(String id, String userId, Date startDate, Date finishDate, Date creationDate, Status status) {
-        super(id, userId);
-        this.startDate = startDate;
-        this.finishDate = finishDate;
-        this.creationDate = creationDate;
-        this.status = status;
-    }
+
 }

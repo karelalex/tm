@@ -3,6 +3,7 @@ package ru.karelin.tmserver.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmserver.entity.Session;
 
 import java.util.Date;
@@ -16,13 +17,5 @@ public class SessionDto extends AbstractSecuredDto {
     private String signature;
     private Date creationDate;
 
-    public SessionDto(String id, String userId, String signature, Date creationDate) {
-        super(id, userId);
-        this.signature = signature;
-        this.creationDate = creationDate;
-    }
 
-    public SessionDto(Session session) {
-        this(session.getId(), session.getUser().getId(), session.getSignature(), session.getCreationDate());
-    }
 }

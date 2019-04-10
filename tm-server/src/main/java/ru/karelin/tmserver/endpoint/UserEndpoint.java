@@ -1,5 +1,6 @@
 package ru.karelin.tmserver.endpoint;
 
+import lombok.NoArgsConstructor;
 import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.dto.SessionDto;
 import ru.karelin.tmserver.entity.User;
@@ -11,6 +12,7 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 
 @WebService
+@NoArgsConstructor
 public class UserEndpoint {
 
     private UserService userService;

@@ -32,7 +32,7 @@ public final class UserAuthorizationCommand extends AbstractCommand {
         @NotNull final String login = ts.readLn();
         System.out.println("Enter password");
         final char[] pass = ts.readPass();
-        @Nullable final Session session = sessionEndpoint.login(login, new String(pass));
+        @Nullable final SessionDto session = sessionEndpoint.login(login, new String(pass));
         if(session==null){
             System.out.println("Wrong login or pass");
         }

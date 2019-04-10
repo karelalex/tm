@@ -87,7 +87,12 @@ public final class SessionServiceImpl implements SessionService {
                 sessionRepository.remove(session, em);
                transaction.commit();
             } else throw new WrongSessionException("No such session found");
-        } catch (Exception e) {
+        }
+        catch (WrongSessionException e){
+            transaction.rollback();
+            throw e;
+        }
+        catch (Exception e) {
             e.printStackTrace();
             transaction.rollback();
         } finally {

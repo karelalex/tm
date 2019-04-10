@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
-import ru.karelin.tmserver.endpoint.Session;
+import ru.karelin.tmserver.endpoint.SessionDto;
 import ru.karelin.tmserver.endpoint.TaskEndpoint;
 import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
@@ -40,7 +40,7 @@ public final class TaskCreateCommand  extends AbstractCommand {
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
         @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         @NotNull final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
-        @Nullable final Session session = locator.getCurrentSession();
+        @Nullable final SessionDto session = locator.getCurrentSession();
         @NotNull final DateConverter dateConverter = locator.getDateConverter();
 
         @NotNull String projectId="";

@@ -15,8 +15,5 @@ public abstract class AbstractSecuredDto implements Serializable {
     private String id;
     private String userId;
 
-    public AbstractSecuredDto(String id, String userId) {
-        this.id = id;
-        this.userId = userId;
-    }
+
 }
