@@ -75,9 +75,7 @@ public final class Bootstrap implements ServiceLocator {
         projectService = new ProjectServiceImpl(entityManagerFactory);
         taskService = new TaskServiceImpl(entityManagerFactory);
         userService = new UserServiceImpl(entityManagerFactory);
-        domainService = new DomainServiceImpl(entityManagerFactory);
         sessionService = new SessionServiceImpl(entityManagerFactory);
-
         sessionService.removeOldSessions(15); // clears old sessions from DB
 
 
@@ -87,8 +85,6 @@ public final class Bootstrap implements ServiceLocator {
         System.out.println("Endpoint with url " + PROJECT_ENDPOINT_URL + " started.");
         Endpoint.publish(TASK_ENDPOINT_URL, new TaskEndpoint(taskService, sessionService));
         System.out.println("Endpoint with url " + TASK_ENDPOINT_URL + " started.");
-        Endpoint.publish(DOMAIN_ENDPOINT_URL, new DomainEndpoint(domainService, sessionService));
-        System.out.println("Endpoint with url " + DOMAIN_ENDPOINT_URL + " started.");
         Endpoint.publish(SESSION_ENDPOINT_URL, new SessionEndpoint(sessionService));
         System.out.println("Endpoint with url " + SESSION_ENDPOINT_URL + " started");
 
