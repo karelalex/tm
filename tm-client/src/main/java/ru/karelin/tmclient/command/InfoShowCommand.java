@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 
 
-public class InfoShowCommand extends AbstractCommand {
+public final class InfoShowCommand extends AbstractCommand {
     private static final boolean SECURED = false;
     public InfoShowCommand(@NotNull final ServiceLocator locator) {
         super(locator, SECURED);

@@ -29,7 +29,6 @@ public interface ServiceLocator {
 
     TaskEndpoint getTaskEndpoint();
 
-    DomainEndpoint getDomainEndpoint();
 
     @NotNull
     SessionEndpoint getSessionEndpoint();

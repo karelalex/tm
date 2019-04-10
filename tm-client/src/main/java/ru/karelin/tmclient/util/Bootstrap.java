@@ -23,7 +23,6 @@ public final class Bootstrap implements ServiceLocator {
     @NotNull private ProjectEndpoint projectEndpoint;
     @NotNull private TaskEndpoint taskEndpoint;
     @NotNull private UserEndpoint userEndpoint;
-    @NotNull private DomainEndpoint domainEndpoint;
     @NotNull private SessionEndpoint sessionEndpoint;
 
 
@@ -62,12 +61,6 @@ public final class Bootstrap implements ServiceLocator {
     @NotNull
     public UserEndpoint getUserEndpoint() {
         return userEndpoint;
-    }
-
-    @Override
-    @NotNull
-    public DomainEndpoint getDomainEndpoint() {
-        return domainEndpoint;
     }
 
 
@@ -111,7 +104,6 @@ public final class Bootstrap implements ServiceLocator {
 
         projectEndpoint = new ProjectEndpointService().getProjectEndpointPort();
         taskEndpoint = new TaskEndpointService().getTaskEndpointPort();
-        domainEndpoint = new DomainEndpointService().getDomainEndpointPort();
         userEndpoint = new UserEndpointService().getUserEndpointPort();
         sessionEndpoint = new SessionEndpointService().getSessionEndpointPort();
 
@@ -148,9 +140,7 @@ public final class Bootstrap implements ServiceLocator {
                 try{
                     abstractCommand.execute(params);
                 }
-            catch (PermissionException_Exception e){
-                    System.out.println(e.getMessage());
-            }
+
             catch (WrongSessionException_Exception e){
                 System.out.println(e.getMessage());
                 System.out.println("try to login again");
