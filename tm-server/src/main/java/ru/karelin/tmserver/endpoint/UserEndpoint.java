@@ -7,21 +7,22 @@ import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.exception.WrongSessionException;
 import ru.karelin.tmserver.api.service.SessionService;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
 @WebService
 @NoArgsConstructor
+@Singleton
 public class UserEndpoint {
 
+    @Inject
     private UserService userService;
-    private SessionService sessionServiceImpl;
 
-    public UserEndpoint(UserService userService, SessionService sessionServiceImpl) {
-        this.userService = userService;
-        this.sessionServiceImpl = sessionServiceImpl;
-    }
+    @Inject
+    private SessionService sessionServiceImpl;
 
     @WebMethod public boolean isUserExistsByLogin (@WebParam(name = "login") final String login){
         return userService.isUserExistByLogin(login);

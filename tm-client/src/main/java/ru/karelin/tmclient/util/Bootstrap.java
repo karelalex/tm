@@ -166,7 +166,7 @@ public final class Bootstrap implements ServiceLocator {
             command.setLocator(this);
             commands.put(commandName, command);
         } else {
-            System.out.println("комманда не клёвая");
+            System.out.println("команда не клёвая");
         }
     }
 }

@@ -1,8 +1,6 @@
 package ru.karelin.tmserver.service;
 
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.api.service.UserService;
@@ -11,22 +9,17 @@ import ru.karelin.tmserver.enumeration.RoleType;
 import ru.karelin.tmserver.repository.UserRepositoryHiber;
 import ru.karelin.tmserver.util.MD5Generator;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
+@ApplicationScoped
+public class UserServiceImpl implements UserService {
 
-public final class UserServiceImpl implements UserService {
-
-    @NotNull
-    private final EntityManagerFactory factory;
-
-
-
-    public UserServiceImpl(@NotNull EntityManagerFactory factory) {
-        this.factory = factory;
-    }
-
+    @Inject
+    private EntityManagerFactory factory;
 
     @Nullable
     @Override

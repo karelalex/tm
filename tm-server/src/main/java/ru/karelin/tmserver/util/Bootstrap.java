@@ -2,90 +2,60 @@ package ru.karelin.tmserver.util;
 
 
 import org.jetbrains.annotations.NotNull;
-import ru.karelin.tmserver.api.service.*;
+import ru.karelin.tmserver.api.service.SessionService;
 import ru.karelin.tmserver.api.util.ServiceLocator;
-import ru.karelin.tmserver.endpoint.*;
-import ru.karelin.tmserver.enumeration.RoleType;
-import ru.karelin.tmserver.service.*;
+import ru.karelin.tmserver.endpoint.ProjectEndpoint;
+import ru.karelin.tmserver.endpoint.SessionEndpoint;
+import ru.karelin.tmserver.endpoint.TaskEndpoint;
+import ru.karelin.tmserver.endpoint.UserEndpoint;
 
-import javax.persistence.EntityManagerFactory;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.xml.ws.Endpoint;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-
-public final class Bootstrap implements ServiceLocator {
+@ApplicationScoped
+public class Bootstrap implements ServiceLocator {
 
     private static final String USER_ENDPOINT_URL = "http://localhost:8080/UserEndpoint?wsdl";
     private static final String PROJECT_ENDPOINT_URL = "http://localhost:8080/ProjectEndpoint?wsdl";
     private static final String TASK_ENDPOINT_URL = "http://localhost:8080/TaskEndpoint?wsdl";
-    private static final String DOMAIN_ENDPOINT_URL = "http://localhost:8080/DomainEndpoint?wsdl";
     private static final String SESSION_ENDPOINT_URL = "http://localhost:8080/SessionEndpoint?wsdl";
 
+    @Inject
+    private SessionService sessionService ;
 
-    @NotNull
-    private ProjectService projectService;
-    @NotNull
-    private TaskService taskService;
-    @NotNull
-    private UserService userService;
-    @NotNull
-    private DomainService domainService;
-    @NotNull
-    private SessionService sessionService;
+    @Inject
+    private UserEndpoint userEndpoint;
+
+    @Inject
+    ProjectEndpoint projectEndpoint;
+
+    @Inject
+    TaskEndpoint taskEndpoint;
+
+    @Inject
+    SessionEndpoint sessionEndpoint;
 
 
     @NotNull
     private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
-    @NotNull
-    @Override
-    public DateFormat getDateFormat() {
-        return dateFormat;
-    }
-
-    @NotNull
-    public DomainService getDomainService() {
-        return domainService;
-    }
 
     @Override
-    @NotNull
-    public UserService getUserService() {
-        return userService;
-    }
+    public void init() {
 
-    @Override
-    @NotNull
-    public ProjectService getProjectService() {
-        return projectService;
-    }
-
-    @Override
-    @NotNull
-    public TaskService getTaskService() {
-        return taskService;
-    }
-
-    @Override
-    public void init() throws SQLException, IOException, ClassNotFoundException {
-        EntityManagerFactory entityManagerFactory = HiberInit.getEntityManagerFactory();
-        projectService = new ProjectServiceImpl(entityManagerFactory);
-        taskService = new TaskServiceImpl(entityManagerFactory);
-        userService = new UserServiceImpl(entityManagerFactory);
-        sessionService = new SessionServiceImpl(entityManagerFactory);
         sessionService.removeOldSessions(15); // clears old sessions from DB
 
 
-        Endpoint.publish(USER_ENDPOINT_URL, new UserEndpoint(userService, sessionService));
+        Endpoint.publish(USER_ENDPOINT_URL, userEndpoint);
         System.out.println("Endpoint with url " + USER_ENDPOINT_URL + " started.");
-        Endpoint.publish(PROJECT_ENDPOINT_URL, new ProjectEndpoint(projectService, sessionService));
+        Endpoint.publish(PROJECT_ENDPOINT_URL, projectEndpoint);
         System.out.println("Endpoint with url " + PROJECT_ENDPOINT_URL + " started.");
-        Endpoint.publish(TASK_ENDPOINT_URL, new TaskEndpoint(taskService, sessionService));
+        Endpoint.publish(TASK_ENDPOINT_URL, taskEndpoint);
         System.out.println("Endpoint with url " + TASK_ENDPOINT_URL + " started.");
-        Endpoint.publish(SESSION_ENDPOINT_URL, new SessionEndpoint(sessionService));
+        Endpoint.publish(SESSION_ENDPOINT_URL, sessionEndpoint);
         System.out.println("Endpoint with url " + SESSION_ENDPOINT_URL + " started");
 
 

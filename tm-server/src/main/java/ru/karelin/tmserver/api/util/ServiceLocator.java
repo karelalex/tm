@@ -13,15 +13,5 @@ import java.text.DateFormat;
 
 public interface ServiceLocator {
 
-    DateFormat getDateFormat();
-
-    UserService getUserService();
-
-    ProjectService getProjectService();
-
-    TaskService getTaskService();
-
-    DomainService getDomainService();
-
-    void init() throws SQLException, IOException, ClassNotFoundException;
+       void init();
 }

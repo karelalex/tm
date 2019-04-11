@@ -12,6 +12,8 @@ import ru.karelin.tmserver.enumeration.Status;
 import ru.karelin.tmserver.exception.WrongSessionException;
 import ru.karelin.tmserver.api.service.SessionService;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -22,17 +24,16 @@ import java.util.List;
 
 @WebService
 @NoArgsConstructor
+@Singleton
 public class ProjectEndpoint {
 
     @NotNull
+    @Inject
     private ProjectService projectService;
     @NotNull
+    @Inject
     private SessionService sessionService;
 
-    public ProjectEndpoint(@NotNull final ProjectService projectService, @NotNull SessionService sessionService) {
-        this.projectService = projectService;
-        this.sessionService = sessionService;
-    }
 
     @WebMethod
     public List<ProjectDto> getProjectList(@WebParam(name = "session") final SessionDto session) throws WrongSessionException {

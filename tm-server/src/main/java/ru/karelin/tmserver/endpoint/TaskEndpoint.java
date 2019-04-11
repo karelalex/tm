@@ -12,6 +12,8 @@ import ru.karelin.tmserver.enumeration.Status;
 import ru.karelin.tmserver.exception.WrongSessionException;
 import ru.karelin.tmserver.api.service.SessionService;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -22,14 +24,12 @@ import java.util.List;
 
 @WebService
 @NoArgsConstructor
+@Singleton
 public class TaskEndpoint {
-    @NotNull private TaskService taskService;
-    @NotNull private SessionService sessionServiceImpl;
+    @NotNull @Inject private TaskService taskService;
+    @NotNull @Inject private SessionService sessionServiceImpl;
 
-    public TaskEndpoint(@NotNull TaskService taskService, @NotNull SessionService sessionServiceImpl) {
-        this.taskService = taskService;
-        this.sessionServiceImpl = sessionServiceImpl;
-    }
+
 
     @WebMethod
     public void createTask(@WebParam(name = "session") final SessionDto session,

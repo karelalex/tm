@@ -12,6 +12,7 @@ import ru.karelin.tmserver.entity.Session;
 import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.entity.User;
 
+import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManagerFactory;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +20,7 @@ import java.util.Properties;
 
 public class HiberInit {
     @SneakyThrows
+    @Produces
     public static EntityManagerFactory getEntityManagerFactory() {
         Properties properties = new Properties();
         properties.load(HiberInit.class.getResourceAsStream("/db.properties"));

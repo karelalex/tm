@@ -13,6 +13,8 @@ import ru.karelin.tmserver.enumeration.Status;
 import ru.karelin.tmserver.repository.ProjectRepositoryHiber;
 import ru.karelin.tmserver.repository.UserRepositoryHiber;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -20,20 +22,18 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+@ApplicationScoped
+public class ProjectServiceImpl /*extends AbstractSecuredEntityService<Project>*/ implements ProjectService {
 
-public final class ProjectServiceImpl /*extends AbstractSecuredEntityService<Project>*/ implements ProjectService {
-
-
-    final private EntityManagerFactory factory;
+    @Inject
+    private EntityManagerFactory factory;
 
     private static final String CREATION_DATE_SORT_STRING = "cre";
     private static final String FINISH_DATE_SORT_STRING = "fin";
     private static final String START_DATE_SORT_STRING = "start";
     private static final String STATUS_SORT_STRING = "stat";
 
-    public ProjectServiceImpl(@NotNull final EntityManagerFactory factory) {
-        this.factory = factory;
-    }
+
 
     @Override
     public List<Project> getList(String userId) {

@@ -63,6 +63,12 @@
             <artifactId>slf4j-nop</artifactId>
             <version>1.8.0-beta4</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jboss.weld.se/weld-se-core -->
+        <dependency>
+            <groupId>org.jboss.weld.se</groupId>
+            <artifactId>weld-se-core</artifactId>
+            <version>3.1.0.Final</version>
+        </dependency>
 
 
     </dependencies>

@@ -9,6 +9,8 @@ import ru.karelin.tmserver.entity.Session;
 import ru.karelin.tmserver.exception.WrongSessionException;
 import ru.karelin.tmserver.api.service.SessionService;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -16,12 +18,11 @@ import java.util.Date;
 
 @WebService
 @NoArgsConstructor
+@Singleton
 public class SessionEndpoint {
-    private SessionService sessionService;
 
-    public SessionEndpoint(@NotNull final SessionService sessionService) {
-        this.sessionService = sessionService;
-    }
+    @Inject
+    private SessionService sessionService;
 
     @WebMethod
     public SessionDto login(@WebParam(name = "login") final String login,

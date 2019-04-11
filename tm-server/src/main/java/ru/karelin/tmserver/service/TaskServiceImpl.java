@@ -1,7 +1,6 @@
 package ru.karelin.tmserver.service;
 
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.api.repository.ProjectRepository;
@@ -16,6 +15,8 @@ import ru.karelin.tmserver.repository.ProjectRepositoryHiber;
 import ru.karelin.tmserver.repository.TaskRepositoryHiber;
 import ru.karelin.tmserver.repository.UserRepositoryHiber;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -23,19 +24,19 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-
-public final class TaskServiceImpl implements TaskService {
+@ApplicationScoped
+public class TaskServiceImpl implements TaskService {
 
     private static final String CREATION_DATE_SORT_STRING = "cre";
     private static final String FINISH_DATE_SORT_STRING = "fin";
     private static final String START_DATE_SORT_STRING = "start";
     private static final String STATUS_SORT_STRING = "stat";
-    final private EntityManagerFactory factory;
+
+    @Inject
+    private EntityManagerFactory factory;
 
 
-    public TaskServiceImpl(EntityManagerFactory factory) {
-        this.factory = factory;
-    }
+
 
     @Override
     public List<Task> getList(String userId) {

@@ -15,20 +15,21 @@ import ru.karelin.tmserver.repository.UserRepositoryHiber;
 import ru.karelin.tmserver.util.MD5Generator;
 import ru.karelin.tmserver.util.SignatureUtil;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import java.util.Date;
 
-public final class SessionServiceImpl implements SessionService {
+@ApplicationScoped
+public class SessionServiceImpl implements SessionService {
     @NotNull
+    @Inject
     private EntityManagerFactory factory;
     private static final String SALT = "keramic";
     private static final int CIRCLE = 251;
 
-    public SessionServiceImpl(@NotNull EntityManagerFactory factory) {
-        this.factory = factory;
-    }
 
     @Override@Nullable
     public Session getNewSession(final String login, final String password) {
