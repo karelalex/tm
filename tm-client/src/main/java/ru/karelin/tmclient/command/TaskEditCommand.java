@@ -7,18 +7,29 @@ import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.*;
 
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.xml.datatype.DatatypeConfigurationException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
+@ApplicationScoped
+public class TaskEditCommand extends AbstractCommand {
 
-public final class TaskEditCommand extends AbstractCommand {
+    @Inject
+    private ServiceLocator locator;
+
+    @Inject
+    private ProjectEndpoint projectEndpoint;
+
+    @Inject
+    private TaskEndpoint taskEndpoint;
+
+    @Inject
+    private DateConverter dateConverter;
+
     private static final boolean SECURED = true;
-
-    public TaskEditCommand(@NotNull ServiceLocator locator) {
-        super(locator, SECURED);
-    }
 
     public TaskEditCommand() {
         super(SECURED);
@@ -42,11 +53,8 @@ public final class TaskEditCommand extends AbstractCommand {
             System.out.println("You must enter taskId");
             return;
         }
-        @NotNull final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
-        @NotNull final DateConverter dateConverter = locator.getDateConverter();
-        @NotNull final DateFormat dateFormat = locator.getDateFormat();
+               @NotNull final DateFormat dateFormat = locator.getDateFormat();
         @Nullable final SessionDto session = locator.getCurrentSession();
-        @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         if (!taskEndpoint.checkTaskId(session, taskId)) {
             System.out.println("Wrong ID!");
             return;

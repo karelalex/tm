@@ -5,14 +5,19 @@ import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.TaskEndpoint;
 import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
-public final class TaskRemoveCommand extends AbstractCommand {
+@ApplicationScoped
+public class TaskRemoveCommand extends AbstractCommand {
+
+    @Inject
+    private TaskEndpoint taskEndpoint;
+
+    @Inject
+    private ServiceLocator locator;
 
     private static final boolean SECURED = true;
-
-    public TaskRemoveCommand(@NotNull final ServiceLocator locator) {
-        super(locator, SECURED);
-    }
 
     public TaskRemoveCommand(){super(SECURED);}
 
@@ -28,7 +33,6 @@ public final class TaskRemoveCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) throws WrongSessionException_Exception {
-        final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
         final String taskId;
         if (params.length > 0) taskId = params[0];
         else {

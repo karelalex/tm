@@ -9,18 +9,29 @@ import ru.karelin.tmserver.endpoint.Status;
 import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.xml.datatype.DatatypeConfigurationException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
+@ApplicationScoped
+public class ProjectEditCommand extends AbstractCommand {
 
-public final class ProjectEditCommand extends AbstractCommand {
+    @Inject
+    private ServiceLocator locator;
+
+    @Inject
+    private ProjectEndpoint projectEndpoint;
+
+    @Inject
+    private DateConverter dateConverter;
+
+
     private static final boolean SECURED = true;
 
-    public ProjectEditCommand(@NotNull final ServiceLocator locator) {
-        super(locator, SECURED);
-    }
+
     public ProjectEditCommand(){super(SECURED);}
 
     @Override
@@ -41,10 +52,8 @@ public final class ProjectEditCommand extends AbstractCommand {
             System.out.println("You must enter projectId");
             return;
         }
-        final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         final SessionDto currentSession = locator.getCurrentSession();
         final DateFormat dateFormat = locator.getDateFormat();
-        final DateConverter dateConverter = locator.getDateConverter();
         if (!projectEndpoint.checkProjectId(currentSession, projectId)) {
             System.out.println("Wrong ID " + projectId);
             return;

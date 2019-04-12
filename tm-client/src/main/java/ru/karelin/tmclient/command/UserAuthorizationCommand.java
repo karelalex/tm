@@ -5,14 +5,26 @@ import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.*;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
-public final class UserAuthorizationCommand extends AbstractCommand {
+@ApplicationScoped
+public class UserAuthorizationCommand extends AbstractCommand {
+
+    @Inject
+    private SessionEndpoint sessionEndpoint;
+
+    @Inject
+    private UserEndpoint userEndpoint;
+
+    @Inject
+    private ServiceLocator locator;
+
     private static final boolean SECURED = false;
 
-    public UserAuthorizationCommand(@NotNull ServiceLocator locator) {
-        super(locator, SECURED);
+    public UserAuthorizationCommand() {
+        super(SECURED);
     }
-    public UserAuthorizationCommand(){super(SECURED);}
 
     @Override
     public String getName() {
@@ -26,17 +38,14 @@ public final class UserAuthorizationCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) throws WrongSessionException_Exception {
-        @NotNull final SessionEndpoint sessionEndpoint = locator.getSessionEndpoint();
-        @NotNull final UserEndpoint userEndpoint = locator.getUserEndpoint();
         System.out.println("Enter login");
         @NotNull final String login = ts.readLn();
         System.out.println("Enter password");
         final char[] pass = ts.readPass();
         @Nullable final SessionDto session = sessionEndpoint.login(login, new String(pass));
-        if(session==null){
+        if (session == null) {
             System.out.println("Wrong login or pass");
-        }
-        else {
+        } else {
             locator.setCurrentSession(session);
             System.out.println("Welcome " + userEndpoint.getCurrentUser(session).getUserName());
         }

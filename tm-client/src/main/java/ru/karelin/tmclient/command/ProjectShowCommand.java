@@ -8,16 +8,28 @@ import ru.karelin.tmserver.endpoint.ProjectDto;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
 import ru.karelin.tmserver.endpoint.SessionDto;
 import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.text.DateFormat;
 
+@ApplicationScoped
+public class ProjectShowCommand extends AbstractCommand {
 
-public final class ProjectShowCommand extends AbstractCommand{
+    @Inject
+    private ServiceLocator locator;
+
+    @Inject
+    private DateConverter dateConverter;
+
+    @Inject
+    private ProjectEndpoint projectEndpoint;
+
     private static final boolean SECURED = true;
 
-    public ProjectShowCommand(final ServiceLocator locator) {
-        super(locator, SECURED);
+    public ProjectShowCommand() {
+        super(SECURED);
     }
-    public ProjectShowCommand(){super(SECURED);}
 
     @Override
     public String getName() {
@@ -37,17 +49,15 @@ public final class ProjectShowCommand extends AbstractCommand{
             System.out.println("You must enter projectId");
             return;
         }
-        @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         @Nullable final DateFormat dateFormat = locator.getDateFormat();
-        @NotNull final DateConverter dateConverter = locator.getDateConverter();
         @Nullable final SessionDto session = locator.getCurrentSession();
-        if(!projectEndpoint.checkProjectId(session, projectId)) {
-            System.out.println("Wrong ID "+ projectId);
+        if (!projectEndpoint.checkProjectId(session, projectId)) {
+            System.out.println("Wrong ID " + projectId);
             return;
         }
         @NotNull final ProjectDto project = projectEndpoint.getProject(session, projectId);
         if (project == null) System.out.println("No projects with");
-        System.out.println("Project name: " + project.getName() );
+        System.out.println("Project name: " + project.getName());
         System.out.println("Project description: " + project.getDescription());
         System.out.println("Creation date: " + dateFormat.format(dateConverter.convert(project.getCreationDate())));
         System.out.println("Start Date: " + dateFormat.format(dateConverter.convert(project.getStartDate())));

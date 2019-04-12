@@ -2,6 +2,8 @@ package ru.karelin.tmserver.endpoint;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
 import javax.xml.namespace.QName;
 import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.WebServiceClient;
@@ -68,6 +70,7 @@ public class SessionEndpointService extends Service {
      *     returns SessionEndpoint
      */
     @WebEndpoint(name = "SessionEndpointPort")
+    @Produces @ApplicationScoped
     public SessionEndpoint getSessionEndpointPort() {
         return super.getPort(SessionEndpointPort, SessionEndpoint.class);
     }

@@ -5,13 +5,20 @@ import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
 import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
-public final class ProjectRemoveCommand extends AbstractCommand {
+@ApplicationScoped
+public class ProjectRemoveCommand extends AbstractCommand {
+
+    @Inject
+    private ProjectEndpoint projectEndpoint;
+
+    @Inject
+    private ServiceLocator locator;
+
     private static final boolean SECURED = true;
 
-    public ProjectRemoveCommand(@NotNull final ServiceLocator locator) {
-        super( locator,SECURED);
-    }
     public ProjectRemoveCommand(){super(SECURED);}
 
     @Override
@@ -32,7 +39,6 @@ public final class ProjectRemoveCommand extends AbstractCommand {
             System.out.println("You must enter projectId");
             return;
         }
-        @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         projectEndpoint.removeProject(locator.getCurrentSession(), projectId);
     }
 }

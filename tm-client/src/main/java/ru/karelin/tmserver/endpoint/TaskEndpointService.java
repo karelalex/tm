@@ -2,6 +2,8 @@ package ru.karelin.tmserver.endpoint;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
 import javax.xml.namespace.QName;
 import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.WebServiceClient;
@@ -68,6 +70,7 @@ public class TaskEndpointService extends Service {
      *     returns TaskEndpoint
      */
     @WebEndpoint(name = "TaskEndpointPort")
+    @Produces @ApplicationScoped
     public TaskEndpoint getTaskEndpointPort() {
         return super.getPort(TaskEndpointPort, TaskEndpoint.class);
     }

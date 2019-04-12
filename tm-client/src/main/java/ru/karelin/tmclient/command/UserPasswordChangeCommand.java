@@ -7,15 +7,21 @@ import ru.karelin.tmserver.endpoint.UserEndpoint;
 import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.Arrays;
 
-public final class UserPasswordChangeCommand extends AbstractCommand {
+@ApplicationScoped
+public class UserPasswordChangeCommand extends AbstractCommand {
+
+    @Inject
+    private ServiceLocator locator;
+
+    @Inject
+    private UserEndpoint userEndpoint;
 
     private static final boolean SECURED = true;
 
-    public UserPasswordChangeCommand(ServiceLocator locator) {
-        super(locator, SECURED);
-    }
     public UserPasswordChangeCommand(){super(SECURED);}
 
     @Override
@@ -30,7 +36,6 @@ public final class UserPasswordChangeCommand extends AbstractCommand {
 
     @Override
     public void execute(String... params) throws WrongSessionException_Exception {
-        @NotNull final UserEndpoint userEndpoint = locator.getUserEndpoint();
         @NotNull final SessionDto session = locator.getCurrentSession();
         System.out.println("Enter your old pass");
         final char[] oldPass;

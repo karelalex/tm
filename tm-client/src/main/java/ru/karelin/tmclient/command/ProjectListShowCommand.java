@@ -6,16 +6,25 @@ import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.*;
 
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.text.DateFormat;
 import java.util.List;
 
+@ApplicationScoped
+public class ProjectListShowCommand extends AbstractCommand {
 
-public final class ProjectListShowCommand extends AbstractCommand {
+    @Inject
+    private ProjectEndpoint projectEndpoint;
+
+    @Inject
+    private ServiceLocator locator;
+
+    @Inject
+    private DateConverter dateConverter;
+
     private static final boolean SECURED = true;
 
-    public ProjectListShowCommand(@NotNull final ServiceLocator locator) {
-        super(locator, SECURED);
-    }
     public ProjectListShowCommand(){super(SECURED);}
 
     @Override
@@ -30,10 +39,7 @@ public final class ProjectListShowCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) throws WrongSessionException_Exception {
-
-        @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
-        @NotNull final DateConverter dateConverter = locator.getDateConverter();
         @NotNull final SessionDto session = locator.getCurrentSession();
         boolean isSorted = false;
         @NotNull String sortField = "";

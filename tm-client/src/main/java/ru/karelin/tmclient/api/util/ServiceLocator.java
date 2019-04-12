@@ -18,20 +18,5 @@ public interface ServiceLocator {
 
     DateFormat getDateFormat();
 
-    TerminalService getTerminalService();
-
-    UserEndpoint getUserEndpoint();
-
-    @NotNull
-    DateConverter getDateConverter();
-
-    ProjectEndpoint getProjectEndpoint();
-
-    TaskEndpoint getTaskEndpoint();
-
-
-    @NotNull
-    SessionEndpoint getSessionEndpoint();
-
     void init(Class[] commandClasses);
 }

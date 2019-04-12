@@ -10,18 +10,30 @@ import ru.karelin.tmserver.endpoint.TaskEndpoint;
 import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.xml.datatype.DatatypeConfigurationException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
+@ApplicationScoped
+public class TaskCreateCommand  extends AbstractCommand {
 
-public final class TaskCreateCommand  extends AbstractCommand {
+    @Inject
+    private ServiceLocator locator;
+
+    @Inject
+    private ProjectEndpoint projectEndpoint;
+
+    @Inject
+    private TaskEndpoint taskEndpoint;
+
+    @Inject
+    private DateConverter dateConverter;
+
     private static final boolean SECURED = true;
 
-    public TaskCreateCommand(@NotNull final ServiceLocator locator) {
-        super(locator, SECURED);
-    }
     public TaskCreateCommand(){super(SECURED);}
 
     @Override
@@ -38,10 +50,8 @@ public final class TaskCreateCommand  extends AbstractCommand {
     @Override
     public void execute(final String... params) throws DatatypeConfigurationException, WrongSessionException_Exception {
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
-        @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
-        @NotNull final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
         @Nullable final SessionDto session = locator.getCurrentSession();
-        @NotNull final DateConverter dateConverter = locator.getDateConverter();
+
 
         @NotNull String projectId="";
         if (params.length>0) projectId=params[0];

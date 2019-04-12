@@ -7,16 +7,27 @@ import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.*;
 
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.text.DateFormat;
 import java.util.List;
 
+@ApplicationScoped
+public class TaskListShowCommand extends AbstractCommand {
 
-public final class TaskListShowCommand extends AbstractCommand {
+    @Inject
+    private ServiceLocator locator;
+
+    @Inject
+    private DateConverter dateConverter;
+
+    @Inject
+    private TaskEndpoint taskEndpoint;
+
+    @Inject
+    private ProjectEndpoint projectEndpoint;
+
     private static final boolean SECURED = true;
-
-    public TaskListShowCommand(@NotNull final ServiceLocator locator) {
-        super(locator, SECURED);
-    }
 
     public TaskListShowCommand() {
         super(SECURED);
@@ -36,12 +47,11 @@ public final class TaskListShowCommand extends AbstractCommand {
     public void execute(final String... params) throws WrongSessionException_Exception {
         @Nullable final SessionDto session = locator.getCurrentSession();
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
-        @NotNull final DateConverter dateConverter = locator.getDateConverter();
         @NotNull final String projectId;
         boolean isSorted = false;
         String sortField = "";
         boolean isStraight = true;
-        String searchItem ="";
+        String searchItem = "";
         boolean isFind = false;
         if (params.length > 0) {
             int iter;
@@ -64,10 +74,10 @@ public final class TaskListShowCommand extends AbstractCommand {
 
                         }
                     }
-                    if(iter<params.length && params[iter].equals("-search")){
+                    if (iter < params.length && params[iter].equals("-search")) {
                         isFind = true;
-                        iter ++;
-                        if(iter<params.length && !params[iter].startsWith("-")){
+                        iter++;
+                        if (iter < params.length && !params[iter].startsWith("-")) {
                             searchItem = params[iter];
                         }
                     }
@@ -77,8 +87,6 @@ public final class TaskListShowCommand extends AbstractCommand {
             }
 
         } else projectId = "";
-        @NotNull final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
-        @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
         @NotNull final List<TaskDto> tasks;
         boolean showProjectId = true;
         if (isFind) tasks = taskEndpoint.getTaskListByKeyword(session, searchItem);
@@ -87,10 +95,9 @@ public final class TaskListShowCommand extends AbstractCommand {
                 tasks = taskEndpoint.getSortedTaskList(session, sortField, isStraight);
             } else tasks = taskEndpoint.getTaskList(session);
         } else if (projectEndpoint.checkProjectId(session, projectId)) {
-            if(isSorted){
+            if (isSorted) {
                 tasks = taskEndpoint.getSortedTaskListByProjectId(session, projectId, sortField, isStraight);
-            }
-            else tasks = taskEndpoint.getTaskListByProjectId(session, projectId);
+            } else tasks = taskEndpoint.getTaskListByProjectId(session, projectId);
             showProjectId = false;
         } else {
             System.out.println("Wrong Project ID");

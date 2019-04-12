@@ -6,17 +6,31 @@ import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
 import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.xml.datatype.DatatypeConfigurationException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
-public final class ProjectCreateCommand extends AbstractCommand {
+@ApplicationScoped
+public class ProjectCreateCommand extends AbstractCommand {
+
+    @Inject
+    private ServiceLocator locator;
+
+    @Inject
+    private ProjectEndpoint projectEndpoint;
+
+    @Inject
+    private DateConverter dateConverter;
+
     private static final boolean SECURED = true;
-    public ProjectCreateCommand(@NotNull final ServiceLocator locator) {
-        super( locator, SECURED);
+
+    public ProjectCreateCommand() {
+        super(SECURED);
     }
-    public ProjectCreateCommand(){super(SECURED);}
+
     @Override
     public String getName() {
         return "cp";
@@ -28,17 +42,16 @@ public final class ProjectCreateCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(final String ... params) throws DatatypeConfigurationException, WrongSessionException_Exception {
+    public void execute(final String... params) throws DatatypeConfigurationException, WrongSessionException_Exception {
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
-        @NotNull final ProjectEndpoint projectEndpoint = locator.getProjectEndpoint();
-        @NotNull final DateConverter dateConverter = locator.getDateConverter();
+
         System.out.println("Enter project name");
         @NotNull final String projectName = ts.readLn();
         System.out.println("Enter project description");
         final String projectDescription = ts.readLn();
         @NotNull String date;
         @NotNull Date projectStartDate;
-        while(true) {
+        while (true) {
             System.out.println("Enter starting date (format DD.MM.YYYY) or leave empty for today");
             date = ts.readLn();
             if (date.isEmpty()) {

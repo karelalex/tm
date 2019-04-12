@@ -8,63 +8,30 @@ import ru.karelin.tmclient.command.AbstractCommand;
 import ru.karelin.tmclient.exception.CommandRegisteredException;
 import ru.karelin.tmserver.endpoint.*;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.spi.CDI;
+import javax.inject.Inject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@ApplicationScoped
+public class Bootstrap implements ServiceLocator {
 
-public final class Bootstrap implements ServiceLocator {
+    @Inject
+    private TerminalService terminalService;
 
     private static final String QUIT = "exit";
 
-
-    @NotNull private ProjectEndpoint projectEndpoint;
-    @NotNull private TaskEndpoint taskEndpoint;
-    @NotNull private UserEndpoint userEndpoint;
-    @NotNull private SessionEndpoint sessionEndpoint;
-
-
-
-    @NotNull private DateConverter dateConverter = new DateConverter();
-
-
-
-    @NotNull private final TerminalService terminalService= new TerminalServiceImpl();
     @NotNull private final Map<String, AbstractCommand> commands = new LinkedHashMap<>();
     @NotNull private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 
     @Nullable private SessionDto currentSession;
 
-    @Override
-    @NotNull
-    public ProjectEndpoint getProjectEndpoint() {
-        return projectEndpoint;
-    }
-
-    @Override
-    @NotNull
-    public DateConverter getDateConverter() {
-        return dateConverter;
-    }
-
-    @NotNull
-    @Override
-    public TaskEndpoint getTaskEndpoint() {
-        return taskEndpoint;
-    }
-
-
-    @Override
-    @NotNull
-    public UserEndpoint getUserEndpoint() {
-        return userEndpoint;
-    }
-
-
-    @Override
+       @Override
     @Nullable
     public SessionDto getCurrentSession() {
         return currentSession;
@@ -87,27 +54,9 @@ public final class Bootstrap implements ServiceLocator {
         return dateFormat;
     }
 
-    @NotNull
-    @Override
-    public TerminalService getTerminalService() {
-        return terminalService;
-    }
-
-    @Override
-    @NotNull
-    public SessionEndpoint getSessionEndpoint() {
-        return sessionEndpoint;
-    }
 
     @Override
     public void init(Class[] commandClasses) {
-
-        projectEndpoint = new ProjectEndpointService().getProjectEndpointPort();
-        taskEndpoint = new TaskEndpointService().getTaskEndpointPort();
-        userEndpoint = new UserEndpointService().getUserEndpointPort();
-        sessionEndpoint = new SessionEndpointService().getSessionEndpointPort();
-
-
 
         //command registration block
         for (Class commandClass : commandClasses) {
@@ -159,11 +108,11 @@ public final class Bootstrap implements ServiceLocator {
 
     private void registerCommand(@NotNull final Class commandClass) throws IllegalAccessException, InstantiationException {
         if (AbstractCommand.class.isAssignableFrom(commandClass)) {
-            AbstractCommand command = (AbstractCommand) commandClass.newInstance();
+            AbstractCommand command = (AbstractCommand) CDI.current().select(commandClass).get();
             final String commandName = command.getName();
             if (commands.containsKey(commandName))
                 throw new CommandRegisteredException("Command with name " + commandName + " is already registered");
-            command.setLocator(this);
+            //command.setLocator(this);
             commands.put(commandName, command);
         } else {
             System.out.println("команда не клёвая");

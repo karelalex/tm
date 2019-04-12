@@ -7,16 +7,25 @@ import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.*;
 
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.text.DateFormat;
 
+@ApplicationScoped
+public class TaskShowCommand extends AbstractCommand {
 
-public final class TaskShowCommand extends AbstractCommand {
+    @Inject
+    DateConverter dateConverter;
+
+    @Inject
+    ServiceLocator locator;
+
+    @Inject
+    TaskEndpoint taskEndpoint;
+
 
     private static final boolean SECURED = true;
 
-    public TaskShowCommand(final ServiceLocator locator) {
-        super(locator, SECURED);
-    }
     public TaskShowCommand(){super(SECURED);}
 
     @Override
@@ -31,7 +40,6 @@ public final class TaskShowCommand extends AbstractCommand {
 
     @Override
     public void execute(final String... params) throws WrongSessionException_Exception {
-        @NotNull final TaskEndpoint taskEndpoint = locator.getTaskEndpoint();
         @NotNull final String taskId;
         if (params.length > 0) taskId = params[0];
         else {
@@ -39,7 +47,6 @@ public final class TaskShowCommand extends AbstractCommand {
             return;
         }
         @NotNull final DateFormat dateFormat = locator.getDateFormat();
-        @NotNull final DateConverter dateConverter = locator.getDateConverter();
         @Nullable final SessionDto session = locator.getCurrentSession();
         if (!taskEndpoint.checkTaskId(session, taskId)) {
             System.out.println("Wrong ID");

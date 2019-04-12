@@ -5,13 +5,20 @@ import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.UserEndpoint;
 import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
-public final class UserProfileEditCommand extends AbstractCommand{
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
+@ApplicationScoped
+public class UserProfileEditCommand extends AbstractCommand{
+
+    @Inject
+    private UserEndpoint userEndpoint;
+
+    @Inject
+    private ServiceLocator locator;
 
     private static final boolean SECURED = true;
 
-    public UserProfileEditCommand(ServiceLocator locator) {
-        super(locator, SECURED);
-    }
     public UserProfileEditCommand(){super(SECURED);}
 
     @Override
@@ -28,7 +35,6 @@ public final class UserProfileEditCommand extends AbstractCommand{
     public void execute(String... params) throws WrongSessionException_Exception {
         System.out.println("Enter user name or just press enter if you do not want to change it");
         @NotNull final String userName = ts.readLn();
-        @NotNull final UserEndpoint userEndpoint = locator.getUserEndpoint();
         userEndpoint.editUser(locator.getCurrentSession(), userName);
     }
 }

@@ -3,10 +3,16 @@ package ru.karelin.tmclient;
 
 import ru.karelin.tmclient.command.*;
 import ru.karelin.tmclient.util.Bootstrap;
+import ru.karelin.tmserver.endpoint.ProjectEndpointService;
+
+import javax.enterprise.inject.se.SeContainerInitializer;
+import javax.enterprise.inject.spi.CDI;
 
 public class Application {
 
     public static void main(String[] args) {
+        SeContainerInitializer.newInstance().initialize();
+        Bootstrap bootstrap = CDI.current().select(Bootstrap.class).get();
         Class[] commandClasses = {
                 ProjectCreateCommand.class,
                 ProjectEditCommand.class,
@@ -30,7 +36,6 @@ public class Application {
                 HelpShowCommand.class,
                 InfoShowCommand.class
         };
-        new Bootstrap().init(commandClasses);
-
+        bootstrap.init(commandClasses);
     }
 }
