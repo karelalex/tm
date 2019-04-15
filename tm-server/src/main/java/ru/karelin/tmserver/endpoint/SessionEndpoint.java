@@ -9,6 +9,7 @@ import ru.karelin.tmserver.entity.Session;
 import ru.karelin.tmserver.exception.WrongSessionException;
 import ru.karelin.tmserver.api.service.SessionService;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.jws.WebMethod;

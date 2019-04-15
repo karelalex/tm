@@ -1,8 +1,6 @@
 package ru.karelin.tmclient.command;
 
 import com.jcabi.manifests.Manifests;
-import org.jetbrains.annotations.NotNull;
-import ru.karelin.tmclient.api.util.ServiceLocator;
 
 import javax.enterprise.context.ApplicationScoped;
 
