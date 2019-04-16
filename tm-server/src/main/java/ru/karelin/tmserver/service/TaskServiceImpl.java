@@ -170,7 +170,6 @@ public class TaskServiceImpl implements TaskService {
             @Nullable final Task task = taskRepository.findOneByIdAndUserId(id, userId);
             if (task != null) {
                 taskRepository.remove(task);
-                transaction.rollback();
             }
             transaction.commit();
         } catch (Exception e) {

@@ -33,7 +33,7 @@ public class HiberInit {
         settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect");
         settings.put(Environment.SHOW_SQL, "true");
         settings.put(Environment.HBM2DDL_AUTO, "update");
-        settings.put(Environment.FORMAT_SQL, "true");
+        settings.put(Environment.FORMAT_SQL, "false");
         final StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
         registryBuilder.applySettings(settings);
         final StandardServiceRegistry registry = registryBuilder.build();

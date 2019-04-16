@@ -1,6 +1,7 @@
 package ru.karelin.tmclient;
 
 import org.junit.*;
+import org.junit.experimental.categories.Category;
 import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.*;
 
@@ -8,12 +9,14 @@ import javax.enterprise.inject.se.SeContainer;
 import javax.enterprise.inject.se.SeContainerInitializer;
 import javax.enterprise.inject.spi.CDI;
 import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
-
+@Category(CrudIntegration.class)
 public class CrudTesting {
     private static ProjectEndpoint projectEndpoint;
     private static SessionEndpoint sessionEndpoint;
@@ -23,62 +26,64 @@ public class CrudTesting {
     private static TaskEndpoint taskEndpoint;
     private static SeContainer container;
     private static DatatypeFactory factory;
-
-
+    private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 
     @BeforeClass
-    public static void MainInit() throws DatatypeConfigurationException {
+    public static void MainInit() {
         container = SeContainerInitializer.newInstance().initialize();
-        userEndpoint= CDI.current().select(UserEndpoint.class).get();
+        userEndpoint = CDI.current().select(UserEndpoint.class).get();
         sessionEndpoint = CDI.current().select(SessionEndpoint.class).get();
         projectEndpoint = CDI.current().select(ProjectEndpoint.class).get();
         taskEndpoint = CDI.current().select(TaskEndpoint.class).get();
         dateConverter = CDI.current().select(DateConverter.class).get();
-        if (!userEndpoint.isUserExistsByLogin("testUser")){
+        if (!userEndpoint.isUserExistsByLogin("testUser")) {
             userEndpoint.registerNewUser("testUser", "testPass", "Test User");
         }
-        factory = DatatypeFactory.newInstance();
-
     }
 
     @Before
-    public void endPointInit() throws WrongSessionException_Exception, DatatypeConfigurationException {
+    public void endPointInit() throws WrongSessionException_Exception, ParseException, DatatypeConfigurationException {
         currentSession = sessionEndpoint.login("testUser", "testPass");
         projectEndpoint.createProject(currentSession, "prj1", "project 1 description",
-                factory.newXMLGregorianCalendarDate(2019, 7, 19, DatatypeConstants.FIELD_UNDEFINED),
-                factory.newXMLGregorianCalendarDate(2020, 5,19, DatatypeConstants.FIELD_UNDEFINED));
+                dateConverter.convert(dateFormat.parse("19.07.2019")),
+                dateConverter.convert(dateFormat.parse("19.05.2020")));
         projectEndpoint.createProject(currentSession, "prj2", "project 2 koshka",
-                factory.newXMLGregorianCalendarDate(2019, 8, 30, DatatypeConstants.FIELD_UNDEFINED),
-                factory.newXMLGregorianCalendarDate(2020, 4,7, DatatypeConstants.FIELD_UNDEFINED));
+                dateConverter.convert(dateFormat.parse("30.08.2019")),
+                dateConverter.convert(dateFormat.parse("07.04.2020")));
         projectEndpoint.createProject(currentSession, "prj3", "project 3 kobra",
-                factory.newXMLGregorianCalendarDate(2019, 6, 3, DatatypeConstants.FIELD_UNDEFINED),
-                factory.newXMLGregorianCalendarDate(2021, 1,2, DatatypeConstants.FIELD_UNDEFINED));
+                dateConverter.convert(dateFormat.parse("03.06.2019")),
+                dateConverter.convert(dateFormat.parse("02.01.2021")));
         List<ProjectDto> projectDtos = projectEndpoint.getProjectList(currentSession);
         taskEndpoint.createTask(currentSession, "task 1_1", "mishka",
-                factory.newXMLGregorianCalendarDate(2019, 9, 17, DatatypeConstants.FIELD_UNDEFINED),
-                factory.newXMLGregorianCalendarDate(2020, 3, 2, DatatypeConstants.FIELD_UNDEFINED), projectDtos.get(0).getId());
+                dateConverter.convert(dateFormat.parse("17.09.2019")),
+                dateConverter.convert(dateFormat.parse("02.03.2020")),
+                projectDtos.get(0).getId());
         taskEndpoint.createTask(currentSession, "task 1_2", "bushka",
-                factory.newXMLGregorianCalendarDate(2019, 9, 16, DatatypeConstants.FIELD_UNDEFINED),
-                factory.newXMLGregorianCalendarDate(2020, 4, 17, DatatypeConstants.FIELD_UNDEFINED), projectDtos.get(0).getId());
+                dateConverter.convert(dateFormat.parse("16.09.2019")),
+                dateConverter.convert(dateFormat.parse("17.04.2020")), projectDtos.get(0).getId());
         taskEndpoint.createTask(currentSession, "task 1_3", "kashka",
-                factory.newXMLGregorianCalendarDate(2019, 9, 15, DatatypeConstants.FIELD_UNDEFINED),
-                factory.newXMLGregorianCalendarDate(2020, 4, 3, DatatypeConstants.FIELD_UNDEFINED), projectDtos.get(0).getId());
+                dateConverter.convert(dateFormat.parse("15.09.2019")),
+                dateConverter.convert(dateFormat.parse("03.04.2020")),
+                projectDtos.get(0).getId());
         taskEndpoint.createTask(currentSession, "task 2_1", "mishku",
-                factory.newXMLGregorianCalendarDate(2019, 10, 17, DatatypeConstants.FIELD_UNDEFINED),
-                factory.newXMLGregorianCalendarDate(2020, 2, 19, DatatypeConstants.FIELD_UNDEFINED), projectDtos.get(1).getId());
+                dateConverter.convert(dateFormat.parse("17.10.2019")),
+                dateConverter.convert(dateFormat.parse("19.02.2020")),
+                projectDtos.get(1).getId());
         taskEndpoint.createTask(currentSession, "task 2_2", "kandela",
-                factory.newXMLGregorianCalendarDate(2019, 9, 17, DatatypeConstants.FIELD_UNDEFINED),
-                factory.newXMLGregorianCalendarDate(2019, 12, 3, DatatypeConstants.FIELD_UNDEFINED), projectDtos.get(1).getId());
+                dateConverter.convert(dateFormat.parse("17.09.2019")),
+                dateConverter.convert(dateFormat.parse("12.03.2020")),
+                projectDtos.get(1).getId());
         taskEndpoint.createTask(currentSession, "task 3_1", "viking",
-                factory.newXMLGregorianCalendarDate(2019, 9, 17, DatatypeConstants.FIELD_UNDEFINED),
-                factory.newXMLGregorianCalendarDate(2020, 1, 19, DatatypeConstants.FIELD_UNDEFINED), projectDtos.get(2).getId());
+                dateConverter.convert(dateFormat.parse("17.09.2019")),
+                dateConverter.convert(dateFormat.parse("19.01.2020")),
+                projectDtos.get(2).getId());
 
 
     }
 
     @Test(expected = WrongSessionException_Exception.class)
-    public void notLogged() throws WrongSessionException_Exception{
+    public void notLogged() throws WrongSessionException_Exception {
         Assert.assertEquals(0, projectEndpoint.getProjectList(null).size());
     }
 
@@ -93,38 +98,145 @@ public class CrudTesting {
     }
 
     @Test
-    public void creationFail() throws WrongSessionException_Exception {
+    public void creationFail() throws WrongSessionException_Exception, ParseException, DatatypeConfigurationException {
         Assert.assertEquals(6, taskEndpoint.getTaskList(currentSession).size());
         taskEndpoint.createTask(currentSession, "task 3_1", "viking",
-                factory.newXMLGregorianCalendarDate(2019, 9, 17, DatatypeConstants.FIELD_UNDEFINED),
-                factory.newXMLGregorianCalendarDate(2020, 1, 19, DatatypeConstants.FIELD_UNDEFINED), "7");
+                dateConverter.convert(dateFormat.parse("17.09.2019")),
+                dateConverter.convert(dateFormat.parse("19.01.2020")),
+                "7");
         Assert.assertEquals(6, taskEndpoint.getTaskList(currentSession).size());
     }
 
     @Test
-    public void projectEditStratDate() throws WrongSessionException_Exception {
-        ProjectDto projectDto = projectEndpoint.getProjectList(currentSession).get(0);
-        XMLGregorianCalendar calendar = factory.newXMLGregorianCalendarDate(2022, 12, 12, DatatypeConstants.FIELD_UNDEFINED);
-        projectEndpoint.editProject(currentSession, projectDto.getId(), "", "", calendar, null, null);
-        //ProjectDto test
+    public void taskEditStartDate() throws WrongSessionException_Exception, ParseException, DatatypeConfigurationException {
+        TaskDto taskDto = taskEndpoint.getTaskList(currentSession).get(0);
+        XMLGregorianCalendar calendar = dateConverter.convert(dateFormat.parse("12.12.2022"));
+        String name = "nice task";
+        taskEndpoint.editTask(currentSession, taskDto.getId(), name, "", calendar, null, "", null);
+        TaskDto testDto = taskEndpoint.getTask(currentSession, taskDto.getId());
+        Assert.assertEquals(name, testDto.getName());
+        Assert.assertEquals(taskDto.getDescription(), testDto.getDescription());
+        Assert.assertEquals(calendar, testDto.getStartDate());
+        Assert.assertEquals(taskDto.getFinishDate(), testDto.getFinishDate());
+        Assert.assertEquals(taskDto.getCreationDate(), testDto.getCreationDate());
+        Assert.assertEquals(taskDto.getStatus(), testDto.getStatus());
+        Assert.assertEquals(taskDto.getProjectId(), testDto.getProjectId());
     }
+
+    @Test
+    public void taskEditFinishDateAndDescription() throws WrongSessionException_Exception, ParseException, DatatypeConfigurationException {
+        TaskDto taskDto = taskEndpoint.getTaskList(currentSession).get(0);
+        XMLGregorianCalendar calendar = dateConverter.convert(dateFormat.parse("12.12.2022"));
+        final String desc = "Task important desk";
+        taskEndpoint.editTask(currentSession, taskDto.getId(), "", desc, null, calendar, "", null);
+        TaskDto testDto = taskEndpoint.getTask(currentSession, taskDto.getId());
+        Assert.assertEquals(taskDto.getName(), testDto.getName());
+        Assert.assertEquals(desc, testDto.getDescription());
+        Assert.assertEquals(taskDto.getStartDate(), testDto.getStartDate());
+        Assert.assertEquals(calendar, testDto.getFinishDate());
+        Assert.assertEquals(taskDto.getCreationDate(), testDto.getCreationDate());
+        Assert.assertEquals(taskDto.getStatus(), testDto.getStatus());
+        Assert.assertEquals(taskDto.getProjectId(), testDto.getProjectId());
+    }
+
+    @Test
+    public void tasktEditStatusAndProjectId() throws WrongSessionException_Exception, ParseException, DatatypeConfigurationException {
+        TaskDto taskDto = taskEndpoint.getTaskList(currentSession).get(0);
+        List<ProjectDto> projectList= projectEndpoint.getProjectList(currentSession);
+        String secondProjectId = projectList.get(0).getId();
+        if (secondProjectId.equals(taskDto.getProjectId())) secondProjectId=projectList.get(1).getId();
+        taskEndpoint.editTask(currentSession, taskDto.getId(), "", "", null, null, secondProjectId, Status.PROCESS);
+        TaskDto testDto = taskEndpoint.getTask(currentSession, taskDto.getId());
+        Assert.assertEquals(taskDto.getName(), testDto.getName());
+        Assert.assertEquals(taskDto.getDescription(), testDto.getDescription());
+        Assert.assertEquals(taskDto.getStartDate(), testDto.getStartDate());
+        Assert.assertEquals(taskDto.getFinishDate(), testDto.getFinishDate());
+        Assert.assertEquals(taskDto.getCreationDate(), testDto.getCreationDate());
+        Assert.assertEquals(Status.PROCESS, testDto.getStatus());
+        Assert.assertEquals(secondProjectId, testDto.getProjectId());
+        projectEndpoint.removeProject(currentSession, secondProjectId);
+        Assert.assertNull(taskEndpoint.getTask(currentSession, taskDto.getId()));
+
+    }
+
+    @Test
+    public void projectRemove() throws WrongSessionException_Exception {
+        ProjectDto projectDto = projectEndpoint.getProjectList(currentSession).get(1);
+        List<TaskDto> taskDtoList = taskEndpoint.getTaskListByProjectId(currentSession, projectDto.getId());
+        Assert.assertTrue(taskDtoList.size() > 0);
+        projectEndpoint.removeProject(currentSession, projectDto.getId());
+        Assert.assertNull(projectEndpoint.getProject(currentSession, projectDto.getId()));
+        Assert.assertEquals(0, taskEndpoint.getTaskListByProjectId(currentSession, projectDto.getId()).size());
+
+    }
+
+    @Test
+    public void taskRemove() throws WrongSessionException_Exception {
+        TaskDto taskDto = taskEndpoint.getTaskList(currentSession).get(1);
+        taskEndpoint.removeTask(currentSession, taskDto.getId());
+        Assert.assertNull(taskEndpoint.getTask(currentSession, taskDto.getId()));
+    }
+
+    @Test
+    public void projectEditStartDate() throws WrongSessionException_Exception, ParseException, DatatypeConfigurationException {
+        ProjectDto projectDto = projectEndpoint.getProjectList(currentSession).get(0);
+        XMLGregorianCalendar calendar = dateConverter.convert(dateFormat.parse("12.12.2022"));
+        String name = "Projection1";
+        projectEndpoint.editProject(currentSession, projectDto.getId(), name, "", calendar, null, null);
+        ProjectDto testDto = projectEndpoint.getProject(currentSession, projectDto.getId());
+        Assert.assertEquals(name, testDto.getName());
+        Assert.assertEquals(projectDto.getDescription(), testDto.getDescription());
+        Assert.assertEquals(calendar, testDto.getStartDate());
+        Assert.assertEquals(projectDto.getFinishDate(), testDto.getFinishDate());
+        Assert.assertEquals(projectDto.getCreationDate(), testDto.getCreationDate());
+        Assert.assertEquals(projectDto.getStatus(), testDto.getStatus());
+    }
+
+    @Test
+    public void projectEditFinishDate() throws WrongSessionException_Exception, ParseException, DatatypeConfigurationException {
+        ProjectDto projectDto = projectEndpoint.getProjectList(currentSession).get(0);
+        XMLGregorianCalendar calendar = dateConverter.convert(dateFormat.parse("12.12.2022"));
+        final String desc = "Projection desk";
+        projectEndpoint.editProject(currentSession, projectDto.getId(), "", desc, null, calendar, null);
+        ProjectDto testDto = projectEndpoint.getProject(currentSession, projectDto.getId());
+        Assert.assertEquals(projectDto.getName(), testDto.getName());
+        Assert.assertEquals(desc, testDto.getDescription());
+        Assert.assertEquals(projectDto.getStartDate(), testDto.getStartDate());
+        Assert.assertEquals(calendar, testDto.getFinishDate());
+        Assert.assertEquals(projectDto.getCreationDate(), testDto.getCreationDate());
+        Assert.assertEquals(projectDto.getStatus(), testDto.getStatus());
+    }
+
+    @Test
+    public void projectEditStatus() throws WrongSessionException_Exception, ParseException, DatatypeConfigurationException {
+        ProjectDto projectDto = projectEndpoint.getProjectList(currentSession).get(0);
+        projectEndpoint.editProject(currentSession, projectDto.getId(), "", "", null, null, Status.PROCESS);
+        ProjectDto testDto = projectEndpoint.getProject(currentSession, projectDto.getId());
+        Assert.assertEquals(projectDto.getName(), testDto.getName());
+        Assert.assertEquals(projectDto.getDescription(), testDto.getDescription());
+        Assert.assertEquals(projectDto.getStartDate(), testDto.getStartDate());
+        Assert.assertEquals(projectDto.getFinishDate(), testDto.getFinishDate());
+        Assert.assertEquals(projectDto.getCreationDate(), testDto.getCreationDate());
+        Assert.assertEquals(Status.PROCESS, testDto.getStatus());
+    }
+
 
     @After
     public void afterTest() throws WrongSessionException_Exception {
         List<TaskDto> tList = taskEndpoint.getTaskList(currentSession);
-        for(TaskDto t: tList){
+        for (TaskDto t : tList) {
             taskEndpoint.removeTask(currentSession, t.getId());
         }
         List<ProjectDto> pList = projectEndpoint.getProjectList(currentSession);
-        for(ProjectDto p: pList){
+        for (ProjectDto p : pList) {
             projectEndpoint.removeProject(currentSession, p.getId());
         }
         sessionEndpoint.logout(currentSession);
-        currentSession=null;
+        currentSession = null;
     }
 
     @AfterClass
-    public static void end() throws WrongSessionException_Exception {
+    public static void end() {
         container.close();
     }
 }

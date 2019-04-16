@@ -31,7 +31,8 @@ public class SessionServiceImpl implements SessionService {
     private static final int CIRCLE = 251;
 
 
-    @Override@Nullable
+    @Override
+    @Nullable
     public Session getNewSession(final String login, final String password) {
         EntityManager em = factory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
@@ -43,7 +44,7 @@ public class SessionServiceImpl implements SessionService {
             if (user != null) {
                 Session session = new Session();
                 session.setUser(user);
-                session.setSignature(SignatureUtil.sign(session.getId()+session.getUser().getId(), SALT, CIRCLE));
+                session.setSignature(SignatureUtil.sign(session.getId() + session.getUser().getId(), SALT, CIRCLE));
                 sessionRepository.persist(session);
                 transaction.commit();
                 return session;
@@ -57,10 +58,10 @@ public class SessionServiceImpl implements SessionService {
         return null;
     }
 
-    @Override public void removeOldSessions(int minutes) {
+    @Override
+    public void removeOldSessions(int minutes) {
         Date date = new Date();
         date.setTime(date.getTime() - (minutes * 60L * 1000L));
-        System.out.println(date);
         EntityManager em = factory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
         SessionRepository sessionRepository = new SessionRepositoryHiber(em);
@@ -77,7 +78,8 @@ public class SessionServiceImpl implements SessionService {
 
     }
 
-    @Override public void removeSession(@Nullable String sessionId) throws WrongSessionException {
+    @Override
+    public void removeSession(@Nullable String sessionId) throws WrongSessionException {
         EntityManager em = factory.createEntityManager();
         SessionRepository sessionRepository = new SessionRepositoryHiber(em);
         EntityTransaction transaction = em.getTransaction();
@@ -86,14 +88,12 @@ public class SessionServiceImpl implements SessionService {
             final Session session = sessionRepository.findOne(sessionId);
             if (session != null) {
                 sessionRepository.remove(session);
-               transaction.commit();
+                transaction.commit();
             } else throw new WrongSessionException("No such session found");
-        }
-        catch (WrongSessionException e){
+        } catch (WrongSessionException e) {
             transaction.rollback();
             throw e;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             transaction.rollback();
         } finally {
@@ -101,24 +101,23 @@ public class SessionServiceImpl implements SessionService {
         }
     }
 
-    @Override public boolean isSessionExists(@Nullable SessionDto session) throws WrongSessionException {
+    @Override
+    public boolean isSessionExists(@Nullable SessionDto session) throws WrongSessionException {
         if (session == null) throw new WrongSessionException("No such session found");
         String signature = session.getSignature();
         session.setSignature(null);
-        if (signature.equals(SignatureUtil.sign(session.getId()+session.getUserId(), SALT, CIRCLE))) {
+        if (signature.equals(SignatureUtil.sign(session.getId() + session.getUserId(), SALT, CIRCLE))) {
             EntityManager em = factory.createEntityManager();
             SessionRepository sessionRepository = new SessionRepositoryHiber(em);
-            try  {
+            try {
                 Session tempSession = sessionRepository.findOne(session.getId());
-                if (tempSession == null || !tempSession.getUser().getId().equals(session.getUserId())) throw new WrongSessionException("No such session found");
+                if (tempSession == null || !tempSession.getUser().getId().equals(session.getUserId()))
+                    throw new WrongSessionException("No such session found");
                 session.setSignature(signature);
                 return true;
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
-            }
-            finally {
+            } finally {
                 em.close();
             }
         } else throw new WrongSessionException("No such session found");

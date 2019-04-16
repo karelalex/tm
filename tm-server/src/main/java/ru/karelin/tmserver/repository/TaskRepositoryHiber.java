@@ -98,7 +98,7 @@ public class TaskRepositoryHiber implements TaskRepository {
     @Override
     public List<Task> findAllByUserIdAndKeyword(String userId, String key) {
         key = '%' + key + '%';
-        return em.createQuery( "select t from Task t where t.user.id = :uid and (t.description like :key or t.name like :key)", Task.class)
+        return em.createQuery("select t from Task t where t.user.id = :uid and (t.description like :key or t.name like :key)", Task.class)
                 .setParameter("uid", userId)
                 .setParameter("key", key)
                 .getResultList();
@@ -169,10 +169,12 @@ public class TaskRepositoryHiber implements TaskRepository {
 
     @Override
     public Task findOneByIdAndUserId(String id, String userId) {
-        return em.createQuery("select t from Task t where t.id = :id and t.user.id = :uid", Task.class)
+        List<Task> list = em.createQuery("select t from Task t where t.id = :id and t.user.id = :uid", Task.class)
                 .setParameter("id", id)
                 .setParameter("uid", userId)
-                .getSingleResult();
+                .getResultList();
+        if (list.size() == 0) return null;
+        else return list.get(0);
     }
 
     @Override

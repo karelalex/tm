@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 public class ProjectRepositoryHiber implements ProjectRepository {
-    @NotNull final EntityManager em;
+    @NotNull final private EntityManager em;
 
     public ProjectRepositoryHiber(@NotNull EntityManager entityManager) {
         this.em = entityManager;
@@ -86,10 +86,11 @@ public class ProjectRepositoryHiber implements ProjectRepository {
 
     @Override
     public Project findOneByIdAndUserId(String id, String userId) {
-        return em.createQuery("select p from Project p where p.id = :id and p.user.id = :uid", Project.class)
+        List<Project> list = em.createQuery("select p from Project p where p.id = :id and p.user.id = :uid", Project.class)
                 .setParameter("uid", userId)
-                .setParameter("id", id)
-                .getSingleResult();
+                .setParameter("id", id).getResultList();
+        if(list.size()==0) return null;
+        else return list.get(0);
     }
 
     @Override

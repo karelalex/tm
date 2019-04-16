@@ -77,7 +77,6 @@ public class Bootstrap implements ServiceLocator {
             command = terminalService.readLn();
             if (command.equals(QUIT)) break;
             commandParts = command.split(" ");
-
             command = commandParts[0];
             params = Arrays.copyOfRange(commandParts, 1, commandParts.length);
             AbstractCommand abstractCommand = commands.get(command);

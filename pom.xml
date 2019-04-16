@@ -69,17 +69,12 @@
             <artifactId>weld-se-core</artifactId>
             <version>3.1.0.Final</version>
         </dependency>
-
-
     </dependencies>
 
 
     <build>
         <finalName>${project.artifactId}-${project.version}-build-${buildNumber}</finalName>
         <plugins>
-
-
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>buildnumber-maven-plugin</artifactId>

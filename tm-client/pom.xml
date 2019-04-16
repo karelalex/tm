@@ -70,12 +70,11 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>3.0.0-M3</version>
                         <configuration>
+                            <groups>ru.karelin.tmclient.CrudIntegration</groups>
                             <includes>
-                                <include>**/CrudTesting.java</include>
+                                <include>**/*.class</include>
                             </includes>
                         </configuration>
                     </plugin>
@@ -91,6 +90,7 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
     <build>
         <plugins>
@@ -113,6 +113,11 @@
                     </archive>
                     <outputDirectory>${project.build.directory}/out/bin</outputDirectory>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
             </plugin>
         </plugins>
 

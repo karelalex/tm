@@ -10,7 +10,7 @@ import java.util.List;
 
 public class SessionRepositoryHiber implements ru.karelin.tmserver.api.repository.SessionRepository {
 
-    @NotNull final EntityManager em;
+    @NotNull final private EntityManager em;
 
     public SessionRepositoryHiber(@NotNull EntityManager em) {
         this.em = em;
