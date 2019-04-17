@@ -1,17 +1,16 @@
 package ru.karelin.tmserver.service;
 
 
+import org.apache.deltaspike.jpa.api.entitymanager.PersistenceUnitName;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.api.repository.ProjectRepository;
-import ru.karelin.tmserver.api.repository.TaskRepository;
 import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.api.service.ProjectService;
 import ru.karelin.tmserver.entity.Project;
 import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.enumeration.Status;
 import ru.karelin.tmserver.repository.ProjectRepositoryHiber;
-import ru.karelin.tmserver.repository.UserRepositoryHiber;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -26,7 +25,11 @@ import java.util.List;
 public class ProjectServiceImpl /*extends AbstractSecuredEntityService<Project>*/ implements ProjectService {
 
     @Inject
+    @PersistenceUnitName("ENTERPRISE")
     private EntityManagerFactory factory;
+
+    @Inject
+    UserRepository userRepository;
 
     private static final String CREATION_DATE_SORT_STRING = "cre";
     private static final String FINISH_DATE_SORT_STRING = "fin";
@@ -73,7 +76,6 @@ public class ProjectServiceImpl /*extends AbstractSecuredEntityService<Project>*
     public void create(@NotNull final String userId, final String name, final String description, final Date startDate, final Date finishDate) {
         EntityManager em = factory.createEntityManager();
         ProjectRepository projectRepository = new ProjectRepositoryHiber(em);
-        UserRepository userRepository = new UserRepositoryHiber(em);
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();

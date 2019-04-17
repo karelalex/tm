@@ -1,6 +1,7 @@
 package ru.karelin.tmserver.service;
 
 
+import org.apache.deltaspike.jpa.api.entitymanager.PersistenceUnitName;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.api.repository.ProjectRepository;
@@ -13,7 +14,6 @@ import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.enumeration.Status;
 import ru.karelin.tmserver.repository.ProjectRepositoryHiber;
 import ru.karelin.tmserver.repository.TaskRepositoryHiber;
-import ru.karelin.tmserver.repository.UserRepositoryHiber;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -33,7 +33,11 @@ public class TaskServiceImpl implements TaskService {
     private static final String STATUS_SORT_STRING = "stat";
 
     @Inject
+    @PersistenceUnitName("ENTERPRISE")
     private EntityManagerFactory factory;
+
+    @Inject
+    private UserRepository userRepository;
 
 
 
@@ -75,8 +79,7 @@ public class TaskServiceImpl implements TaskService {
     public void create(final String userId, final String name, final String description, final Date startDate, final Date finishDate, final String projectId) {
         EntityManager em = factory.createEntityManager();
         TaskRepository taskRepository = new TaskRepositoryHiber(em);
-        UserRepository userRepository = new UserRepositoryHiber(em);
-        ProjectRepository projectRepository = new ProjectRepositoryHiber(em);
+                ProjectRepository projectRepository = new ProjectRepositoryHiber(em);
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();

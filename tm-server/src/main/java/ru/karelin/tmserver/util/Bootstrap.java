@@ -3,11 +3,13 @@ package ru.karelin.tmserver.util;
 
 import org.jetbrains.annotations.NotNull;
 import ru.karelin.tmserver.api.service.SessionService;
+import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
 import ru.karelin.tmserver.endpoint.SessionEndpoint;
 import ru.karelin.tmserver.endpoint.TaskEndpoint;
 import ru.karelin.tmserver.endpoint.UserEndpoint;
+import ru.karelin.tmserver.enumeration.RoleType;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -22,6 +24,9 @@ public class Bootstrap implements ServiceLocator {
     private static final String PROJECT_ENDPOINT_URL = "http://localhost:8080/ProjectEndpoint?wsdl";
     private static final String TASK_ENDPOINT_URL = "http://localhost:8080/TaskEndpoint?wsdl";
     private static final String SESSION_ENDPOINT_URL = "http://localhost:8080/SessionEndpoint?wsdl";
+
+    //@Inject
+    //UserService userService;
 
     @Inject
     private SessionService sessionService ;
@@ -60,9 +65,10 @@ public class Bootstrap implements ServiceLocator {
 
 
         // create two users block
+
         //userService.registerNewUser("sk", "pp".toCharArray(), "alex", RoleType.ORDINARY_USER);
         //userService.registerNewUser("zz", "tt".toCharArray(), "tank", RoleType.ORDINARY_USER);
-        // userService.registerNewUser("bb", "ee".toCharArray(), "boris", RoleType.ADMIN);
+        //userService.registerNewUser("bb", "ee".toCharArray(), "boris", RoleType.ADMIN);
 
         // end of create two users block
 

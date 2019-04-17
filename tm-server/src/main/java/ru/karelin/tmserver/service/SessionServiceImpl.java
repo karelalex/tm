@@ -1,6 +1,8 @@
 package ru.karelin.tmserver.service;
 
 
+import org.apache.deltaspike.jpa.api.entitymanager.PersistenceUnitName;
+import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.api.repository.SessionRepository;
@@ -11,7 +13,6 @@ import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.exception.WrongSessionException;
 import ru.karelin.tmserver.api.service.SessionService;
 import ru.karelin.tmserver.repository.SessionRepositoryHiber;
-import ru.karelin.tmserver.repository.UserRepositoryHiber;
 import ru.karelin.tmserver.util.MD5Generator;
 import ru.karelin.tmserver.util.SignatureUtil;
 
@@ -26,17 +27,21 @@ import java.util.Date;
 public class SessionServiceImpl implements SessionService {
     @NotNull
     @Inject
+    @PersistenceUnitName("ENTERPRISE")
     private EntityManagerFactory factory;
+
+    @Inject
+    private UserRepository userRepository;
     private static final String SALT = "keramic";
     private static final int CIRCLE = 251;
 
 
     @Override
     @Nullable
+    @Transactional
     public Session getNewSession(final String login, final String password) {
         EntityManager em = factory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
-        UserRepository userRepository = new UserRepositoryHiber(em);
         SessionRepository sessionRepository = new SessionRepositoryHiber(em);
         try {
             transaction.begin();

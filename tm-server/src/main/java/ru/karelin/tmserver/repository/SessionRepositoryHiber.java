@@ -10,7 +10,8 @@ import java.util.List;
 
 public class SessionRepositoryHiber implements ru.karelin.tmserver.api.repository.SessionRepository {
 
-    @NotNull final private EntityManager em;
+    @NotNull
+    final private EntityManager em;
 
     public SessionRepositoryHiber(@NotNull EntityManager em) {
         this.em = em;
@@ -37,8 +38,8 @@ public class SessionRepositoryHiber implements ru.karelin.tmserver.api.repositor
     }
 
     @Override
-    public void merge(Session session) {
-        em.merge(session);
+    public Session merge(Session session) {
+        return em.merge(session);
     }
 
     @Override

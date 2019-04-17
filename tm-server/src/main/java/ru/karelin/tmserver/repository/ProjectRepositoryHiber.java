@@ -109,8 +109,8 @@ public class ProjectRepositoryHiber implements ProjectRepository {
     }
 
     @Override
-    public void merge(Project project) {
-        em.merge(project);
+    public Project merge(Project project) {
+        return em.merge(project);
     }
 
     @Override

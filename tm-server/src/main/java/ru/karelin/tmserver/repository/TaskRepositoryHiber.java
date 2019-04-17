@@ -193,8 +193,8 @@ public class TaskRepositoryHiber implements TaskRepository {
     }
 
     @Override
-    public void merge(Task task) {
-        em.merge(task);
+    public Task merge(Task task) {
+        return em.merge(task);
     }
 
     @Override
