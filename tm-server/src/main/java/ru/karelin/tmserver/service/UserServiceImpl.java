@@ -7,6 +7,7 @@ import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.enumeration.RoleType;
+import ru.karelin.tmserver.repository.UserRepositoryDelta;
 import ru.karelin.tmserver.util.MD5Generator;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
     @Nullable
     @Override
     public User getUserById(final String userId) {
-        return userRepository.findOne(userId);
+        return ((UserRepositoryDelta)userRepository).findById(userId);
     }
 
     @Override
@@ -51,7 +52,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void registerNewUser(final String login, char[] pass, final String name, final RoleType role) {
         final User user = new User();
         user.setLogin(login);

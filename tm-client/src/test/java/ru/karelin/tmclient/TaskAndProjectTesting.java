@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Category(CrudIntegration.class)
-public class CrudTesting {
+public class TaskAndProjectTesting {
     private static ProjectEndpoint projectEndpoint;
     private static SessionEndpoint sessionEndpoint;
     private static DateConverter dateConverter;
@@ -85,11 +85,6 @@ public class CrudTesting {
     @Test(expected = WrongSessionException_Exception.class)
     public void notLogged() throws WrongSessionException_Exception {
         Assert.assertEquals(0, projectEndpoint.getProjectList(null).size());
-    }
-
-    @Test
-    public void creationProject() throws WrongSessionException_Exception {
-        Assert.assertEquals(3, projectEndpoint.getProjectList(currentSession).size());
     }
 
     @Test
@@ -175,49 +170,6 @@ public class CrudTesting {
         TaskDto taskDto = taskEndpoint.getTaskList(currentSession).get(1);
         taskEndpoint.removeTask(currentSession, taskDto.getId());
         Assert.assertNull(taskEndpoint.getTask(currentSession, taskDto.getId()));
-    }
-
-    @Test
-    public void projectEditStartDate() throws WrongSessionException_Exception, ParseException, DatatypeConfigurationException {
-        ProjectDto projectDto = projectEndpoint.getProjectList(currentSession).get(0);
-        XMLGregorianCalendar calendar = dateConverter.convert(dateFormat.parse("12.12.2022"));
-        String name = "Projection1";
-        projectEndpoint.editProject(currentSession, projectDto.getId(), name, "", calendar, null, null);
-        ProjectDto testDto = projectEndpoint.getProject(currentSession, projectDto.getId());
-        Assert.assertEquals(name, testDto.getName());
-        Assert.assertEquals(projectDto.getDescription(), testDto.getDescription());
-        Assert.assertEquals(calendar, testDto.getStartDate());
-        Assert.assertEquals(projectDto.getFinishDate(), testDto.getFinishDate());
-        Assert.assertEquals(projectDto.getCreationDate(), testDto.getCreationDate());
-        Assert.assertEquals(projectDto.getStatus(), testDto.getStatus());
-    }
-
-    @Test
-    public void projectEditFinishDate() throws WrongSessionException_Exception, ParseException, DatatypeConfigurationException {
-        ProjectDto projectDto = projectEndpoint.getProjectList(currentSession).get(0);
-        XMLGregorianCalendar calendar = dateConverter.convert(dateFormat.parse("12.12.2022"));
-        final String desc = "Projection desk";
-        projectEndpoint.editProject(currentSession, projectDto.getId(), "", desc, null, calendar, null);
-        ProjectDto testDto = projectEndpoint.getProject(currentSession, projectDto.getId());
-        Assert.assertEquals(projectDto.getName(), testDto.getName());
-        Assert.assertEquals(desc, testDto.getDescription());
-        Assert.assertEquals(projectDto.getStartDate(), testDto.getStartDate());
-        Assert.assertEquals(calendar, testDto.getFinishDate());
-        Assert.assertEquals(projectDto.getCreationDate(), testDto.getCreationDate());
-        Assert.assertEquals(projectDto.getStatus(), testDto.getStatus());
-    }
-
-    @Test
-    public void projectEditStatus() throws WrongSessionException_Exception, ParseException, DatatypeConfigurationException {
-        ProjectDto projectDto = projectEndpoint.getProjectList(currentSession).get(0);
-        projectEndpoint.editProject(currentSession, projectDto.getId(), "", "", null, null, Status.PROCESS);
-        ProjectDto testDto = projectEndpoint.getProject(currentSession, projectDto.getId());
-        Assert.assertEquals(projectDto.getName(), testDto.getName());
-        Assert.assertEquals(projectDto.getDescription(), testDto.getDescription());
-        Assert.assertEquals(projectDto.getStartDate(), testDto.getStartDate());
-        Assert.assertEquals(projectDto.getFinishDate(), testDto.getFinishDate());
-        Assert.assertEquals(projectDto.getCreationDate(), testDto.getCreationDate());
-        Assert.assertEquals(Status.PROCESS, testDto.getStatus());
     }
 
 
