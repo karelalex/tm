@@ -17,7 +17,8 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
                       value="jdbc:mysql://localhost:3306/tm_schema"/>
             <property name="javax.persistence.jdbc.user" value="${db.user}"/>
             <property name="javax.persistence.jdbc.password" value="${db.password}"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57Dialect"/>
+            <property name="hibernate.dialect.storage_engine" value="innodb"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="false"/>

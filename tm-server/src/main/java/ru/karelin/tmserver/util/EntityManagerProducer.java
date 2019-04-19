@@ -19,6 +19,8 @@ public class EntityManagerProducer {
     @NotNull
     private EntityManagerFactory emf;
 
+
+
     @NotNull
     @Produces
     @TransactionScoped

@@ -12,8 +12,6 @@ import ru.karelin.tmserver.entity.Session;
 import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.entity.User;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.Vetoed;
 import javax.persistence.EntityManagerFactory;
 import java.util.HashMap;
