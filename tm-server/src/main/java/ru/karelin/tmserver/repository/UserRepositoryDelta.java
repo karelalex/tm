@@ -6,7 +6,7 @@ import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.entity.User;
 
 @Repository
-//@Transactional
+@Transactional
 public interface UserRepositoryDelta extends FullEntityRepository<User, Long>, UserRepository  {
     @Override
     @Query(value = "select u from User u where u.login = :login and u.passwordHash = :pass", singleResult = SingleResultType.OPTIONAL)
