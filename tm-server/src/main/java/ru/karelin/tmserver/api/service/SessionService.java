@@ -14,4 +14,6 @@ public interface SessionService {
     void removeSession(@Nullable String sessionId) throws WrongSessionException;
 
     boolean isSessionExists(@Nullable SessionDto session) throws WrongSessionException;
+
+    String serverInfo();
 }

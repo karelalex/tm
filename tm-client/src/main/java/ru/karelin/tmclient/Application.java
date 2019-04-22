@@ -3,7 +3,6 @@ package ru.karelin.tmclient;
 
 import ru.karelin.tmclient.command.*;
 import ru.karelin.tmclient.util.Bootstrap;
-import ru.karelin.tmserver.endpoint.ProjectEndpointService;
 
 import javax.enterprise.inject.se.SeContainerInitializer;
 import javax.enterprise.inject.spi.CDI;
@@ -34,7 +33,8 @@ public class Application {
                 UserProfileEditCommand.class,
 
                 HelpShowCommand.class,
-                InfoShowCommand.class
+                InfoShowCommand.class,
+                ServerInfoShowCommand.class
         };
         bootstrap.init(commandClasses);
     }

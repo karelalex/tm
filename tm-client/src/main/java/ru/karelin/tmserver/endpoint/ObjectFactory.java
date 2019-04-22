@@ -29,6 +29,8 @@ public class ObjectFactory {
     private final static QName _LoginResponse_QNAME = new QName("http://endpoint.tmserver.karelin.ru/", "loginResponse");
     private final static QName _Logout_QNAME = new QName("http://endpoint.tmserver.karelin.ru/", "logout");
     private final static QName _LogoutResponse_QNAME = new QName("http://endpoint.tmserver.karelin.ru/", "logoutResponse");
+    private final static QName _ServerInfo_QNAME = new QName("http://endpoint.tmserver.karelin.ru/", "serverInfo");
+    private final static QName _ServerInfoResponse_QNAME = new QName("http://endpoint.tmserver.karelin.ru/", "serverInfoResponse");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: ru.karelin.tmserver.endpoint
@@ -75,6 +77,22 @@ public class ObjectFactory {
      */
     public LogoutResponse createLogoutResponse() {
         return new LogoutResponse();
+    }
+
+    /**
+     * Create an instance of {@link ServerInfo }
+     * 
+     */
+    public ServerInfo createServerInfo() {
+        return new ServerInfo();
+    }
+
+    /**
+     * Create an instance of {@link ServerInfoResponse }
+     * 
+     */
+    public ServerInfoResponse createServerInfoResponse() {
+        return new ServerInfoResponse();
     }
 
     /**
@@ -128,6 +146,24 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://endpoint.tmserver.karelin.ru/", name = "logoutResponse")
     public JAXBElement<LogoutResponse> createLogoutResponse(LogoutResponse value) {
         return new JAXBElement<LogoutResponse>(_LogoutResponse_QNAME, LogoutResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ServerInfo }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://endpoint.tmserver.karelin.ru/", name = "serverInfo")
+    public JAXBElement<ServerInfo> createServerInfo(ServerInfo value) {
+        return new JAXBElement<ServerInfo>(_ServerInfo_QNAME, ServerInfo.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ServerInfoResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://endpoint.tmserver.karelin.ru/", name = "serverInfoResponse")
+    public JAXBElement<ServerInfoResponse> createServerInfoResponse(ServerInfoResponse value) {
+        return new JAXBElement<ServerInfoResponse>(_ServerInfoResponse_QNAME, ServerInfoResponse.class, null, value);
     }
 
 }

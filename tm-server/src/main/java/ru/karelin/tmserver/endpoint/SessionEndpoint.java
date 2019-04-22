@@ -2,20 +2,17 @@ package ru.karelin.tmserver.endpoint;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.karelin.tmserver.api.service.SessionService;
 import ru.karelin.tmserver.dto.SessionDto;
 import ru.karelin.tmserver.entity.Session;
 import ru.karelin.tmserver.exception.WrongSessionException;
-import ru.karelin.tmserver.api.service.SessionService;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
-import java.util.Date;
 
 @WebService
 @NoArgsConstructor
@@ -37,6 +34,10 @@ public class SessionEndpoint {
             sessionService.removeSession(session.getId());
         }
 
+    }
+    @WebMethod
+    public String serverInfo(){
+        return sessionService.serverInfo();
     }
 
     @Contract("null -> null")

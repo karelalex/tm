@@ -31,27 +31,22 @@
                                     <wsdlOptions>
                                         <wsdlOption>
                                             <wsdl>
-                                                http://localhost:8080/UserEndpoint?wsdl
+                                                http://cluster/UserEndpoint?wsdl
                                             </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
                                             <wsdl>
-                                                http://localhost:8080/ProjectEndpoint?wsdl
+                                                http://cluster/ProjectEndpoint?wsdl
                                             </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
                                             <wsdl>
-                                                http://localhost:8080/TaskEndpoint?wsdl
+                                                http://cluster/TaskEndpoint?wsdl
                                             </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
                                             <wsdl>
-                                                http://localhost:8080/DomainEndpoint?wsdl
-                                            </wsdl>
-                                        </wsdlOption>
-                                        <wsdlOption>
-                                            <wsdl>
-                                                http://localhost:8080/SessionEndpoint?wsdl
+                                                http://cluster/SessionEndpoint?wsdl
                                             </wsdl>
                                         </wsdlOption>
                                     </wsdlOptions>

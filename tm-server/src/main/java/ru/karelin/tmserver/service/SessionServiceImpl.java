@@ -5,13 +5,14 @@ import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.Nullable;
 import ru.karelin.tmserver.api.repository.SessionRepository;
 import ru.karelin.tmserver.api.repository.UserRepository;
+import ru.karelin.tmserver.api.service.SessionService;
 import ru.karelin.tmserver.dto.SessionDto;
 import ru.karelin.tmserver.entity.Session;
 import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.exception.WrongSessionException;
-import ru.karelin.tmserver.api.service.SessionService;
 import ru.karelin.tmserver.repository.SessionRepositoryDelta;
 import ru.karelin.tmserver.util.MD5Generator;
+import ru.karelin.tmserver.util.PropertyService;
 import ru.karelin.tmserver.util.SignatureUtil;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -27,6 +28,9 @@ public class SessionServiceImpl implements SessionService {
 
     @Inject
     private UserRepository userRepository;
+
+    @Inject
+    PropertyService propertyService;
 
     private static final String SALT = "keramic";
     private static final int CIRCLE = 251;
@@ -73,5 +77,10 @@ public class SessionServiceImpl implements SessionService {
             session.setSignature(signature);
             return true;
         } else throw new WrongSessionException("No such session found");
+    }
+
+    @Override
+    public String serverInfo() {
+        return "This server is running on "+propertyService.getProperty("app.host")+":"+propertyService.getProperty("app.port");
     }
 }
