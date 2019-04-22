@@ -4,16 +4,16 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.karelin.tmserver.api.service.ProjectService;
+import ru.karelin.tmserver.api.service.SessionService;
 import ru.karelin.tmserver.dto.ProjectDto;
 import ru.karelin.tmserver.dto.SessionDto;
 import ru.karelin.tmserver.entity.Project;
 import ru.karelin.tmserver.enumeration.Status;
 import ru.karelin.tmserver.exception.WrongSessionException;
-import ru.karelin.tmserver.api.service.SessionService;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -24,14 +24,14 @@ import java.util.List;
 
 @WebService
 @NoArgsConstructor
-@Singleton
+@Component
 public class ProjectEndpoint {
 
     @NotNull
-    @Inject
+    @Autowired
     private ProjectService projectService;
     @NotNull
-    @Inject
+    @Autowired
     private SessionService sessionService;
 
 

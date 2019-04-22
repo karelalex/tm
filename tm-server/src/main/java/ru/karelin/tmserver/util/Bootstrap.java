@@ -2,6 +2,9 @@ package ru.karelin.tmserver.util;
 
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 import ru.karelin.tmserver.api.service.SessionService;
 import ru.karelin.tmserver.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
@@ -9,13 +12,11 @@ import ru.karelin.tmserver.endpoint.SessionEndpoint;
 import ru.karelin.tmserver.endpoint.TaskEndpoint;
 import ru.karelin.tmserver.endpoint.UserEndpoint;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.xml.ws.Endpoint;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-@ApplicationScoped
+@Component
 public class Bootstrap implements ServiceLocator {
 
     private static final String USER_ENDPOINT_URL = "UserEndpoint?wsdl";
@@ -23,26 +24,25 @@ public class Bootstrap implements ServiceLocator {
     private static final String TASK_ENDPOINT_URL = "TaskEndpoint?wsdl";
     private static final String SESSION_ENDPOINT_URL = "SessionEndpoint?wsdl";
 
-    //@Inject
-    //UserService userService;
 
-    @Inject
+
+    @Autowired
     private SessionService sessionService;
 
-    @Inject
+    @Autowired
     private UserEndpoint userEndpoint;
 
-    @Inject
+    @Autowired
     ProjectEndpoint projectEndpoint;
 
-    @Inject
+    @Autowired
     TaskEndpoint taskEndpoint;
 
-    @Inject
+    @Autowired
     SessionEndpoint sessionEndpoint;
 
-    @Inject
-    PropertyService propertyService;
+    @Autowired
+    Environment environment;
 
 
     @NotNull
@@ -54,7 +54,7 @@ public class Bootstrap implements ServiceLocator {
 
         sessionService.removeOldSessions(15); // clears old sessions from DB
 
-        @NotNull final String HOST_PORT = "http://" + propertyService.getProperty("app.host") + ":" + propertyService.getProperty("app.port") + "/";
+        @NotNull final String HOST_PORT = "http://" + environment.getProperty("host") + ":" + environment.getProperty("port") + "/";
         Endpoint.publish(HOST_PORT + USER_ENDPOINT_URL, userEndpoint);
         System.out.println("Endpoint with url " + HOST_PORT + USER_ENDPOINT_URL + " started.");
         Endpoint.publish(HOST_PORT + PROJECT_ENDPOINT_URL, projectEndpoint);

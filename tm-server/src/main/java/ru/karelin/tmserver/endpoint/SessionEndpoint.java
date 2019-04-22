@@ -3,23 +3,23 @@ package ru.karelin.tmserver.endpoint;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.karelin.tmserver.api.service.SessionService;
 import ru.karelin.tmserver.dto.SessionDto;
 import ru.karelin.tmserver.entity.Session;
 import ru.karelin.tmserver.exception.WrongSessionException;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
 @WebService
 @NoArgsConstructor
-@Singleton
+@Component
 public class SessionEndpoint {
 
-    @Inject
+    @Autowired
     private SessionService sessionService;
 
     @WebMethod

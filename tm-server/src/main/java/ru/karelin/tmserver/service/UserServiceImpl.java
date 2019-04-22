@@ -1,23 +1,20 @@
 package ru.karelin.tmserver.service;
 
 
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.enumeration.RoleType;
-import ru.karelin.tmserver.repository.UserRepositoryDelta;
 import ru.karelin.tmserver.util.MD5Generator;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
-@ApplicationScoped
-@Transactional
+@Service
 public class UserServiceImpl implements UserService {
 
-    @Inject
+    @Autowired
     private UserRepository userRepository;
 
     @Nullable
@@ -39,7 +36,7 @@ public class UserServiceImpl implements UserService {
     @Nullable
     @Override
     public User getUserById(final String userId) {
-        return ((UserRepositoryDelta)userRepository).findById(userId);
+        return userRepository.findOne(userId);
     }
 
     @Override
@@ -47,7 +44,7 @@ public class UserServiceImpl implements UserService {
         @Nullable final User user = userRepository.findOne(userId);
         if (user != null) {
             if (!userName.isEmpty()) user.setUserName(userName);
-            userRepository.merge(user);
+            userRepository.save(user);
         }
     }
 
@@ -58,7 +55,7 @@ public class UserServiceImpl implements UserService {
         user.setPasswordHash(MD5Generator.generate(pass));
         user.setUserName(name);
         user.setRole(role);
-        userRepository.persist(user);
+        userRepository.save(user);
     }
 
     @Override
@@ -66,7 +63,7 @@ public class UserServiceImpl implements UserService {
         @Nullable final User user = userRepository.findOne(userId);
         if (user == null || !user.getPasswordHash().equals(MD5Generator.generate(oldPass))) return false;
         user.setPasswordHash(MD5Generator.generate(newPass));
-        userRepository.merge(user);
+        userRepository.save(user);
         return true;
     }
 }

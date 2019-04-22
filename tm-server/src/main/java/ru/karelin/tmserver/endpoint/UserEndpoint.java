@@ -1,27 +1,27 @@
 package ru.karelin.tmserver.endpoint;
 
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import ru.karelin.tmserver.api.service.SessionService;
 import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.dto.SessionDto;
 import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.exception.WrongSessionException;
-import ru.karelin.tmserver.api.service.SessionService;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
 @WebService
 @NoArgsConstructor
-@Singleton
+@Component
 public class UserEndpoint {
 
-    @Inject
+    @Autowired
     private UserService userService;
 
-    @Inject
+    @Autowired
     private SessionService sessionServiceImpl;
 
     @WebMethod public boolean isUserExistsByLogin (@WebParam(name = "login") final String login){

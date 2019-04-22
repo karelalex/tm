@@ -1,8 +1,10 @@
 package ru.karelin.tmserver.service;
 
 
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.karelin.tmserver.api.repository.SessionRepository;
 import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.api.service.SessionService;
@@ -10,26 +12,22 @@ import ru.karelin.tmserver.dto.SessionDto;
 import ru.karelin.tmserver.entity.Session;
 import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.exception.WrongSessionException;
-import ru.karelin.tmserver.repository.SessionRepositoryDelta;
 import ru.karelin.tmserver.util.MD5Generator;
 import ru.karelin.tmserver.util.PropertyService;
 import ru.karelin.tmserver.util.SignatureUtil;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.Date;
 
-@ApplicationScoped
-@Transactional
+@Service
 public class SessionServiceImpl implements SessionService {
 
-    @Inject
+    @Autowired
     private SessionRepository sessionRepository;
 
-    @Inject
+    @Autowired
     private UserRepository userRepository;
 
-    @Inject
+    @Autowired
     PropertyService propertyService;
 
     private static final String SALT = "keramic";
@@ -43,13 +41,14 @@ public class SessionServiceImpl implements SessionService {
             Session session = new Session();
             session.setUser(user);
             session.setSignature(SignatureUtil.sign(session.getId() + session.getUser().getId(), SALT, CIRCLE));
-            sessionRepository.persist(session);
+            sessionRepository.save(session);
             return session;
         }
         return null;
     }
 
     @Override
+    @Transactional
     public void removeOldSessions(int minutes) {
         Date date = new Date();
         date.setTime(date.getTime() - (minutes * 60L * 1000L));
@@ -58,9 +57,9 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public void removeSession(@Nullable String sessionId) throws WrongSessionException {
-        final Session session = ((SessionRepositoryDelta)sessionRepository).findById(sessionId);
+        final Session session = sessionRepository.findOne(sessionId);
         if (session != null) {
-            sessionRepository.remove(session);
+            sessionRepository.delete(session);
         } else throw new WrongSessionException("No such session found");
     }
 
@@ -70,8 +69,7 @@ public class SessionServiceImpl implements SessionService {
         String signature = session.getSignature();
         session.setSignature(null);
         if (signature.equals(SignatureUtil.sign(session.getId() + session.getUserId(), SALT, CIRCLE))) {
-           // Session tempSession = sessionRepository.findOne(session.getId());
-           Session tempSession = ((SessionRepositoryDelta)sessionRepository).findById(session.getId());
+            Session tempSession = sessionRepository.findOne(session.getId());
             if (tempSession == null || !tempSession.getUser().getId().equals(session.getUserId()))
                 throw new WrongSessionException("No such session found");
             session.setSignature(signature);

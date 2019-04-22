@@ -1,29 +1,26 @@
 package ru.karelin.tmserver;
 
 
-import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import ru.karelin.tmserver.api.service.ProjectService;
 import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.entity.Project;
 import ru.karelin.tmserver.entity.User;
 
-import javax.inject.Inject;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-@RunWith(CdiTestRunner.class)
+//@RunWith(CdiTestRunner.class)
 public class ProjectServiceSortingTest {
-    @Inject
+
     private ProjectService projectService;
 
-    @Inject
+
     private  UserService userService;
 
     private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");

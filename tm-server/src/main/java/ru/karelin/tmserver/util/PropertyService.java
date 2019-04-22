@@ -1,14 +1,11 @@
 package ru.karelin.tmserver.util;
 
 import lombok.SneakyThrows;
+import org.springframework.stereotype.Component;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 import java.util.Properties;
 
-@ApplicationScoped
-@Named
-
+@Component
 public class PropertyService {
     Properties properties = new Properties();
 

@@ -1,31 +1,28 @@
 package ru.karelin.tmserver.service;
 
 
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.karelin.tmserver.api.repository.ProjectRepository;
 import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.api.service.ProjectService;
 import ru.karelin.tmserver.entity.Project;
 import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.enumeration.Status;
-import ru.karelin.tmserver.repository.ProjectRepositoryDelta;
-import ru.karelin.tmserver.repository.UserRepositoryDelta;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.Date;
 import java.util.List;
 
-@ApplicationScoped
-@Transactional
-public class ProjectServiceImpl /*extends AbstractSecuredEntityService<Project>*/ implements ProjectService {
 
-    @Inject
+@Service
+public class ProjectServiceImpl implements ProjectService {
+
+    @Autowired
     private ProjectRepository projectRepository;
 
-    @Inject
+    @Autowired
     private UserRepository userRepository;
 
     private static final String CREATION_DATE_SORT_STRING = "cre";
@@ -47,7 +44,7 @@ public class ProjectServiceImpl /*extends AbstractSecuredEntityService<Project>*
     @Nullable
     @Override
     public Project getOne(String userId, String id) {
-        return ((ProjectRepositoryDelta)projectRepository).obtainOneByIdAndUserId(id, userId);
+        return projectRepository.findOneByIdAndUserId(id, userId);
     }
 
     @Override
@@ -57,25 +54,25 @@ public class ProjectServiceImpl /*extends AbstractSecuredEntityService<Project>*
         project.setDescription(description);
         project.setStartDate(startDate);
         project.setFinishDate(finishDate);
-        User user = ((UserRepositoryDelta)userRepository).findById(userId);
+        User user = userRepository.findOne(userId);
         if (user == null) {
             return;
         }
         project.setUser(user);
         project.setStatus(Status.PLANNED);
-        projectRepository.persist(project);
+        projectRepository.save(project);
     }
 
     @Override
     public void edit(final String userId, final String id, final String name, final String description, final Date startDate, final Date finishDate, Status status) {
-        @Nullable final Project project = ((ProjectRepositoryDelta)projectRepository).obtainOneByIdAndUserId(id, userId);
+        @Nullable final Project project = projectRepository.findOneByIdAndUserId(id, userId);
         if (project != null) {
             if (!name.isEmpty()) project.setName(name);
             if (!description.isEmpty()) project.setDescription(description);
             if (startDate != null) project.setStartDate(startDate);
             if (finishDate != null) project.setFinishDate(finishDate);
             if (status != null) project.setStatus(status);
-            projectRepository.merge(project);
+            projectRepository.save(project);
         }
     }
 
@@ -113,9 +110,9 @@ public class ProjectServiceImpl /*extends AbstractSecuredEntityService<Project>*
 
     @Override
     public void remove(final String userId, final String id) {
-        Project p = ((ProjectRepositoryDelta)projectRepository).obtainOneByIdAndUserId(id, userId);
+        Project p = projectRepository.findOneByIdAndUserId(id, userId);
         if (p != null)
-            projectRepository.remove(p);
+            projectRepository.delete(p);
     }
 
     @Override

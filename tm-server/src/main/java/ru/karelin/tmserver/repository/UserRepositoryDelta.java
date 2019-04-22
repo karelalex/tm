@@ -1,29 +1,25 @@
 package ru.karelin.tmserver.repository;
 
-import org.apache.deltaspike.data.api.*;
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.entity.User;
 
 @Repository
-@Transactional
-public interface UserRepositoryDelta extends FullEntityRepository<User, Long>, UserRepository  {
+public interface UserRepositoryDelta extends CrudRepository<User, String>, UserRepository  {
     @Override
-    @Query(value = "select u from User u where u.login = :login and u.passwordHash = :pass", singleResult = SingleResultType.OPTIONAL)
-    User findOneByLoginAndPassword(@QueryParam("login") String login, @QueryParam("pass") String passHash);
+    @Query(value = "select u from User u where u.login = :login and u.passwordHash = :pass")
+    User findOneByLoginAndPassword(@Param("login") String login, @Param("pass") String passHash);
+
+
+    User findOneByLogin( String login);
 
     @Override
-    @Query(value = "select u from User u where u.login = :login", singleResult = SingleResultType.OPTIONAL)
-    User findOneByLogin(@QueryParam("login") String login);
+    @Query("select u from User u where u.id= :id")
+    User findOne(@Param("id") String id);
 
-    @Override
-    @Query("select u from User u where u.id = :id")
-    User findOne(@QueryParam("id") String id);
 
-    @Override
-    @Query("delete from User")
-    void removeAll();
 
-    @Query(singleResult = SingleResultType.OPTIONAL)
-    User findById(String userId);
 }

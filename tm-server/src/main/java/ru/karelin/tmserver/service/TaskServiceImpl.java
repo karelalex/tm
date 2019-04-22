@@ -1,9 +1,10 @@
 package ru.karelin.tmserver.service;
 
 
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.karelin.tmserver.api.repository.ProjectRepository;
 import ru.karelin.tmserver.api.repository.TaskRepository;
 import ru.karelin.tmserver.api.repository.UserRepository;
@@ -12,17 +13,12 @@ import ru.karelin.tmserver.entity.Project;
 import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.enumeration.Status;
-import ru.karelin.tmserver.repository.ProjectRepositoryDelta;
 import ru.karelin.tmserver.repository.TaskRepositoryDelta;
-import ru.karelin.tmserver.repository.UserRepositoryDelta;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.Date;
 import java.util.List;
 
-@ApplicationScoped
-@Transactional
+@Service
 public class TaskServiceImpl implements TaskService {
 
     private static final String CREATION_DATE_SORT_STRING = "cre";
@@ -30,13 +26,13 @@ public class TaskServiceImpl implements TaskService {
     private static final String START_DATE_SORT_STRING = "start";
     private static final String STATUS_SORT_STRING = "stat";
 
-    @Inject
+    @Autowired
     private ProjectRepository projectRepository;
 
-    @Inject
+    @Autowired
     private UserRepository userRepository;
 
-    @Inject
+    @Autowired
     private TaskRepository taskRepository;
 
 
@@ -52,16 +48,16 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task getOne(String userId, String id) {
-        return ((TaskRepositoryDelta)taskRepository).obtainOneByIdAndUserId(id, userId);
+        return ((TaskRepositoryDelta)taskRepository).findOneByIdAndUserId(id, userId);
     }
 
     @Override
     public void create(final String userId, final String name, final String description, final Date startDate, final Date finishDate, final String projectId) {
-        User user = ((UserRepositoryDelta) userRepository).findById(userId);
+        User user = userRepository.findOne(userId);
         if (user == null) {
             return;
         }
-        Project project = ((ProjectRepositoryDelta)projectRepository).obtainOneByIdAndUserId(projectId, userId);
+        Project project = projectRepository.findOneByIdAndUserId(projectId, userId);
         if (project == null) {
             return;
         }
@@ -73,26 +69,26 @@ public class TaskServiceImpl implements TaskService {
         task.setDescription(description);
         task.setStartDate(startDate);
         task.setFinishDate(finishDate);
-        taskRepository.persist(task);
+        taskRepository.save(task);
     }
 
     @Override
     public void edit(@NotNull final String userId, @NotNull final String id, @NotNull final String name, @NotNull final String description, @Nullable final Date startDate, @Nullable final Date finishDate, @NotNull final String projectId, @Nullable final Status status) {
-        @Nullable final Task task = ((TaskRepositoryDelta)taskRepository).obtainOneByIdAndUserId(id, userId);
+        @Nullable final Task task = taskRepository.findOneByIdAndUserId(id, userId);
         if (task != null) {
             if (!name.isEmpty()) task.setName(name);
             if (!description.isEmpty()) task.setDescription(description);
             if (startDate != null) task.setStartDate(startDate);
             if (finishDate != null) task.setFinishDate(finishDate);
             if (!projectId.isEmpty()) {
-                @Nullable final Project project = ((ProjectRepositoryDelta)projectRepository).obtainOneByIdAndUserId(projectId, userId);
+                @Nullable final Project project = projectRepository.findOneByIdAndUserId(projectId, userId);
                 if (project == null) {
                     return;
                 }
                 task.setProject(project);
             }
             if (status != null) task.setStatus(status);
-            taskRepository.merge(task);
+            taskRepository.save(task);
         }
     }
 
@@ -105,9 +101,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void remove(final String userId, final String id) {
-        @Nullable final Task task = ((TaskRepositoryDelta)taskRepository).obtainOneByIdAndUserId(id, userId);
+        @Nullable final Task task = taskRepository.findOneByIdAndUserId(id, userId);
         if (task != null) {
-            taskRepository.remove(task);
+            taskRepository.delete(task);
         }
     }
 
