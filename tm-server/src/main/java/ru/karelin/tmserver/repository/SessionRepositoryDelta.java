@@ -1,9 +1,11 @@
 package ru.karelin.tmserver.repository;
 
 import org.apache.deltaspike.data.api.*;
+import org.hibernate.jpa.QueryHints;
 import ru.karelin.tmserver.api.repository.SessionRepository;
 import ru.karelin.tmserver.entity.Session;
 
+import javax.persistence.QueryHint;
 import java.util.Date;
 
 @Repository
@@ -17,7 +19,7 @@ public interface SessionRepositoryDelta extends FullEntityRepository<Session, St
     Session findOne(@QueryParam("sid") String id);
 
 
-    @Query(singleResult = SingleResultType.OPTIONAL)
+    @Query(singleResult = SingleResultType.OPTIONAL, hints = {@QueryHint(name = QueryHints.HINT_CACHEABLE, value = "true")})
     Session findById(String id);
 
     @Override

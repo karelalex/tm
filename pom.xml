@@ -116,8 +116,7 @@
                             <outputDirectory>
                                 ${project.build.directory}/out/lib
                             </outputDirectory>
-                            <excludeScope>provided</excludeScope>
-                            <excludeScope>test</excludeScope>
+                            <includeScope>runtime</includeScope>
                         </configuration>
                     </execution>
                 </executions>

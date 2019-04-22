@@ -20,7 +20,6 @@ public class PropertyService {
     private void init() {
         properties.load(PropertyService.class.getResourceAsStream("/app.properties"));
         String temp = System.getProperty("port");
-        System.out.println(temp);
         if (temp != null && !temp.isEmpty()) {
             properties.setProperty("app.port", temp);
         }
