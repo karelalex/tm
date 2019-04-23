@@ -2,25 +2,25 @@ package ru.karelin.tmclient.util;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.api.util.TerminalService;
 import ru.karelin.tmclient.command.AbstractCommand;
 import ru.karelin.tmclient.exception.CommandRegisteredException;
-import ru.karelin.tmserver.endpoint.*;
+import ru.karelin.tmserver.endpoint.SessionDto;
+import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.spi.CDI;
-import javax.inject.Inject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@ApplicationScoped
+@Component
 public class Bootstrap implements ServiceLocator {
 
-    @Inject
+    @Autowired
     private TerminalService terminalService;
 
     private static final String QUIT = "exit";
@@ -107,7 +107,7 @@ public class Bootstrap implements ServiceLocator {
 
     private void registerCommand(@NotNull final Class commandClass) throws IllegalAccessException, InstantiationException {
         if (AbstractCommand.class.isAssignableFrom(commandClass)) {
-            AbstractCommand command = (AbstractCommand) CDI.current().select(commandClass).get();
+            AbstractCommand command = (AbstractCommand) ;
             final String commandName = command.getName();
             if (commands.containsKey(commandName))
                 throw new CommandRegisteredException("Command with name " + commandName + " is already registered");

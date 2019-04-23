@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.karelin.tmserver.api.repository.ProjectRepository;
 import ru.karelin.tmserver.api.repository.TaskRepository;
 import ru.karelin.tmserver.api.repository.UserRepository;
@@ -100,6 +101,7 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
+    @Transactional
     public void remove(final String userId, final String id) {
         @Nullable final Task task = taskRepository.findOneByIdAndUserId(id, userId);
         if (task != null) {

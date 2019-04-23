@@ -5,9 +5,15 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import ru.karelin.tmserver.api.service.ProjectService;
 import ru.karelin.tmserver.api.service.TaskService;
 import ru.karelin.tmserver.api.service.UserService;
+import ru.karelin.tmserver.config.MainConfig;
 import ru.karelin.tmserver.entity.Project;
 import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.entity.User;
@@ -18,15 +24,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-//@RunWith(CdiTestRunner.class)
+@RunWith(SpringRunner.class)
+@ActiveProfiles("test")
+@ContextConfiguration(classes = {MainConfig.class, TestConfig.class})
 public class TaskServiceSortingTest {
 
+    @Autowired
     private ProjectService projectService;
 
-
+    @Autowired
     private UserService userService;
 
-
+    @Autowired
     TaskService taskService;
 
     private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
@@ -50,7 +59,7 @@ public class TaskServiceSortingTest {
                 dateFormat.parse("03.06.2019"),
                 dateFormat.parse("02.01.2021"));
         List<Project> list = projectService.getList(user.getId());
-        globalProjectId =  list.get(0).getId();
+        globalProjectId = list.get(0).getId();
         taskService.create(user.getId(), "task 1_1", "mishka",
                 dateFormat.parse("17.11.2019"),
                 dateFormat.parse("02.03.2020"),
@@ -83,72 +92,72 @@ public class TaskServiceSortingTest {
     @Test
     public void finishDateSortingTest() {
         List<Task> taskList = taskService.getSortedList(user.getId(), "fin", true);
-        Assert.assertTrue(taskList.size()>1);
-        for (int i = 1; i<taskList.size(); i++){
-            Assert.assertTrue(taskList.get(i).getFinishDate().compareTo(taskList.get(i-1).getFinishDate())>0);
+        Assert.assertTrue(taskList.size() > 1);
+        for (int i = 1; i < taskList.size(); i++) {
+            Assert.assertTrue(taskList.get(i).getFinishDate().compareTo(taskList.get(i - 1).getFinishDate()) > 0);
         }
         taskList = taskService.getSortedList(user.getId(), "fin", false);
-        Assert.assertTrue(taskList.size()>1);
-        for (int i = 1; i<taskList.size(); i++){
-            Assert.assertTrue(taskList.get(i).getFinishDate().compareTo(taskList.get(i-1).getFinishDate())<0);
+        Assert.assertTrue(taskList.size() > 1);
+        for (int i = 1; i < taskList.size(); i++) {
+            Assert.assertTrue(taskList.get(i).getFinishDate().compareTo(taskList.get(i - 1).getFinishDate()) < 0);
         }
-        taskList = taskService.getSortedListByProjectId(user.getId(), globalProjectId,"fin", true);
-        Assert.assertTrue(taskList.size()>1);
-        for (int i = 1; i<taskList.size(); i++){
-            Assert.assertTrue(taskList.get(i).getFinishDate().compareTo(taskList.get(i-1).getFinishDate())>0);
+        taskList = taskService.getSortedListByProjectId(user.getId(), globalProjectId, "fin", true);
+        Assert.assertTrue(taskList.size() > 1);
+        for (int i = 1; i < taskList.size(); i++) {
+            Assert.assertTrue(taskList.get(i).getFinishDate().compareTo(taskList.get(i - 1).getFinishDate()) > 0);
         }
-        taskList = taskService.getSortedListByProjectId(user.getId(), globalProjectId,"fin", false);
-        Assert.assertTrue(taskList.size()>1);
-        for (int i = 1; i<taskList.size(); i++){
-            Assert.assertTrue(taskList.get(i).getFinishDate().compareTo(taskList.get(i-1).getFinishDate())<0);
+        taskList = taskService.getSortedListByProjectId(user.getId(), globalProjectId, "fin", false);
+        Assert.assertTrue(taskList.size() > 1);
+        for (int i = 1; i < taskList.size(); i++) {
+            Assert.assertTrue(taskList.get(i).getFinishDate().compareTo(taskList.get(i - 1).getFinishDate()) < 0);
         }
     }
 
     @Test
     public void startDateSortingTest() {
         List<Task> taskDtoList = taskService.getSortedList(user.getId(), "start", true);
-        Assert.assertTrue(taskDtoList.size()>1);
-        for (int i = 1; i<taskDtoList.size(); i++){
-            Assert.assertTrue(taskDtoList.get(i).getStartDate().compareTo(taskDtoList.get(i-1).getStartDate())>0);
+        Assert.assertTrue(taskDtoList.size() > 1);
+        for (int i = 1; i < taskDtoList.size(); i++) {
+            Assert.assertTrue(taskDtoList.get(i).getStartDate().compareTo(taskDtoList.get(i - 1).getStartDate()) > 0);
         }
         taskDtoList = taskService.getSortedList(user.getId(), "start", false);
-        Assert.assertTrue(taskDtoList.size()>1);
-        for (int i = 1; i<taskDtoList.size(); i++){
-            Assert.assertTrue(taskDtoList.get(i).getStartDate().compareTo(taskDtoList.get(i-1).getStartDate())<0);
+        Assert.assertTrue(taskDtoList.size() > 1);
+        for (int i = 1; i < taskDtoList.size(); i++) {
+            Assert.assertTrue(taskDtoList.get(i).getStartDate().compareTo(taskDtoList.get(i - 1).getStartDate()) < 0);
         }
-        taskDtoList = taskService.getSortedListByProjectId(user.getId(), globalProjectId,"start", true);
-        Assert.assertTrue(taskDtoList.size()>1);
-        for (int i = 1; i<taskDtoList.size(); i++){
-            Assert.assertTrue(taskDtoList.get(i).getStartDate().compareTo(taskDtoList.get(i-1).getStartDate())>0);
+        taskDtoList = taskService.getSortedListByProjectId(user.getId(), globalProjectId, "start", true);
+        Assert.assertTrue(taskDtoList.size() > 1);
+        for (int i = 1; i < taskDtoList.size(); i++) {
+            Assert.assertTrue(taskDtoList.get(i).getStartDate().compareTo(taskDtoList.get(i - 1).getStartDate()) > 0);
         }
-        taskDtoList = taskService.getSortedListByProjectId(user.getId(), globalProjectId,"start", false);
-        Assert.assertTrue(taskDtoList.size()>1);
-        for (int i = 1; i<taskDtoList.size(); i++){
-            Assert.assertTrue(taskDtoList.get(i).getStartDate().compareTo(taskDtoList.get(i-1).getStartDate())<0);
+        taskDtoList = taskService.getSortedListByProjectId(user.getId(), globalProjectId, "start", false);
+        Assert.assertTrue(taskDtoList.size() > 1);
+        for (int i = 1; i < taskDtoList.size(); i++) {
+            Assert.assertTrue(taskDtoList.get(i).getStartDate().compareTo(taskDtoList.get(i - 1).getStartDate()) < 0);
         }
     }
 
     @Test
-    public void statusSortingTest()  {
+    public void statusSortingTest() {
         List<Task> taskDtoList = taskService.getSortedList(user.getId(), "stat", true);
-        Assert.assertTrue(taskDtoList.size()>1);
-        for (int i = 1; i<taskDtoList.size(); i++){
-            Assert.assertTrue(taskDtoList.get(i).getStatus().name().compareTo(taskDtoList.get(i-1).getStatus().name())>=0);
+        Assert.assertTrue(taskDtoList.size() > 1);
+        for (int i = 1; i < taskDtoList.size(); i++) {
+            Assert.assertTrue(taskDtoList.get(i).getStatus().name().compareTo(taskDtoList.get(i - 1).getStatus().name()) >= 0);
         }
         taskDtoList = taskService.getSortedList(user.getId(), "stat", false);
-        Assert.assertTrue(taskDtoList.size()>1);
-        for (int i = 1; i<taskDtoList.size(); i++){
-            Assert.assertTrue(taskDtoList.get(i).getStatus().name().compareTo(taskDtoList.get(i-1).getStatus().name())<=0);
+        Assert.assertTrue(taskDtoList.size() > 1);
+        for (int i = 1; i < taskDtoList.size(); i++) {
+            Assert.assertTrue(taskDtoList.get(i).getStatus().name().compareTo(taskDtoList.get(i - 1).getStatus().name()) <= 0);
         }
-        taskDtoList = taskService.getSortedListByProjectId(user.getId(), globalProjectId,"stat", true);
-        Assert.assertTrue(taskDtoList.size()>1);
-        for (int i = 1; i<taskDtoList.size(); i++){
-            Assert.assertTrue(taskDtoList.get(i).getStatus().name().compareTo(taskDtoList.get(i-1).getStatus().name())>0);
+        taskDtoList = taskService.getSortedListByProjectId(user.getId(), globalProjectId, "stat", true);
+        Assert.assertTrue(taskDtoList.size() > 1);
+        for (int i = 1; i < taskDtoList.size(); i++) {
+            Assert.assertTrue(taskDtoList.get(i).getStatus().name().compareTo(taskDtoList.get(i - 1).getStatus().name()) > 0);
         }
-        taskDtoList = taskService.getSortedListByProjectId(user.getId(), globalProjectId,"stat", false);
-        Assert.assertTrue(taskDtoList.size()>1);
-        for (int i = 1; i<taskDtoList.size(); i++){
-            Assert.assertTrue(taskDtoList.get(i).getStatus().name().compareTo(taskDtoList.get(i-1).getStatus().name())<0);
+        taskDtoList = taskService.getSortedListByProjectId(user.getId(), globalProjectId, "stat", false);
+        Assert.assertTrue(taskDtoList.size() > 1);
+        for (int i = 1; i < taskDtoList.size(); i++) {
+            Assert.assertTrue(taskDtoList.get(i).getStatus().name().compareTo(taskDtoList.get(i - 1).getStatus().name()) < 0);
         }
     }
 

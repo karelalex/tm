@@ -1,17 +1,17 @@
 package ru.karelin.tmclient;
 
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.karelin.tmclient.command.*;
+import ru.karelin.tmclient.config.MainConfig;
 import ru.karelin.tmclient.util.Bootstrap;
-
-import javax.enterprise.inject.se.SeContainerInitializer;
-import javax.enterprise.inject.spi.CDI;
 
 public class Application {
 
     public static void main(String[] args) {
-        SeContainerInitializer.newInstance().initialize();
-        Bootstrap bootstrap = CDI.current().select(Bootstrap.class).get();
+        ApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
+        Bootstrap bootstrap = context.getBean(Bootstrap.class);
         Class[] commandClasses = {
                 ProjectCreateCommand.class,
                 ProjectEditCommand.class,

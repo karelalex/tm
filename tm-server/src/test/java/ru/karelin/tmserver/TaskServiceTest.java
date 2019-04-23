@@ -5,9 +5,15 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import ru.karelin.tmserver.api.service.ProjectService;
 import ru.karelin.tmserver.api.service.TaskService;
 import ru.karelin.tmserver.api.service.UserService;
+import ru.karelin.tmserver.config.MainConfig;
 import ru.karelin.tmserver.entity.Project;
 import ru.karelin.tmserver.entity.Task;
 import ru.karelin.tmserver.entity.User;
@@ -19,13 +25,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-//@RunWith(CdiTestRunner.class)
+@RunWith(SpringRunner.class)
+@ActiveProfiles("test")
+@ContextConfiguration(classes = {MainConfig.class, TestConfig.class})
 public class TaskServiceTest {
 
+    @Autowired
     private ProjectService projectService;
 
+    @Autowired
     private UserService userService;
 
+    @Autowired
     private TaskService taskService;
 
     private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
