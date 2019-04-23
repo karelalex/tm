@@ -1,10 +1,10 @@
 package ru.karelin.tmclient.command;
 
 import com.jcabi.manifests.Manifests;
+import org.springframework.stereotype.Component;
 
-import javax.enterprise.context.ApplicationScoped;
 
-@ApplicationScoped
+@Component
 public class InfoShowCommand extends AbstractCommand {
     private static final boolean SECURED = false;
     public InfoShowCommand() {

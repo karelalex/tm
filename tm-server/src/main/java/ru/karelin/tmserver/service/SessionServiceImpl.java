@@ -3,6 +3,7 @@ package ru.karelin.tmserver.service;
 
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.karelin.tmserver.api.repository.SessionRepository;
@@ -13,7 +14,6 @@ import ru.karelin.tmserver.entity.Session;
 import ru.karelin.tmserver.entity.User;
 import ru.karelin.tmserver.exception.WrongSessionException;
 import ru.karelin.tmserver.util.MD5Generator;
-import ru.karelin.tmserver.util.PropertyService;
 import ru.karelin.tmserver.util.SignatureUtil;
 
 import java.util.Date;
@@ -28,13 +28,14 @@ public class SessionServiceImpl implements SessionService {
     private UserRepository userRepository;
 
     @Autowired
-    PropertyService propertyService;
+    Environment environment;
 
     private static final String SALT = "keramic";
     private static final int CIRCLE = 251;
 
     @Override
     @Nullable
+    @Transactional
     public Session getNewSession(final String login, final String password) {
         @Nullable final User user = userRepository.findOneByLoginAndPassword(login, MD5Generator.generate(password));
         if (user != null) {
@@ -56,6 +57,7 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
+    @Transactional
     public void removeSession(@Nullable String sessionId) throws WrongSessionException {
         final Session session = sessionRepository.findOne(sessionId);
         if (session != null) {
@@ -79,6 +81,6 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public String serverInfo() {
-        return "This server is running on "+propertyService.getProperty("app.host")+":"+propertyService.getProperty("app.port");
+        return "This server is running on "+environment.getProperty("host")+":"+environment.getProperty("port");
     }
 }

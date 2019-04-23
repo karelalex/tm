@@ -1,23 +1,22 @@
 package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.SessionDto;
 import ru.karelin.tmserver.endpoint.UserEndpoint;
 import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.Arrays;
 
-@ApplicationScoped
+@Component
 public class UserPasswordChangeCommand extends AbstractCommand {
 
-    @Inject
+    @Autowired
     private ServiceLocator locator;
 
-    @Inject
+    @Autowired
     private UserEndpoint userEndpoint;
 
     private static final boolean SECURED = true;

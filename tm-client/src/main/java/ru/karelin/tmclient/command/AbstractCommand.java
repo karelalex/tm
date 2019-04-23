@@ -1,18 +1,16 @@
 package ru.karelin.tmclient.command;
 
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
-import ru.karelin.tmclient.api.util.ServiceLocator;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.karelin.tmclient.api.util.TerminalService;
-import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
-import javax.inject.Inject;
 
 @NoArgsConstructor
 public abstract class AbstractCommand {
 
 
-    @Inject protected TerminalService ts;
+    @Autowired
+    protected TerminalService ts;
 
     private boolean isSecured;
 

@@ -2,7 +2,10 @@ package ru.karelin.tmclient.util;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.api.util.TerminalService;
@@ -18,20 +21,25 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Component
-public class Bootstrap implements ServiceLocator {
+public class Bootstrap implements ServiceLocator, ApplicationContextAware {
 
     @Autowired
     private TerminalService terminalService;
 
+    private ApplicationContext applicationContext;
+
     private static final String QUIT = "exit";
 
-    @NotNull private final Map<String, AbstractCommand> commands = new LinkedHashMap<>();
-    @NotNull private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    @NotNull
+    private final Map<String, AbstractCommand> commands = new LinkedHashMap<>();
+    @NotNull
+    private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 
-    @Nullable private SessionDto currentSession;
+    @Nullable
+    private SessionDto currentSession;
 
-       @Override
+    @Override
     @Nullable
     public SessionDto getCurrentSession() {
         return currentSession;
@@ -54,6 +62,10 @@ public class Bootstrap implements ServiceLocator {
         return dateFormat;
     }
 
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 
     @Override
     public void init(Class[] commandClasses) {
@@ -85,18 +97,15 @@ public class Bootstrap implements ServiceLocator {
                 continue;
             }
             if (!abstractCommand.isSecured() || currentSession != null)
-                try{
+                try {
                     abstractCommand.execute(params);
-                }
-
-            catch (WrongSessionException_Exception e){
-                System.out.println(e.getMessage());
-                System.out.println("try to login again");
-                setCurrentSession(null);
-            }
-            catch (Exception e){
+                } catch (WrongSessionException_Exception e) {
+                    System.out.println(e.getMessage());
+                    System.out.println("try to login again");
+                    setCurrentSession(null);
+                } catch (Exception e) {
                     e.printStackTrace();
-            }
+                }
             else System.out.println("Login first.");
         }
 
@@ -107,7 +116,7 @@ public class Bootstrap implements ServiceLocator {
 
     private void registerCommand(@NotNull final Class commandClass) throws IllegalAccessException, InstantiationException {
         if (AbstractCommand.class.isAssignableFrom(commandClass)) {
-            AbstractCommand command = (AbstractCommand) ;
+            AbstractCommand command = (AbstractCommand) applicationContext.getBean(commandClass);
             final String commandName = command.getName();
             if (commands.containsKey(commandName))
                 throw new CommandRegisteredException("Command with name " + commandName + " is already registered");
@@ -117,4 +126,6 @@ public class Bootstrap implements ServiceLocator {
             System.out.println("команда не клёвая");
         }
     }
+
+
 }

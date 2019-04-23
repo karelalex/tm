@@ -2,6 +2,8 @@ package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.ProjectEndpoint;
@@ -9,27 +11,24 @@ import ru.karelin.tmserver.endpoint.SessionDto;
 import ru.karelin.tmserver.endpoint.TaskEndpoint;
 import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.xml.datatype.DatatypeConfigurationException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
-@ApplicationScoped
+@Component
 public class TaskCreateCommand  extends AbstractCommand {
 
-    @Inject
+    @Autowired
     private ServiceLocator locator;
 
-    @Inject
+    @Autowired
     private ProjectEndpoint projectEndpoint;
 
-    @Inject
+    @Autowired
     private TaskEndpoint taskEndpoint;
 
-    @Inject
+    @Autowired
     private DateConverter dateConverter;
 
     private static final boolean SECURED = true;

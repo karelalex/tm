@@ -1,7 +1,6 @@
 package ru.karelin.tmserver.endpoint;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
+
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
@@ -70,7 +69,6 @@ public class TaskEndpointService extends Service {
      *     returns TaskEndpoint
      */
     @WebEndpoint(name = "TaskEndpointPort")
-    @Produces @ApplicationScoped
     public TaskEndpoint getTaskEndpointPort() {
         return super.getPort(TaskEndpointPort, TaskEndpoint.class);
     }

@@ -53,6 +53,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public void create(final String userId, final String name, final String description, final Date startDate, final Date finishDate, final String projectId) {
         User user = userRepository.findOne(userId);
         if (user == null) {
@@ -74,6 +75,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public void edit(@NotNull final String userId, @NotNull final String id, @NotNull final String name, @NotNull final String description, @Nullable final Date startDate, @Nullable final Date finishDate, @NotNull final String projectId, @Nullable final Status status) {
         @Nullable final Task task = taskRepository.findOneByIdAndUserId(id, userId);
         if (task != null) {

@@ -2,22 +2,25 @@ package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.karelin.tmclient.api.util.ServiceLocator;
-import ru.karelin.tmserver.endpoint.*;
+import ru.karelin.tmserver.endpoint.SessionDto;
+import ru.karelin.tmserver.endpoint.SessionEndpoint;
+import ru.karelin.tmserver.endpoint.UserEndpoint;
+import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
-@ApplicationScoped
+@Component
 public class UserAuthorizationCommand extends AbstractCommand {
 
-    @Inject
+    @Autowired
     private SessionEndpoint sessionEndpoint;
 
-    @Inject
+    @Autowired
     private UserEndpoint userEndpoint;
 
-    @Inject
+    @Autowired
     private ServiceLocator locator;
 
     private static final boolean SECURED = false;

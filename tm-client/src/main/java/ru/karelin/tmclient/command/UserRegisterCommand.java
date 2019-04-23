@@ -1,18 +1,16 @@
 package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
-import ru.karelin.tmclient.api.util.ServiceLocator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.karelin.tmserver.endpoint.UserEndpoint;
 
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.Arrays;
 
-@ApplicationScoped
+@Component
 public class UserRegisterCommand extends AbstractCommand {
 
-    @Inject
+    @Autowired
     private UserEndpoint userEndpoint;
 
     private static final boolean SECURED = false;

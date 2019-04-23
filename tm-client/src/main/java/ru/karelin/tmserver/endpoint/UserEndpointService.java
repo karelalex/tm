@@ -1,7 +1,5 @@
 package ru.karelin.tmserver.endpoint;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
@@ -70,7 +68,6 @@ public class UserEndpointService extends Service {
      *     returns UserEndpoint
      */
     @WebEndpoint(name = "UserEndpointPort")
-    @Produces @ApplicationScoped
     public UserEndpoint getUserEndpointPort() {
         return super.getPort(UserEndpointPort, UserEndpoint.class);
     }

@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.karelin.tmserver.api.repository.ProjectRepository;
 import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.api.service.ProjectService;
@@ -48,6 +49,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional
     public void create(@NotNull final String userId, final String name, final String description, final Date startDate, final Date finishDate) {
         @NotNull final Project project = new Project();
         project.setName(name);
@@ -64,6 +66,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional
     public void edit(final String userId, final String id, final String name, final String description, final Date startDate, final Date finishDate, Status status) {
         @Nullable final Project project = projectRepository.findOneByIdAndUserId(id, userId);
         if (project != null) {
@@ -109,6 +112,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional
     public void remove(final String userId, final String id) {
         Project p = projectRepository.findOneByIdAndUserId(id, userId);
         if (p != null)

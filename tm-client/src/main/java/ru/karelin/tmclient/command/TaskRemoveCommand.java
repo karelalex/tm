@@ -1,20 +1,19 @@
 package ru.karelin.tmclient.command;
 
-import org.jetbrains.annotations.NotNull;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.TaskEndpoint;
 import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
-@ApplicationScoped
+@Component
 public class TaskRemoveCommand extends AbstractCommand {
 
-    @Inject
+    @Autowired
     private TaskEndpoint taskEndpoint;
 
-    @Inject
+    @Autowired
     private ServiceLocator locator;
 
     private static final boolean SECURED = true;

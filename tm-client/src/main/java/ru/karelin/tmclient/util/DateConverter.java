@@ -1,13 +1,14 @@
 package ru.karelin.tmclient.util;
 
-import javax.enterprise.context.ApplicationScoped;
+import org.springframework.stereotype.Component;
+
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-@ApplicationScoped
+@Component
 public class DateConverter {
     public XMLGregorianCalendar convert(Date date) throws DatatypeConfigurationException {
         if (date==null) return null;

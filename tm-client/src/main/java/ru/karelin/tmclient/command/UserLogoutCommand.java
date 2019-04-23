@@ -1,20 +1,20 @@
 package ru.karelin.tmclient.command;
 
-import org.jetbrains.annotations.NotNull;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmserver.endpoint.SessionEndpoint;
 import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
-@ApplicationScoped
+@Component
 public class UserLogoutCommand extends AbstractCommand {
 
-    @Inject
+    @Autowired
     private ServiceLocator locator;
 
-    @Inject
+    @Autowired
     private SessionEndpoint sessionEndpoint;
 
     private static final boolean SECURED = false;

@@ -4,6 +4,7 @@ package ru.karelin.tmserver.service;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.karelin.tmserver.api.repository.UserRepository;
 import ru.karelin.tmserver.api.service.UserService;
 import ru.karelin.tmserver.entity.User;
@@ -49,6 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void registerNewUser(final String login, char[] pass, final String name, final RoleType role) {
         final User user = new User();
         user.setLogin(login);
@@ -59,6 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean changePassword(final String userId, final char[] oldPass, final char[] newPass) {
         @Nullable final User user = userRepository.findOne(userId);
         if (user == null || !user.getPasswordHash().equals(MD5Generator.generate(oldPass))) return false;

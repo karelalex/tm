@@ -1,15 +1,19 @@
 package ru.karelin.tmclient;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+import ru.karelin.tmclient.config.MainConfig;
 import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.*;
 
-import javax.enterprise.inject.se.SeContainer;
-import javax.enterprise.inject.se.SeContainerInitializer;
-import javax.enterprise.inject.spi.CDI;
 import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -17,31 +21,32 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Category(CrudIntegration.class)
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = {MainConfig.class})
 public class ProjectCrudTesting {
-    private static ProjectEndpoint projectEndpoint;
-    private static SessionEndpoint sessionEndpoint;
-    private static DateConverter dateConverter;
-    private static UserEndpoint userEndpoint;
-    private static SessionDto currentSession = null;
-    private static SeContainer container;
-    private static DatatypeFactory factory;
+
+    @Autowired
+    private  ProjectEndpoint projectEndpoint;
+
+    @Autowired
+    private  SessionEndpoint sessionEndpoint;
+
+    @Autowired
+    private  DateConverter dateConverter;
+
+    @Autowired
+    private  UserEndpoint userEndpoint;
+
+    private SessionDto currentSession = null;
     private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 
-    @BeforeClass
-    public static void MainInit() {
-        container = SeContainerInitializer.newInstance().initialize();
-        userEndpoint = CDI.current().select(UserEndpoint.class).get();
-        sessionEndpoint = CDI.current().select(SessionEndpoint.class).get();
-        projectEndpoint = CDI.current().select(ProjectEndpoint.class).get();
-        dateConverter = CDI.current().select(DateConverter.class).get();
-        if (!userEndpoint.isUserExistsByLogin("testUser")) {
-            userEndpoint.registerNewUser("testUser", "testPass", "Test User");
-        }
-    }
 
     @Before
     public void endPointInit() throws WrongSessionException_Exception, ParseException, DatatypeConfigurationException {
+        if (!userEndpoint.isUserExistsByLogin("testUser")) {
+            userEndpoint.registerNewUser("testUser", "testPass", "Test User");
+        }
         currentSession = sessionEndpoint.login("testUser", "testPass");
         projectEndpoint.createProject(currentSession, "prj1", "project 1 description",
                 dateConverter.convert(dateFormat.parse("19.07.2019")),
@@ -129,8 +134,5 @@ public class ProjectCrudTesting {
         currentSession = null;
     }
 
-    @AfterClass
-    public static void end() {
-        container.close();
-    }
+
 }

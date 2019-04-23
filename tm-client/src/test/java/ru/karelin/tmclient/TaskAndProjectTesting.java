@@ -1,15 +1,19 @@
 package ru.karelin.tmclient;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+import ru.karelin.tmclient.config.MainConfig;
 import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.*;
 
-import javax.enterprise.inject.se.SeContainer;
-import javax.enterprise.inject.se.SeContainerInitializer;
-import javax.enterprise.inject.spi.CDI;
 import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -17,33 +21,35 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Category(CrudIntegration.class)
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = {MainConfig.class})
 public class TaskAndProjectTesting {
-    private static ProjectEndpoint projectEndpoint;
-    private static SessionEndpoint sessionEndpoint;
-    private static DateConverter dateConverter;
-    private static UserEndpoint userEndpoint;
-    private static SessionDto currentSession = null;
-    private static TaskEndpoint taskEndpoint;
-    private static SeContainer container;
-    private static DatatypeFactory factory;
+
+    @Autowired
+    private ProjectEndpoint projectEndpoint;
+
+    @Autowired
+    private SessionEndpoint sessionEndpoint;
+
+    @Autowired
+    private DateConverter dateConverter;
+
+    @Autowired
+    private UserEndpoint userEndpoint;
+    @Autowired
+    private TaskEndpoint taskEndpoint;
+
+    private SessionDto currentSession = null;
+
+
     private final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 
-    @BeforeClass
-    public static void MainInit() {
-        container = SeContainerInitializer.newInstance().initialize();
-        userEndpoint = CDI.current().select(UserEndpoint.class).get();
-        sessionEndpoint = CDI.current().select(SessionEndpoint.class).get();
-        projectEndpoint = CDI.current().select(ProjectEndpoint.class).get();
-        taskEndpoint = CDI.current().select(TaskEndpoint.class).get();
-        dateConverter = CDI.current().select(DateConverter.class).get();
+    @Before
+    public void endPointInit() throws WrongSessionException_Exception, ParseException, DatatypeConfigurationException {
         if (!userEndpoint.isUserExistsByLogin("testUser")) {
             userEndpoint.registerNewUser("testUser", "testPass", "Test User");
         }
-    }
-
-    @Before
-    public void endPointInit() throws WrongSessionException_Exception, ParseException, DatatypeConfigurationException {
         currentSession = sessionEndpoint.login("testUser", "testPass");
         projectEndpoint.createProject(currentSession, "prj1", "project 1 description",
                 dateConverter.convert(dateFormat.parse("19.07.2019")),
@@ -78,8 +84,6 @@ public class TaskAndProjectTesting {
                 dateConverter.convert(dateFormat.parse("17.09.2019")),
                 dateConverter.convert(dateFormat.parse("19.01.2020")),
                 projectDtos.get(2).getId());
-
-
     }
 
     @Test(expected = WrongSessionException_Exception.class)
@@ -137,9 +141,9 @@ public class TaskAndProjectTesting {
     @Test
     public void tasktEditStatusAndProjectId() throws WrongSessionException_Exception, ParseException, DatatypeConfigurationException {
         TaskDto taskDto = taskEndpoint.getTaskList(currentSession).get(0);
-        List<ProjectDto> projectList= projectEndpoint.getProjectList(currentSession);
+        List<ProjectDto> projectList = projectEndpoint.getProjectList(currentSession);
         String secondProjectId = projectList.get(0).getId();
-        if (secondProjectId.equals(taskDto.getProjectId())) secondProjectId=projectList.get(1).getId();
+        if (secondProjectId.equals(taskDto.getProjectId())) secondProjectId = projectList.get(1).getId();
         taskEndpoint.editTask(currentSession, taskDto.getId(), "", "", null, null, secondProjectId, Status.PROCESS);
         TaskDto testDto = taskEndpoint.getTask(currentSession, taskDto.getId());
         Assert.assertEquals(taskDto.getName(), testDto.getName());
@@ -187,8 +191,5 @@ public class TaskAndProjectTesting {
         currentSession = null;
     }
 
-    @AfterClass
-    public static void end() {
-        container.close();
-    }
+
 }

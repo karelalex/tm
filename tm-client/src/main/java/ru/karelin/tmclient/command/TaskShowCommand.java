@@ -2,31 +2,35 @@ package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.util.DateConverter;
-import ru.karelin.tmserver.endpoint.*;
+import ru.karelin.tmserver.endpoint.SessionDto;
+import ru.karelin.tmserver.endpoint.TaskDto;
+import ru.karelin.tmserver.endpoint.TaskEndpoint;
+import ru.karelin.tmserver.endpoint.WrongSessionException_Exception;
 
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.text.DateFormat;
 
-@ApplicationScoped
+@Component
 public class TaskShowCommand extends AbstractCommand {
 
-    @Inject
-    DateConverter dateConverter;
+    @Autowired
+    private DateConverter dateConverter;
 
-    @Inject
-    ServiceLocator locator;
+    @Autowired
+    private ServiceLocator locator;
 
-    @Inject
-    TaskEndpoint taskEndpoint;
+    @Autowired
+    private TaskEndpoint taskEndpoint;
 
 
     private static final boolean SECURED = true;
 
-    public TaskShowCommand(){super(SECURED);}
+    public TaskShowCommand() {
+        super(SECURED);
+    }
 
     @Override
     public String getName() {

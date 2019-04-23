@@ -2,29 +2,28 @@ package ru.karelin.tmclient.command;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 import ru.karelin.tmclient.util.DateConverter;
 import ru.karelin.tmserver.endpoint.*;
 
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.text.DateFormat;
 import java.util.List;
 
-@ApplicationScoped
+@Component
 public class TaskListShowCommand extends AbstractCommand {
 
-    @Inject
+    @Autowired
     private ServiceLocator locator;
 
-    @Inject
+    @Autowired
     private DateConverter dateConverter;
 
-    @Inject
+    @Autowired
     private TaskEndpoint taskEndpoint;
 
-    @Inject
+    @Autowired
     private ProjectEndpoint projectEndpoint;
 
     private static final boolean SECURED = true;

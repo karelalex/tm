@@ -1,17 +1,17 @@
 package ru.karelin.tmclient.command;
 
-import lombok.NoArgsConstructor;
+
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.karelin.tmclient.api.util.ServiceLocator;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.Map;
 
-@ApplicationScoped
+@Component
 public class HelpShowCommand extends AbstractCommand {
 
-    @Inject
+    @Autowired
     private ServiceLocator locator;
 
     private static final boolean SECURED = false;
